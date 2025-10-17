@@ -1,11 +1,10 @@
+import Homepage from "./components/Home"
 
 function App() {
 
   return (
     <>
-      <h1 class="text-3xl font-bold underline">
-        Welcome to Event Services
-      </h1>
+      <Homepage />
     </>
   )
 }

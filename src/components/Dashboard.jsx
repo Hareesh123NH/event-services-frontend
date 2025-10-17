@@ -9,7 +9,7 @@ import { mockVendors, filtersList } from "./data/duplicatedata";
 
 const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState("All");
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
     const [search, setSearch] = useState("");
     const [darkMode, setDarkMode] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
@@ -19,6 +19,12 @@ const Dashboard = () => {
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
         if (savedTheme === "dark" || (!savedTheme && prefersDark)) setDarkMode(true);
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => setIsSidebarOpen(window.innerWidth >= 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     useEffect(() => {

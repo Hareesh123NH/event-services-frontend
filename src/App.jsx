@@ -1,13 +1,13 @@
-import Login from "./components/auth/Login";
-import Register from "./components/auth/userRegister";
+import Dashboard from "./components/Dashboard";
+import Homepage from "./components/Home";
 
 function App() {
-  const url =
-    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSs5Q051mkmo9IBryTmYxE6EXBHdY76-1gpoQ&s";
   return (
     <>
+      {/* <Homepage /> */}
       {/* <Login /> */}
-      <Register/>
+      {/* <Register/> */}
+      <Dashboard />
     </>
   );
 }

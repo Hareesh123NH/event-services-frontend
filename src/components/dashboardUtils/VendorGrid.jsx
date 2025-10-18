@@ -16,10 +16,12 @@ const VendorGrid = ({ vendors, search }) => {
             key={vendorItem._id}
             layout
             whileHover={{ scale: 1.03 }}
-            className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg cursor-pointer transition-all"
+            className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg cursor-pointer transition-all flex flex-col justify-between"
           >
-            <div className="p-3">
-              <h3 className="font-semibold text-lg">{vendorItem.vendor.full_name}</h3>
+            <div className="p-3 flex-1">
+              <h3 className="font-semibold text-lg">
+                {vendorItem.vendor.full_name}
+              </h3>
               <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                 Service: {vendorItem.service.service_name}
               </p>
@@ -30,7 +32,8 @@ const VendorGrid = ({ vendors, search }) => {
                 Price: ₹{vendorItem.final_price}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                Rating: {vendorItem.average_rating} ⭐ | Bookings: {vendorItem.total_bookings}
+                Rating: {vendorItem.average_rating} ⭐ | Bookings:{" "}
+                {vendorItem.total_bookings}
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Distance: {vendorItem.distance} km
@@ -38,6 +41,24 @@ const VendorGrid = ({ vendors, search }) => {
               <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                 Contact: {vendorItem.vendor.phone_number}
               </p>
+            </div>
+
+            {/* Fixed bottom buttons */}
+            <div className="p-3 border-t border-gray-200 dark:border-gray-700 flex gap-2">
+              <button
+                className="flex-1 bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 transition"
+                onClick={() =>
+                  alert(`Added ${vendorItem.vendor.full_name} to cart`)
+                }
+              >
+                Add to Cart
+              </button>
+              <button
+                className="flex-1 bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 transition"
+                onClick={() => alert(`Booking ${vendorItem.vendor.full_name}`)}
+              >
+                Book
+              </button>
             </div>
           </motion.div>
         ))}

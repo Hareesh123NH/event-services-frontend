@@ -4,39 +4,27 @@ import TopBar from "./dashboardUtils/TopBar";
 import Filters from "./dashboardUtils/Filters";
 import VendorGrid from "./dashboardUtils/VendorGrid"
 
-const filtersList = [
-    "All",
-    "Music",
-    "Telugu cinema",
-    "Mixes",
-    "Bigg Boss",
-    "Anirudh Ravichander",
-    "Anushka Shetty",
-    "Yuvan Shankar Raja",
-    "JavaScript",
-    "Live",
-    "User interface design",
-    "A. R. Rahman",
-    "Data Structures",
-    "Dramedy",
-];
 
-const response = { "success": true, "message": "Nearby vendor services fetched successfully", "data": [{ "_id": "68edef4d46a4f31f05973ab3", "vendor": { "_id": "68d7a2ff5512a8fa806df70c", "full_name": "Vendor1", "email": "gbhuvana938@gmail.com", "phone_number": "9876543210", "location": { "type": "Point", "coordinates": [77.5946, 12.9716] } }, "service": { "service_name": "Decoration", "description": "Beautiful event decoration including flowers, lighting, and stage setup" }, "final_price": 1800, "average_rating": 2.5, "total_bookings": 0, "distance": 0 }], "pagination": { "total": 1, "page": 1, "limit": 5, "totalPages": 1 } }
+import { mockVendors, filtersList } from "./data/duplicatedata";
 
 const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState("All");
-    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
     const [search, setSearch] = useState("");
     const [darkMode, setDarkMode] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-
-
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
         const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 
         if (savedTheme === "dark" || (!savedTheme && prefersDark)) setDarkMode(true);
+    }, []);
+
+    useEffect(() => {
+        const handleResize = () => setIsSidebarOpen(window.innerWidth >= 768);
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
     }, []);
 
     useEffect(() => {
@@ -69,7 +57,7 @@ const Dashboard = () => {
                     setActiveFilter={setActiveFilter}
                 />
 
-                <VendorGrid vendors={response.data} search={search} />
+                <VendorGrid vendors={mockVendors} search={search} />
             </div>
         </div>
     );

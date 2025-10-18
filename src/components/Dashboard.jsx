@@ -2,66 +2,65 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "./dashboardUtils/Sidebar";
 import TopBar from "./dashboardUtils/TopBar";
 import Filters from "./dashboardUtils/Filters";
-import VendorGrid from "./dashboardUtils/VendorGrid"
+import VendorGrid from "./dashboardUtils/VendorGrid";
+import VendorDetail from "./dashboardUtils/vendordetail";
 
-
-import { mockVendors, filtersList, orderData, sidebarOptions } from "./data/duplicatedata";
+import {
+  mockVendors,
+  filtersList, orderData, sidebarOptions,
+  vendorServiceDetails,
+} from "./data/duplicatedata";
 import UserHistory from "./order/UserHistory";
 import ProfilePage from "./accounts/Profile";
 
 const Dashboard = () => {
-    const [activeFilter, setActiveFilter] = useState("All");
-    const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
-    const [search, setSearch] = useState("");
-    const [darkMode, setDarkMode] = useState(false);
-    const [showProfile, setShowProfile] = useState(false);
+  const [activeFilter, setActiveFilter] = useState("All");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
+  const [search, setSearch] = useState("");
+  const [darkMode, setDarkMode] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
 
     const [currentView, setCurrentView] = useState("dashboard");
 
-    useEffect(() => {
-        const savedTheme = localStorage.getItem("theme");
-        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
 
-        if (savedTheme === "dark" || (!savedTheme && prefersDark)) setDarkMode(true);
-    }, []);
+    if (savedTheme === "dark" || (!savedTheme && prefersDark))
+      setDarkMode(true);
+  }, []);
 
-    useEffect(() => {
-        const handleResize = () => setIsSidebarOpen(window.innerWidth >= 768);
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
+  useEffect(() => {
+    const handleResize = () => setIsSidebarOpen(window.innerWidth >= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
-    useEffect(() => {
-        if (darkMode) {
-            document.documentElement.classList.add("dark");
-            localStorage.setItem("theme", "dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-            localStorage.setItem("theme", "light");
-        }
-    }, [darkMode]);
-
-
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+      localStorage.setItem("theme", "dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+      localStorage.setItem("theme", "light");
+    }
+  }, [darkMode]);
 
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+            <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
 
-            <Sidebar
-                sidebarOptions={sidebarOptions[currentView]}
-                isSidebarOpen={isSidebarOpen}
-                setIsSidebarOpen={setIsSidebarOpen}
-                setCurrentView={setCurrentView}
-            />
-
-            <div className="flex-1 flex flex-col overflow-hidden">
-                <TopBar
-                    search={search}
-                    setSearch={setSearch}
-                    darkMode={darkMode}
-                    setDarkMode={setDarkMode}
-                    showProfile={showProfile}
-                    setShowProfile={setShowProfile}
-                />
+      <div className="flex-1 flex flex-col overflow-hidden">
+        <TopBar
+          search={search}
+          setSearch={setSearch}
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          showProfile={showProfile}
+          setShowProfile={setShowProfile}
+        />
 
                 {currentView === "dashboard" && (
                     <>

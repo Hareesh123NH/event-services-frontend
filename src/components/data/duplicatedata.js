@@ -531,6 +531,149 @@ export const orderData = {
 }
 
 
+export const pendingOrders = {
+    "success": true,
+    "count": 3,
+    "orders": [
+        {
+            "order_id": "68ee333002a55c8e927aab5e",
+            "user": {
+                "_id": "68d79f3343f18d5faaf46fd6",
+                "full_name": "Bhuvana",
+                "email": "harifree286@gmail.com",
+                "phone_number": "80994794734"
+            },
+            "event_address": {
+                "_id": "68d7a24ebdc024c7b9cdce1a",
+                "city": "Bengaluru",
+                "state": "Karnataka"
+            },
+            "event_date": "2025-12-13T00:00:00.000Z",
+            "status": "pending",
+            "services": [
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68f3309eee0e2ba81dd92130",
+                    "service_name": "Catering",
+                    "quantity": 1,
+                    "price": 1350,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68f3309eee0e2ba81dd92130",
+                    "service_name": "Catering",
+                    "quantity": 1,
+                    "price": 1350,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                }
+            ]
+        },
+        {
+            "order_id": "68f33259ee0e2ba81dd9213e",
+            "user": {
+                "_id": "68d79f3343f18d5faaf46fd6",
+                "full_name": "Bhuvana",
+                "email": "harifree286@gmail.com",
+                "phone_number": "80994794734"
+            },
+            "event_address": {
+                "_id": "68d7a24ebdc024c7b9cdce1a",
+                "city": "Bengaluru",
+                "state": "Karnataka"
+            },
+            "event_date": "2025-12-13T00:00:00.000Z",
+            "status": "pending",
+            "services": [
+                {
+                    "service_id": "68f3309eee0e2ba81dd92130",
+                    "service_name": "Catering",
+                    "quantity": 1,
+                    "price": 1350,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                }
+            ]
+        },
+        {
+            "order_id": "68f34e66402f6efed31e102b",
+            "user": {
+                "_id": "68d79f3343f18d5faaf46fd6",
+                "full_name": "Bhuvana",
+                "email": "harifree286@gmail.com",
+                "phone_number": "80994794734"
+            },
+            "event_address": {
+                "_id": "68d7a24ebdc024c7b9cdce1a",
+                "city": "Bengaluru",
+                "state": "Karnataka"
+            },
+            "event_date": "2025-12-13T00:00:00.000Z",
+            "status": "pending",
+            "services": [
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                },
+                {
+                    "service_id": "68edef4d46a4f31f05973ab3",
+                    "service_name": "Decoration",
+                    "quantity": 1,
+                    "price": 1800,
+                    "provider_status": "pending",
+                    "scheduled_from": "2025-10-20T10:00:00.000Z",
+                    "scheduled_to": "2025-10-20T12:00:00.000Z"
+                }
+            ]
+        }
+    ]
+}
+
+
 
 export const cartData = [
     { _id: "1", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
@@ -563,4 +706,68 @@ export const addresses = [
         country: "India",
         alternate_phone: "+91-9876543210"
     }
+];
+
+export const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZDBlNTdjYjhmOGFlMWQwYzAzMTgyMCIsImVtYWlsIjoiYWRtaW4xQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2MDc4MzExOSwiZXhwIjoxNzYwNzg2NzE5fQ.gIef6APCWteFgcjCxHj2fYlIiIzoJAkf9uK22K7bo1I"
+
+
+export const vendorRegistrations = [
+    {
+        _id: "11",
+        vendor_name: "N Hareesh",
+        email: "harifree286@gmail.com",
+        phonenumber: "8008906106",
+        desc: "I am providing catering",
+        address: "123 Main Street, Hyderabad",
+        service: {
+            _id: "68d7a09ebdc024c7b9cdce10",
+            service_name: "Catering",
+            base_price: 1500,
+            pricing_type: "per_day",
+        },
+        media: [
+            { id: "68f36ae7402f6efed31e104a", mime_type: "application/pdf", name: "aadhar.pdf" },
+            { id: "68f36ae7402f6efed31e104c", mime_type: "application/pdf", name: "pan_card.pdf" },
+            { id: "68f36ae6402f6efed31e1048", mime_type: "application/pdf", name: "business_document.pdf" },
+        ],
+    },
+    {
+        _id: "22",
+        vendor_name: "N Hareesh",
+        email: "harifree286@gmail.com",
+        phonenumber: "8008906106",
+        desc: "I am providing catering",
+        address: "123 Main Street, Hyderabad",
+        service: {
+            _id: "68d7a09ebdc024c7b9cdce10",
+            service_name: "Catering",
+            base_price: 1500,
+            pricing_type: "per_day",
+        },
+        media: [
+            { id: "4", mime_type: "application/pdf", name: "pan_card.pdf" },
+            { id: "5", mime_type: "application/pdf", name: "adhar.pdf" },
+            { id: "6", mime_type: "application/pdf", name: "business_document.pdf" },
+        ],
+    },
+    {
+        _id: "33",
+        vendor_name: "N Hareesh",
+        email: "harifree286@gmail.com",
+        phonenumber: "8008906106",
+        desc: "I am providing catering",
+        address: "123 Main Street, Hyderabad",
+        service: {
+            _id: "68d7a09ebdc024c7b9cdce10",
+            service_name: "Catering",
+            base_price: 1500,
+            pricing_type: "per_day",
+        },
+        media: [
+            { id: "7", mime_type: "application/pdf", name: "aadhar_document.pdf" },
+            { id: "8", mime_type: "application/pdf", name: "pancard.pdf" },
+            { id: "9", mime_type: "application/pdf", name: "business_document.pdf" },
+        ],
+    },
+
 ];

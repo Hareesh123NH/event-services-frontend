@@ -9,10 +9,14 @@ import {
   mockVendors,
   filtersList, orderData, sidebarOptions,
   vendorServiceDetails,
+  pendingOrders,
+  vendorRegistrations,
 } from "./data/duplicatedata";
 import UserHistory from "./order/UserHistory";
 import ProfilePage from "./accounts/Profile";
 import BookOrder from "./order/BookOrder";
+import VendorPendingOrders from "./order/VendorPendingOrders";
+import VendorRegistrationView from "./admin/VendorRegistrationView";
 
 const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -68,22 +72,24 @@ const Dashboard = () => {
           showProfile={showProfile}
           setShowProfile={setShowProfile}
         />
-
-        {/* {currentView === "dashboard" && (
+        {/* 
+        {currentView === "dashboard" && (
           <>
             <Filters
               filters={filtersList}
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}
-            />
-            <UserHistory orders={orderData.orders} />
-            <VendorGrid vendors={mockVendors} search={search} />
-            <VendorDetail vendorItem={vendorServiceDetails.data} />
-          </>
-        )} */}
+            /> */}
+        {/* <UserHistory orders={orderData.orders} /> */}
+        {/* <VendorGrid vendors={mockVendors} search={search} /> */}
+        {/* <VendorDetail vendorItem={vendorServiceDetails.data} /> */}
+        {/* <VendorPendingOrders orders={pendingOrders.orders} /> */}
+        {/* </> */}
+        {/* )} */}
 
-        {/* {currentView === "profile" && <ProfilePage />} */}
-        <BookOrder />
+        {currentView === "profile" && <ProfilePage />}
+        {/* <BookOrder /> */}
+        <VendorRegistrationView vendors={vendorRegistrations} />
 
       </div>
     </div>

@@ -529,3 +529,38 @@ export const orderData = {
         }
     ]
 }
+
+
+
+export const cartData = [
+    { _id: "1", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
+    { _id: "2", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
+    { _id: "3", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
+    { _id: "4", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
+    { _id: "5", vendor: { full_name: "Vendor1", email: "vendor1@example.com", phone_number: "9876543210", }, service_name: "Decoration", final_price: 1800 },
+]
+
+export const addresses = [
+    {
+        _id: "68eddb778149a6a4f702e6f0",
+        label: "Home",
+        address_line1: "123 MG Road",
+        address_line2: "Near City Mall",
+        city: "hyderabad",
+        state: "Telangana",
+        postal_code: "560001",
+        country: "India",
+        alternate_phone: "+91-9876543210"
+    },
+    {
+        _id: "68d7a24ebdc024c7b9cdce1a",
+        label: "work",
+        address_line1: "123 MG Road",
+        address_line2: "Near City Mall",
+        city: "Bengaluru",
+        state: "Karnataka",
+        postal_code: "560001",
+        country: "India",
+        alternate_phone: "+91-9876543210"
+    }
+];

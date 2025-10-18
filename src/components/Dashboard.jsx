@@ -12,6 +12,7 @@ import {
 } from "./data/duplicatedata";
 import UserHistory from "./order/UserHistory";
 import ProfilePage from "./accounts/Profile";
+import BookOrder from "./order/BookOrder";
 
 const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -68,20 +69,21 @@ const Dashboard = () => {
           setShowProfile={setShowProfile}
         />
 
-        {currentView === "dashboard" && (
+        {/* {currentView === "dashboard" && (
           <>
             <Filters
               filters={filtersList}
               activeFilter={activeFilter}
               setActiveFilter={setActiveFilter}
             />
-            {/* <UserHistory orders={orderData.orders} /> */}
-            {/* <VendorGrid vendors={mockVendors} search={search} /> */}
+            <UserHistory orders={orderData.orders} />
+            <VendorGrid vendors={mockVendors} search={search} />
             <VendorDetail vendorItem={vendorServiceDetails.data} />
           </>
-        )}
+        )} */}
 
-        {currentView === "profile" && <ProfilePage />}
+        {/* {currentView === "profile" && <ProfilePage />} */}
+        <BookOrder />
 
       </div>
     </div>

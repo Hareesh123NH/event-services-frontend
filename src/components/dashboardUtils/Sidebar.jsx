@@ -2,7 +2,24 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 
-const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
+const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen, setCurrentView }) => {
+    const Options = sidebarOptions || ["Home", "Subscriptions", "Library", "History"];
+
+
+    const handleClick = (item) => {
+
+        switch (item) {
+            case "Back to Dashboard":
+                setCurrentView("dashboard"); // lowercase matches Dashboard component check
+                break;
+            case "Go to Setting":
+                setCurrentView("profile"); // lowercase matches Dashboard component check
+                break;
+            default:
+                console.log("Clicked:", item);
+        }
+    }
+
     return (
         <motion.aside
             initial={{ width: 0 }}
@@ -21,10 +38,11 @@ const Sidebar = ({ isSidebarOpen, setIsSidebarOpen }) => {
 
             {isSidebarOpen && (
                 <nav className="flex-1 overflow-y-auto p-2">
-                    {["Home", "Subscriptions", "Library", "History"].map((item) => (
+                    {Options.map((item) => (
                         <button
                             key={item}
                             className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
+                            onClick={() => handleClick(item)}
                         >
                             {item}
                         </button>

@@ -20,7 +20,7 @@ const TopBar = ({ search, setSearch, darkMode, setDarkMode, showProfile, setShow
       {/* Dark Mode + Profile */}
       <div className="flex items-center space-x-4">
         {/* Dark Mode Toggle */}
-        <motion.button
+        {/* <motion.button
           onClick={() => setDarkMode((prev) => !prev)}
           className={`relative w-14 h-7 rounded-full flex items-center px-1 ${
             darkMode ? "bg-yellow-400" : "bg-gray-300"
@@ -58,7 +58,7 @@ const TopBar = ({ search, setSearch, darkMode, setDarkMode, showProfile, setShow
               )}
             </AnimatePresence>
           </motion.div>
-        </motion.button>
+        </motion.button> */}
 
         {/* Profile Dropdown */}
         <div className="relative">

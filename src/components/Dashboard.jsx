@@ -20,7 +20,7 @@ const Dashboard = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
 
-    const [currentView, setCurrentView] = useState("dashboard");
+  const [currentView, setCurrentView] = useState("dashboard");
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme");
@@ -48,9 +48,15 @@ const Dashboard = () => {
     }
   }, [darkMode]);
 
-    return (
-        <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
-            <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+  return (
+    <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
+
+      <Sidebar
+        sidebarOptions={sidebarOptions[currentView]}
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+        setCurrentView={setCurrentView}
+      />
 
       <div className="flex-1 flex flex-col overflow-hidden">
         <TopBar
@@ -62,23 +68,24 @@ const Dashboard = () => {
           setShowProfile={setShowProfile}
         />
 
-                {currentView === "dashboard" && (
-                    <>
-                        <Filters
-                            filters={filtersList}
-                            activeFilter={activeFilter}
-                            setActiveFilter={setActiveFilter}
-                        />
-                        {/* <UserHistory orders={orderData.orders} /> */}
-                        <VendorGrid vendors={mockVendors} search={search} />
-                    </>
-                )}
+        {currentView === "dashboard" && (
+          <>
+            <Filters
+              filters={filtersList}
+              activeFilter={activeFilter}
+              setActiveFilter={setActiveFilter}
+            />
+            {/* <UserHistory orders={orderData.orders} /> */}
+            {/* <VendorGrid vendors={mockVendors} search={search} /> */}
+            <VendorDetail vendorItem={vendorServiceDetails.data} />
+          </>
+        )}
 
-                {currentView === "profile" && <ProfilePage />}
+        {currentView === "profile" && <ProfilePage />}
 
-            </div>
-        </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;

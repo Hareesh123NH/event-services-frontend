@@ -5,7 +5,9 @@ import Filters from "./dashboardUtils/Filters";
 import VendorGrid from "./dashboardUtils/VendorGrid"
 
 
-import { mockVendors, filtersList } from "./data/duplicatedata";
+import { mockVendors, filtersList, orderData, sidebarOptions } from "./data/duplicatedata";
+import UserHistory from "./order/UserHistory";
+import ProfilePage from "./accounts/Profile";
 
 const Dashboard = () => {
     const [activeFilter, setActiveFilter] = useState("All");
@@ -13,6 +15,8 @@ const Dashboard = () => {
     const [search, setSearch] = useState("");
     const [darkMode, setDarkMode] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
+
+    const [currentView, setCurrentView] = useState("dashboard");
 
     useEffect(() => {
         const savedTheme = localStorage.getItem("theme");
@@ -37,9 +41,17 @@ const Dashboard = () => {
         }
     }, [darkMode]);
 
+
+
     return (
         <div className="flex h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 overflow-hidden">
-            <Sidebar isSidebarOpen={isSidebarOpen} setIsSidebarOpen={setIsSidebarOpen} />
+
+            <Sidebar
+                sidebarOptions={sidebarOptions[currentView]}
+                isSidebarOpen={isSidebarOpen}
+                setIsSidebarOpen={setIsSidebarOpen}
+                setCurrentView={setCurrentView}
+            />
 
             <div className="flex-1 flex flex-col overflow-hidden">
                 <TopBar
@@ -51,13 +63,20 @@ const Dashboard = () => {
                     setShowProfile={setShowProfile}
                 />
 
-                <Filters
-                    filters={filtersList}
-                    activeFilter={activeFilter}
-                    setActiveFilter={setActiveFilter}
-                />
+                {currentView === "dashboard" && (
+                    <>
+                        <Filters
+                            filters={filtersList}
+                            activeFilter={activeFilter}
+                            setActiveFilter={setActiveFilter}
+                        />
+                        {/* <UserHistory orders={orderData.orders} /> */}
+                        <VendorGrid vendors={mockVendors} search={search} />
+                    </>
+                )}
 
-                <VendorGrid vendors={mockVendors} search={search} />
+                {currentView === "profile" && <ProfilePage />}
+
             </div>
         </div>
     );

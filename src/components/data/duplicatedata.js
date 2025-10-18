@@ -230,3 +230,265 @@ export const filtersList = [
     "Data Structures",
     "Dramedy",
 ];
+
+
+export const sidebarOptions = {
+    dashboard: ["Home", "Subscriptions", "Library", "History", "Go to Setting"],
+    profile: ["Account", "Privacy", "Billing", "Security", "Back to Dashboard"]
+};
+
+
+export const orderData = {
+    "success": true,
+    "count": 5,
+    "orders": [
+        {
+            "_id": "1",
+            "event_date": "2025-12-13T00:00:00.000Z",
+            "total_amount": 4800,
+            "status": "pending",
+            "payment_status": "pending",
+            "order_date": "2025-10-14T11:25:36.091Z",
+            "event_address": {
+                "label": "work",
+                "address_line1": "123 MG Road",
+                "address_line2": "Near City Mall",
+                "city": "Bengaluru"
+            },
+            "services": [
+                {
+                    "_id": "2",
+                    "quantity": 1,
+                    "price": 1800,
+                    "scheduled_from": "2025-12-13T10:00:00.000Z",
+                    "scheduled_to": "2025-12-13T12:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "gbhuvana938@gmail.com" },
+                        "service_name": "Photography"
+                    }
+                },
+                {
+                    "_id": "3",
+                    "quantity": 1,
+                    "price": 3000,
+                    "scheduled_from": "2025-12-13T13:00:00.000Z",
+                    "scheduled_to": "2025-12-13T17:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "lightdecor@gmail.com" },
+                        "service_name": "Stage Decoration"
+                    }
+                },
+                {
+                    "_id": "4",
+                    "quantity": 1,
+                    "price": 1800,
+                    "scheduled_from": "2025-12-13T10:00:00.000Z",
+                    "scheduled_to": "2025-12-13T12:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "gbhuvana938@gmail.com" },
+                        "service_name": "Photography"
+                    }
+                },
+                {
+                    "_id": "5",
+                    "quantity": 1,
+                    "price": 3000,
+                    "scheduled_from": "2025-12-13T13:00:00.000Z",
+                    "scheduled_to": "2025-12-13T17:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "lightdecor@gmail.com" },
+                        "service_name": "Stage Decoration"
+                    }
+                },
+                {
+                    "_id": "6",
+                    "quantity": 1,
+                    "price": 1800,
+                    "scheduled_from": "2025-12-13T10:00:00.000Z",
+                    "scheduled_to": "2025-12-13T12:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "gbhuvana938@gmail.com" },
+                        "service_name": "Photography"
+                    }
+                },
+                {
+                    "_id": "7",
+                    "quantity": 1,
+                    "price": 3000,
+                    "scheduled_from": "2025-12-13T13:00:00.000Z",
+                    "scheduled_to": "2025-12-13T17:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "lightdecor@gmail.com" },
+                        "service_name": "Stage Decoration"
+                    }
+                },
+                {
+                    "_id": "8",
+                    "quantity": 1,
+                    "price": 1800,
+                    "scheduled_from": "2025-12-13T10:00:00.000Z",
+                    "scheduled_to": "2025-12-13T12:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "gbhuvana938@gmail.com" },
+                        "service_name": "Photography"
+                    }
+                },
+                {
+                    "_id": "9",
+                    "quantity": 1,
+                    "price": 3000,
+                    "scheduled_from": "2025-12-13T13:00:00.000Z",
+                    "scheduled_to": "2025-12-13T17:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "lightdecor@gmail.com" },
+                        "service_name": "Stage Decoration"
+                    }
+                }
+            ]
+        },
+        {
+            "_id": "11",
+            "event_date": "2025-11-01T00:00:00.000Z",
+            "total_amount": 2700,
+            "status": "confirmed",
+            "payment_status": "paid",
+            "order_date": "2025-10-14T11:14:19.557Z",
+            "event_address": {
+                "label": "home",
+                "address_line1": "Plot 45, Lake View",
+                "address_line2": "Whitefield",
+                "city": "Bengaluru"
+            },
+            "services": [
+                {
+                    "_id": "22",
+                    "quantity": 1,
+                    "price": 1500,
+                    "scheduled_from": "2025-11-01T09:00:00.000Z",
+                    "scheduled_to": "2025-11-01T11:00:00.000Z",
+                    "provider_status": "accepted",
+                    "vendor_service": {
+                        "vendor": { "email": "djbeats@gmail.com" },
+                        "service_name": "DJ Sound Setup"
+                    }
+                },
+                {
+                    "_id": "33",
+                    "quantity": 1,
+                    "price": 1200,
+                    "scheduled_from": "2025-11-01T11:30:00.000Z",
+                    "scheduled_to": "2025-11-01T13:00:00.000Z",
+                    "provider_status": "accepted",
+                    "vendor_service": {
+                        "vendor": { "email": "cateringhub@gmail.com" },
+                        "service_name": "Catering"
+                    }
+                }
+            ]
+        },
+        {
+            "_id": "44",
+            "event_date": "2025-10-25T00:00:00.000Z",
+            "total_amount": 5000,
+            "status": "cancelled",
+            "payment_status": "refunded",
+            "order_date": "2025-10-01T09:12:40.091Z",
+            "event_address": {
+                "label": "office",
+                "address_line1": "Plot 77, Cyber Towers",
+                "address_line2": "Hi-Tech City",
+                "city": "Hyderabad"
+            },
+            "services": [
+                {
+                    "_id": "55",
+                    "quantity": 1,
+                    "price": 5000,
+                    "scheduled_from": "2025-10-25T09:00:00.000Z",
+                    "scheduled_to": "2025-10-25T12:00:00.000Z",
+                    "provider_status": "cancelled",
+                    "vendor_service": {
+                        "vendor": { "email": "studioelite@gmail.com" },
+                        "service_name": "Event Photography"
+                    }
+                }
+            ]
+        },
+        {
+            "_id": "66",
+            "event_date": "2025-11-28T00:00:00.000Z",
+            "total_amount": 3200,
+            "status": "confirmed",
+            "payment_status": "paid",
+            "order_date": "2025-10-11T14:32:50.091Z",
+            "event_address": {
+                "label": "home",
+                "address_line1": "Flat 101, Palm Residency",
+                "address_line2": "Baner Road",
+                "city": "Pune"
+            },
+            "services": [
+                {
+                    "_id": "77",
+                    "quantity": 2,
+                    "price": 1600,
+                    "scheduled_from": "2025-11-28T09:00:00.000Z",
+                    "scheduled_to": "2025-11-28T12:00:00.000Z",
+                    "provider_status": "accepted",
+                    "vendor_service": {
+                        "vendor": { "email": "sushma.decor@gmail.com" },
+                        "service_name": "Decoration"
+                    }
+                }
+            ]
+        },
+        {
+            "_id": "88",
+            "event_date": "2025-12-20T00:00:00.000Z",
+            "total_amount": 2700,
+            "status": "pending",
+            "payment_status": "pending",
+            "order_date": "2025-10-17T10:45:00.000Z",
+            "event_address": {
+                "label": "home",
+                "address_line1": "5th Avenue Street",
+                "address_line2": "Near City Center",
+                "city": "Chennai"
+            },
+            "services": [
+                {
+                    "_id": "99",
+                    "quantity": 1,
+                    "price": 900,
+                    "scheduled_from": "2025-12-20T16:00:00.000Z",
+                    "scheduled_to": "2025-12-20T19:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "soundwave.events@gmail.com" },
+                        "service_name": "DJ Music"
+                    }
+                },
+                {
+                    "_id": "00",
+                    "quantity": 2,
+                    "price": 1800,
+                    "scheduled_from": "2025-12-20T10:00:00.000Z",
+                    "scheduled_to": "2025-12-20T14:00:00.000Z",
+                    "provider_status": "pending",
+                    "vendor_service": {
+                        "vendor": { "email": "flowerworks@gmail.com" },
+                        "service_name": "Flower Decoration"
+                    }
+                }
+            ]
+        }
+    ]
+}

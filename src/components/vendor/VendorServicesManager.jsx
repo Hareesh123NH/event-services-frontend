@@ -1,0 +1,21 @@
+import { motion } from "framer-motion";
+import VendorServiceBlock from "./VendorServiceBlock";
+
+const VendorServicesManager = ({ services, onAddNew }) => {
+    return (
+        <motion.div
+            layout
+            className="p-6 flex flex-col gap-8 overflow-y-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+        >
+            {services.map((item, index) => (
+                <VendorServiceBlock key={item.service._id} serviceItem={item} index={index} />
+            ))}
+        </motion.div>
+    );
+};
+
+
+export default VendorServicesManager;

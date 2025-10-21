@@ -771,3 +771,54 @@ export const vendorRegistrations = [
     },
 
 ];
+
+
+export const vendorServices = {
+    "services": [
+        {
+            "service": {
+                "_id": "68d7a0adbdc024c7b9cdce13",
+                "service_name": "Decoration",
+                "description": "Beautiful event decoration including flowers, lighting, and stage setup",
+                "base_price": 2000,
+                "pricing_type": "per_day"
+            },
+            "price": 2000,
+            "discount": 10,
+            "final_price": 1800,
+            "average_rating": 2.5,
+            "total_bookings": 0,
+            "status": "active",
+            "addons": [
+                {
+                    "title": "Live Counters",
+                    "price": 2000,
+                    "description": "Extra food live counters for snacks"
+                },
+                {
+                    "title": "Dessert Table",
+                    "price": 1500,
+                    "description": "Special desserts section"
+                }
+            ],
+            "notes": "Only available for weddings and big events"
+        },
+        {
+            "service": {
+                "_id": "68d7a09ebdc024c7b9cdce10",
+                "service_name": "Catering",
+                "description": "Delicious food for weddings, parties, and events",
+                "base_price": 1500,
+                "pricing_type": "per_day"
+            },
+            "price": 1500,
+            "discount": 10,
+            "final_price": 1350,
+            "average_rating": 2.5,
+            "total_bookings": 0,
+            "status": "active",
+            "addons": [],
+            "notes": ""
+        }
+    ]
+}

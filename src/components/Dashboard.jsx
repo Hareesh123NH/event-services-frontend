@@ -11,12 +11,15 @@ import {
   vendorServiceDetails,
   pendingOrders,
   vendorRegistrations,
+  vendorServices,
 } from "./data/duplicatedata";
 import UserHistory from "./order/UserHistory";
 import ProfilePage from "./accounts/Profile";
 import BookOrder from "./order/BookOrder";
 import VendorPendingOrders from "./order/VendorPendingOrders";
 import VendorRegistrationView from "./admin/VendorRegistrationView";
+import VendorServicesManager from "./vendor/VendorServicesManager";
+import AddNewVendorService from "./vendor/AddNewVendorService";
 
 const Dashboard = () => {
   const [activeFilter, setActiveFilter] = useState("All");
@@ -89,8 +92,9 @@ const Dashboard = () => {
 
         {currentView === "profile" && <ProfilePage />}
         {/* <BookOrder /> */}
-        <VendorRegistrationView vendors={vendorRegistrations} />
-
+        {/* <VendorRegistrationView vendors={vendorRegistrations} /> */}
+        <VendorServicesManager services={vendorServices.services} />
+        {/* <AddNewVendorService /> */}
       </div>
     </div>
   );

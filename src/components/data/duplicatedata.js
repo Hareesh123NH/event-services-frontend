@@ -1,6 +1,7 @@
+
 export const mockVendors = [
     {
-        _id: "68edef4d46a4f31f05973ab3",
+        _id: "10",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70c",
             full_name: "Vendor1",
@@ -22,7 +23,7 @@ export const mockVendors = [
         distance: 0,
     },
     {
-        _id: "68edef4d46a4f31f05973ab4",
+        _id: "9",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70d",
             full_name: "Vendor2",
@@ -43,7 +44,7 @@ export const mockVendors = [
         distance: 1.2,
     },
     {
-        _id: "68edef4d46a4f31f05973ab5",
+        _id: "8",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70e",
             full_name: "Vendor3",
@@ -64,7 +65,7 @@ export const mockVendors = [
         distance: 0.5,
     },
     {
-        _id: "68edef4d46a4f31f05973ab6",
+        _id: "7",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70f",
             full_name: "Vendor4",
@@ -85,7 +86,7 @@ export const mockVendors = [
         distance: 2.0,
     },
     {
-        _id: "68edef4d46a4f31f05973ab7",
+        _id: "6",
         vendor: {
             _id: "68d7a2ff5512a8fa806df710",
             full_name: "Vendor5",
@@ -106,7 +107,7 @@ export const mockVendors = [
         distance: 1.8,
     },
     {
-        _id: "68edef4d46a4f31f05973ab3",
+        _id: "5",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70c",
             full_name: "Vendor1",
@@ -128,7 +129,7 @@ export const mockVendors = [
         distance: 0,
     },
     {
-        _id: "68edef4d46a4f31f05973ab4",
+        _id: "4",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70d",
             full_name: "Vendor2",
@@ -149,7 +150,7 @@ export const mockVendors = [
         distance: 1.2,
     },
     {
-        _id: "68edef4d46a4f31f05973ab5",
+        _id: "3",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70e",
             full_name: "Vendor3",
@@ -170,7 +171,7 @@ export const mockVendors = [
         distance: 0.5,
     },
     {
-        _id: "68edef4d46a4f31f05973ab6",
+        _id: "2",
         vendor: {
             _id: "68d7a2ff5512a8fa806df70f",
             full_name: "Vendor4",
@@ -191,7 +192,7 @@ export const mockVendors = [
         distance: 2.0,
     },
     {
-        _id: "68edef4d46a4f31f05973ab7",
+        _id: "1",
         vendor: {
             _id: "68d7a2ff5512a8fa806df710",
             full_name: "Vendor5",
@@ -270,8 +271,24 @@ export const vendorServiceDetails = {
 };
 
 export const sidebarOptions = {
-    dashboard: ["Home", "Subscriptions", "Library", "History", "Go to Setting"],
-    profile: ["Account", "Privacy", "Billing", "Security", "Back to Dashboard"]
+    vendor: [
+        { label: "Dashboard", path: "overview" },
+        { label: "Pending Orders", path: "pending-orders" },
+        { label: "My Services", path: "services" },
+        { label: "Add Service", path: "add-service" },
+        { label: "Profile", path: "profile" },
+    ],
+    admin: [
+        { label: "Vendor Registrations", path: "vendor-registrations" },
+        { label: "All Services", path: "all-services" },
+        { label: "Profile", path: "profile" },
+    ],
+    user: [
+        { label: "Home", path: "home" },
+        { label: "Book Order", path: "book-order" },
+        { label: "Order History", path: "history" },
+        { label: "Profile", path: "profile" },
+    ],
 };
 
 

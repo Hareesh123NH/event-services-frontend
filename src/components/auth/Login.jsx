@@ -1,12 +1,17 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "./AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -14,7 +19,22 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login:", formData);
+
+
+    let role = "user";
+    if (formData.email.includes("admin")) role = "admin";
+    else if (formData.email.includes("vendor")) role = "vendor";
+    else if (formData.email.includes("manager")) role = "manager";
+
+    const userData = {
+      email: formData.email,
+      name: "John Doe",
+      role,
+      token: "fake-jwt-token",
+    };
+
+    login(userData); 
+    navigate("/dashboard");
   };
 
   return (

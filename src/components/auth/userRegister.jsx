@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
+import { useNavigate } from "react-router-dom";
 
-const Register = () => {
+const UserRegister = () => {
+  const naviagte = useNavigate();
+
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -42,6 +45,7 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Register:", formData);
+    naviagte("/login");
   };
 
   return (
@@ -180,4 +184,4 @@ const Register = () => {
   );
 };
 
-export default Register;
+export default UserRegister;

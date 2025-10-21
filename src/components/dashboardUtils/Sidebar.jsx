@@ -1,24 +1,10 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen, setCurrentView }) => {
-    const Options = sidebarOptions || ["Home", "Subscriptions", "Library", "History"];
-
-
-    const handleClick = (item) => {
-
-        switch (item) {
-            case "Back to Dashboard":
-                setCurrentView("dashboard"); // lowercase matches Dashboard component check
-                break;
-            case "Go to Setting":
-                setCurrentView("profile"); // lowercase matches Dashboard component check
-                break;
-            default:
-                console.log("Clicked:", item);
-        }
-    }
+const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
+    const navigate = useNavigate();
 
     return (
         <motion.aside
@@ -38,13 +24,13 @@ const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen, setCurrentVi
 
             {isSidebarOpen && (
                 <nav className="flex-1 overflow-y-auto p-2">
-                    {Options.map((item) => (
+                    {sidebarOptions.map((item) => (
                         <button
-                            key={item}
-                            className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
-                            onClick={() => handleClick(item)}
+                            key={item.path}
+                            onClick={() => navigate(item.path)}
+                            className="block w-full text-left px-4 py-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition"
                         >
-                            {item}
+                            {item.label}
                         </button>
                     ))}
                 </nav>

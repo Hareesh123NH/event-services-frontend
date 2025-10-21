@@ -1,7 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { orderData } from "../data/duplicatedata";
 
-const UserHistory = ({ orders }) => {
+const UserHistory = () => {
+    const orders = orderData.orders
     if (!orders || orders.length === 0) {
         return (
             <div className="text-center text-gray-500 dark:text-gray-400 mt-10">

@@ -1,9 +1,11 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, FileText, Briefcase } from "lucide-react";
-import { token } from "../data/duplicatedata";
+import { token, vendorRegistrations } from "../data/duplicatedata";
 
-const VendorRegistrationView = ({ vendors }) => {
+const VendorRegistrationView = () => {
+
+  const vendors = vendorRegistrations;
   if (!vendors || vendors.length === 0) {
     return (
       <div className="text-center text-gray-500 dark:text-gray-400 mt-10">

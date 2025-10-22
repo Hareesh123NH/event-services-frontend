@@ -1,9 +1,11 @@
 import { Link as ScrollLink } from "react-scroll";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { Link, useNavigate } from "react-router-dom";
 
 const HomeNav = () => {
 
+    const navigate = useNavigate();
     const [menuOpen, setMenuOpen] = useState(false);
 
     return (
@@ -11,11 +13,13 @@ const HomeNav = () => {
             {/* Navbar */}
             <nav className="fixed top-0 w-full bg-white shadow z-50">
                 <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-4">
-                    <div className="text-2xl font-bold text-purple-600">Event Services</div>
+                    <div className="text-2xl font-bold text-purple-600">
+                        <Link to="/" >Event Services</Link>
+                    </div>
 
                     {/* Desktop Links */}
                     <div className="hidden md:flex space-x-6">
-
+                        
                         {["hero", "features", "testimonials"].map((section) => (
                             <ScrollLink
                                 key={section}

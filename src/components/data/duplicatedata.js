@@ -272,16 +272,15 @@ export const vendorServiceDetails = {
 
 export const sidebarOptions = {
     vendor: [
-        { label: "Dashboard", path: "overview" },
         { label: "Pending Orders", path: "pending-orders" },
         { label: "My Services", path: "services" },
         { label: "Add Service", path: "add-service" },
-        { label: "Profile", path: "profile" },
+        // { label: "Profile", path: "profile" },
     ],
     admin: [
         { label: "Vendor Registrations", path: "vendor-registrations" },
         { label: "All Services", path: "all-services" },
-        { label: "Profile", path: "profile" },
+        // { label: "Profile", path: "profile" },
     ],
     user: [
         { label: "Home", path: "home" },

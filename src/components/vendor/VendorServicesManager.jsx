@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
 import VendorServiceBlock from "./VendorServiceBlock";
+import { vendorServices } from "../data/duplicatedata";
 
-const VendorServicesManager = ({ services, onAddNew }) => {
+const VendorServicesManager = ({  onAddNew }) => {
+
+    const services=vendorServices.services;
     return (
         <motion.div
             layout

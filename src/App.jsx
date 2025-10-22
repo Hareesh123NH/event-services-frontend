@@ -8,7 +8,7 @@ import { AuthProvider } from "./components/auth/AuthContext";
 import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BookOrder from "./components/order/BookOrder";
 import UserHistory from "./components/order/UserHistory";
-import VendorPendingOrders from "./components/order/VendorPendingOrders";
+import VendorPendingOrders from "./components/vendor/VendorPendingOrders";
 import VendorServicesManager from "./components/vendor/VendorServicesManager";
 import AddNewVendorService from "./components/vendor/AddNewVendorService";
 import VendorRegistrationView from "./components/admin/VendorRegistrationView";
@@ -18,6 +18,7 @@ import { mockVendors } from "./components/data/duplicatedata";
 import RoleProtectedRoute from "./components/auth/RoleProtectedRoute";
 import RoleRedirect from "./components/auth/RoleRedirect";
 import VendorDetail from "./components/dashboardUtils/vendordetail";
+import ServiceManager from "./components/admin/SerivceManager";
 
 function App() {
   return (
@@ -99,6 +100,15 @@ function App() {
               }
             />
 
+            <Route
+              path="profile"
+              element={
+                <RoleProtectedRoute allowedRoles={["user"]}>
+                  <ProfilePage />
+                </RoleProtectedRoute>
+              }
+            />
+
 
 
             {/* Vendor role */}
@@ -140,20 +150,13 @@ function App() {
               path="all-services"
               element={
                 <RoleProtectedRoute allowedRoles={["admin"]}>
-                  <VendorServicesManager />
+                  <ServiceManager />
                 </RoleProtectedRoute>
               }
             />
 
             {/* Shared */}
-            <Route
-              path="profile"
-              element={
-                <RoleProtectedRoute allowedRoles={["user", "vendor", "admin"]}>
-                  <ProfilePage />
-                </RoleProtectedRoute>
-              }
-            />
+
           </Route>
         </Routes>
       </Router>

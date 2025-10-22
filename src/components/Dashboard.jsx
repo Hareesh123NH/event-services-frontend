@@ -16,7 +16,7 @@ import {
 import UserHistory from "./order/UserHistory";
 import ProfilePage from "./accounts/Profile";
 import BookOrder from "./order/BookOrder";
-import VendorPendingOrders from "./order/VendorPendingOrders";
+import VendorPendingOrders from "./vendor/VendorPendingOrders";
 import VendorRegistrationView from "./admin/VendorRegistrationView";
 import VendorServicesManager from "./vendor/VendorServicesManager";
 import AddNewVendorService from "./vendor/AddNewVendorService";

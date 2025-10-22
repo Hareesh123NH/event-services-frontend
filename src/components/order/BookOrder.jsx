@@ -20,7 +20,7 @@ const BookOrder = () => {
         const defaultAddressId = localStorage.getItem("defaultAddressId");
         setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
 
-        const cart = JSON.parse(localStorage.getItem("cart"));
+        const cart = JSON.parse(localStorage.getItem("cart")) || [];
         setCartServices(cart);
     }, []);
 
@@ -113,6 +113,7 @@ const BookOrder = () => {
             services: selectedServices,
         };
         console.log("✅ Order submitted:", orderData);
+        alert("Order Booked!");
     };
 
     // Calculate total amount of selected services
@@ -144,8 +145,8 @@ const BookOrder = () => {
                         <div
                             key={addr._id}
                             className={`p-3 border rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition ${selectedAddressId === addr._id
-                                    ? "border-blue-500 bg-blue-100 dark:bg-blue-800 dark:border-blue-400"
-                                    : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                ? "border-blue-500 bg-blue-100 dark:bg-blue-800 dark:border-blue-400"
+                                : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
                                 }`}
                             onClick={() => setSelectedAddressId(addr._id)}
                         >
@@ -161,6 +162,7 @@ const BookOrder = () => {
                 {/* Services */}
                 <h3 className="text-xl font-semibold mb-2">Select Services</h3>
                 <div className="flex space-x-4 overflow-x-auto mb-4">
+                    {cartServices.length === 0 ? <div>Your cart is Empty please add It</div> : <></>}
                     {cartServices.map((service) => {
                         const isSelected = selectedServices.find(
                             (s) => s.vendorserviceid === service._id
@@ -170,10 +172,10 @@ const BookOrder = () => {
                             <div
                                 key={service._id}
                                 className={`p-3 border rounded-lg min-w-[200px] flex-shrink-0 cursor-pointer transition ${isActive
-                                        ? "border-green-500 bg-green-100 dark:bg-green-800"
-                                        : isSelected
-                                            ? "border-blue-500 bg-blue-100 dark:bg-blue-800"
-                                            : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                    ? "border-green-500 bg-green-100 dark:bg-green-800"
+                                    : isSelected
+                                        ? "border-blue-500 bg-blue-100 dark:bg-blue-800"
+                                        : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
                                     }`}
                                 onClick={() => toggleServiceSelection(service)}
                             >
@@ -256,11 +258,16 @@ const BookOrder = () => {
                 )}
 
                 <button
-                    className="bg-green-500 text-white px-4 py-2 rounded hover:opacity-90 transition"
+                    className={`px-4 py-2 rounded transition ${cartServices.length === 0
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-green-500 hover:opacity-90 text-white"
+                        }`}
                     onClick={handleSubmit}
+                    disabled={cartServices.length === 0}
                 >
                     Submit Order
                 </button>
+
             </div>
         </div>
     );

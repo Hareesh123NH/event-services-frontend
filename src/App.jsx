@@ -18,6 +18,7 @@ import { mockVendors } from "./components/data/duplicatedata";
 import RoleProtectedRoute from "./components/auth/RoleProtectedRoute";
 import RoleRedirect from "./components/auth/RoleRedirect";
 import VendorDetail from "./components/dashboardUtils/vendordetail";
+import Cart from "./components/dashboardUtils/Cart";
 
 function App() {
   return (
@@ -95,6 +96,14 @@ function App() {
               element={
                 <RoleProtectedRoute allowedRoles={["user"]}>
                   <VendorDetail />
+                </RoleProtectedRoute>
+              }
+            />
+            <Route
+              path="cart"
+              element={
+                <RoleProtectedRoute allowedRoles={["user"]}>
+                  <Cart />
                 </RoleProtectedRoute>
               }
             />

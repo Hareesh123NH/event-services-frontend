@@ -20,7 +20,7 @@ const BookOrder = () => {
         const defaultAddressId = localStorage.getItem("defaultAddressId");
         setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
 
-        const cart = JSON.parse(localStorage.getItem("cart")) || cartData;
+        const cart = JSON.parse(localStorage.getItem("cart"));
         setCartServices(cart);
     }, []);
 

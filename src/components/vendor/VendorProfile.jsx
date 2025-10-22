@@ -1,23 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { Camera, Mail, Phone, MapPin, Save, Edit2, X } from "lucide-react";
+import { ThemeContext } from "../ThemeContext";
 
 const VendorProfile = () => {
+  const { theme } = useContext(ThemeContext);
+
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john@example.com",
     phone_number: "+91 9876543210",
     address: "Hyderabad, Telangana",
     description: "We provide catering and decoration services for all events.",
-    profileImage: "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg",
+    profileImage:
+      "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg",
   });
 
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState(profile);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -37,47 +39,52 @@ const VendorProfile = () => {
     setEditing(false);
   };
 
+  // Theme-based classes
+  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
+  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
+  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";
+
+  const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-gray-200 border-gray-300 text-gray-900";
+  const inputDisabledBg = theme === "dark" ? "bg-gray-800 border-gray-600 text-gray-400 cursor-not-allowed" : "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed";
+  const borderEditing = "border-blue-400 focus:ring-2 focus:ring-blue-300";
+
   return (
-    <div className="flex-1 overflow-y-auto px-6 py-6 md:px-10 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className={`flex-1 overflow-y-auto px-6 py-6 md:px-10 ${bgPage} ${textPrimary}`}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="max-w-3xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8 relative"
+        className={`max-w-3xl mx-auto ${bgCard} rounded-2xl shadow-lg p-6 md:p-8 relative`}
       >
-        {/* Edit icon */}
+        {/* Edit Icon */}
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-purple-600 transition"
+            className="absolute top-4 right-4 text-gray-500 hover:text-blue-600 transition"
             title="Edit Profile"
           >
             <Edit2 size={20} />
           </button>
         )}
 
-        {/* Header: Profile image + Name */}
+        {/* Header */}
         <div className="flex items-center gap-6 mb-6">
           <div className="relative">
             <img
               src={formData.profileImage}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border-4 border-gray-200 dark:border-gray-700"
+              className={`w-24 h-24 rounded-full object-cover border-4 ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
             />
             {editing && (
               <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
                 <Camera size={16} />
-                <input
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
+                <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
               </label>
             )}
           </div>
           <div>
             <h1 className="text-2xl font-semibold">{formData.name}</h1>
-            <p className="text-gray-500 dark:text-gray-400">{formData.email}</p>
+            <p className={textSecondary}>{formData.email}</p>
           </div>
         </div>
 
@@ -85,24 +92,20 @@ const VendorProfile = () => {
         <div className="space-y-5">
           {/* Name */}
           <div>
-            <label className="text-gray-600 dark:text-gray-400">Name</label>
+            <label className={`block text-sm mb-1 ${textSecondary}`}>Name</label>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${
-                editing
-                  ? "border-blue-400 focus:ring-2 focus:ring-blue-300"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-              }`}
+              className={`w-full p-2 rounded-md border ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
               <Mail size={16} /> Email
             </label>
             <input
@@ -110,13 +113,13 @@ const VendorProfile = () => {
               name="email"
               value={formData.email}
               disabled
-              className="w-full p-2 mt-1 rounded-md border border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 cursor-not-allowed"
+              className={`w-full p-2 mt-1 rounded-md border ${inputDisabledBg}`}
             />
           </div>
 
           {/* Phone */}
           <div>
-            <label className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
               <Phone size={16} /> Phone
             </label>
             <input
@@ -125,17 +128,13 @@ const VendorProfile = () => {
               value={formData.phone_number}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${
-                editing
-                  ? "border-blue-400 focus:ring-2 focus:ring-blue-300"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-              }`}
+              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
           {/* Address */}
           <div>
-            <label className="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
               <MapPin size={16} /> Address
             </label>
             <textarea
@@ -144,28 +143,20 @@ const VendorProfile = () => {
               value={formData.address}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${
-                editing
-                  ? "border-blue-400 focus:ring-2 focus:ring-blue-300"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-              }`}
+              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className="text-gray-600 dark:text-gray-400">Description</label>
+            <label className={`block text-sm mb-1 ${textSecondary}`}>Description</label>
             <textarea
               name="description"
               rows={3}
               value={formData.description}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${
-                editing
-                  ? "border-blue-400 focus:ring-2 focus:ring-blue-300"
-                  : "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700"
-              }`}
+              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
             />
           </div>
         </div>
@@ -176,13 +167,13 @@ const VendorProfile = () => {
             <>
               <button
                 onClick={handleCancel}
-                className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg flex items-center gap-2"
+                className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg flex items-center gap-2 transition"
               >
                 <X size={16} /> Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2"
+                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition"
               >
                 <Save size={16} /> Save
               </button>
@@ -190,7 +181,7 @@ const VendorProfile = () => {
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition"
             >
               <Edit2 size={16} /> Edit Profile
             </button>

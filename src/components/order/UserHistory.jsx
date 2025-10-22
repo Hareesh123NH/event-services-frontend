@@ -1,47 +1,58 @@
-import React from "react";
+import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { orderData } from "../data/duplicatedata";
+import { ThemeContext } from "../ThemeContext"; // adjust path if needed
 
 const UserHistory = () => {
-    const orders = orderData.orders
+    const { theme } = useContext(ThemeContext);
+
+    const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-300";
+    const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+    const textClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
+    const labelClass = theme === "dark" ? "text-gray-200" : "text-gray-700";
+    const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-900";
+    const buttonBg = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
+    const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-900";
+    const secondaryText = theme === "dark" ? "text-gray-400" : "text-gray-1200";
+
+    const orders = orderData.orders;
     if (!orders || orders.length === 0) {
         return (
-            <div className="text-center text-gray-500 dark:text-gray-400 mt-10">
+            <div className={`${secondaryText} text-center mt-10`}>
                 No orders found.
             </div>
         );
     }
 
     return (
-        <motion.div layout className="p-4 space-y-6 overflow-y-auto">
+        <motion.div layout className={`p-4 space-y-6 overflow-y-auto ${pageBg}`}>
             {orders.map((order) => (
                 <motion.div
                     key={order._id}
                     layout
                     whileHover={{ scale: 1.01 }}
-                    className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between"
+                    className={`${cardBg} rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between`}
                 >
                     {/* LEFT: Order Info */}
-                    <div className="p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700">
-                        <h3 className="font-semibold text-lg text-gray-800 dark:text-gray-100 mb-1">
+                    <div className={`p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r ${borderColor}`}>
+                        <h3 className={`font-semibold text-lg ${textClass} mb-1`}>
                             Order ID: {order._id.slice(-6)}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className={`text-sm ${secondaryText}`}>
                             Event Date: {new Date(order.event_date).toLocaleDateString("en-IN")}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                        <p className={`text-sm ${secondaryText}`}>
                             Order Date: {new Date(order.order_date).toLocaleDateString("en-IN")}
                         </p>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                            Address: {order.event_address.address_line1},{" "}
-                            {order.event_address.city}
+                        <p className={`text-sm ${secondaryText}`}>
+                            Address: {order.event_address.address_line1}, {order.event_address.city}
                         </p>
 
-                        <div className="mt-3 border-t border-gray-200 dark:border-gray-700 pt-2">
-                            <p className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <div className={`mt-3 border-t pt-2 ${borderColor}`}>
+                            <p className={`text-sm font-medium ${textClass}`}>
                                 Total Amount: ₹{order.total_amount}
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className={`text-sm ${secondaryText}`}>
                                 Status:{" "}
                                 <span
                                     className={`font-medium ${order.status === "confirmed"
@@ -54,33 +65,13 @@ const UserHistory = () => {
                                     {order.status}
                                 </span>
                             </p>
-                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                            <p className={`text-sm ${secondaryText}`}>
                                 Payment:{" "}
-                                <span
-                                    className={
-                                        order.payment_status === "pending"
-                                            ? "text-yellow-500"
-                                            : "text-green-500"
-                                    }
-                                >
+                                <span className={order.payment_status === "pending" ? "text-yellow-500" : "text-green-500"}>
                                     {order.payment_status}
                                 </span>
                             </p>
                         </div>
-
-                        {/* Action Buttons */}
-                        {/* <div className="mt-4 flex gap-2">
-
-                            {order.status === "pending" && (
-                                <button
-                                    className="flex-1 bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
-                                    onClick={() => alert(`Cancelling order ${order._id}`)}
-                                >
-                                    Cancel
-                                </button>
-                            )}
-
-                        </div> */}
                     </div>
 
                     {/* RIGHT: Services (Horizontal Grid) */}
@@ -90,22 +81,22 @@ const UserHistory = () => {
                                 {order.services.map((service, index) => (
                                     <div
                                         key={service._id}
-                                        className="min-w-[220px] bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-3 shadow-sm flex-shrink-0"
+                                        className={`min-w-[220px] ${theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-200"} border rounded-lg p-3 shadow-sm flex-shrink-0`}
                                     >
-                                        <p className="font-medium text-gray-700 dark:text-gray-200 text-sm mb-1">
+                                        <p className={`font-medium text-sm mb-1 ${textClass}`}>
                                             Service {index + 1}
                                         </p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className={`text-sm ${secondaryText}`}>
                                             Vendor: {service.vendor_service.vendor.email}
                                         </p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className={`text-sm ${secondaryText}`}>
                                             Price: ₹{service.price}
                                         </p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-400">
+                                        <p className={`text-sm ${secondaryText}`}>
                                             Provider: {service.provider_status}
                                         </p>
                                         {service.scheduled_from && (
-                                            <p className="text-xs text-gray-500 dark:text-gray-400">
+                                            <p className={`text-xs ${secondaryText}`}>
                                                 Date:{" "}
                                                 {new Date(service.scheduled_from).toLocaleDateString("en-IN", {
                                                     day: "2-digit",
@@ -127,7 +118,6 @@ const UserHistory = () => {
                                                 })}
                                             </p>
                                         )}
-
                                     </div>
                                 ))}
                             </div>

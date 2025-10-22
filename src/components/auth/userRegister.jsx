@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ThemeContext } from "../ThemeContext";
 
 const UserRegister = () => {
-  const naviagte = useNavigate();
+  const navigate = useNavigate();
+  const { theme } = useContext(ThemeContext); // ✅ Access theme from context
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -45,11 +47,27 @@ const UserRegister = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Register:", formData);
-    naviagte("/login");
+    navigate("/login");
   };
 
+  // ✅ Dynamic styles based on theme
+  const bgGradient =
+    theme === "dark"
+      ? "bg-gradient-to-br from-gray-800 to-gray-900"
+      : "bg-gradient-to-br from-purple-100 to-indigo-200";
+  const formBg = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800";
+  const labelColor = theme === "dark" ? "text-gray-200" : "text-gray-700";
+  const inputBg =
+    theme === "dark"
+      ? "bg-gray-700 border-gray-600 focus:ring-purple-500"
+      : "bg-white border-gray-300 focus:ring-purple-500";
+  const buttonBg =
+    theme === "dark"
+      ? "bg-purple-700 hover:bg-purple-800 text-white"
+      : "bg-purple-600 hover:bg-purple-700 text-white";
+
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-gradient-to-br from-purple-100 to-indigo-200">
+    <div className={`min-h-screen flex flex-col md:flex-row ${bgGradient}`}>
       {/* Left Side - Image */}
       <LeftSideImage
         url={
@@ -58,7 +76,7 @@ const UserRegister = () => {
       />
 
       {/* Right Side - Register Form */}
-      <div className="md:w-1/2 w-full bg-white flex justify-center items-center p-8 md:p-16">
+      <div className={`md:w-1/2 w-full ${formBg} flex justify-center items-center p-8 md:p-16`}>
         <motion.div
           initial={{ x: 50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
@@ -72,7 +90,7 @@ const UserRegister = () => {
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Full Name
               </label>
               <input
@@ -80,7 +98,7 @@ const UserRegister = () => {
                 name="full_name"
                 value={formData.full_name}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${inputBg}`}
                 placeholder="Enter your full name"
                 required
               />
@@ -88,16 +106,14 @@ const UserRegister = () => {
 
             {/* Email + Send OTP */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                Email
-              </label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>Email</label>
               <div className="flex gap-2">
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                  className={`flex-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${inputBg}`}
                   placeholder="example@email.com"
                   required
                 />
@@ -105,11 +121,9 @@ const UserRegister = () => {
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent}
-                  className={`px-4 py-2 rounded-lg font-semibold text-white ${
-                    otpSent
-                      ? "bg-gray-400 cursor-not-allowed"
-                      : "bg-purple-600 hover:bg-purple-700"
-                  } transition`}
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${
+                    otpSent ? "bg-gray-400 cursor-not-allowed" : buttonBg
+                  }`}
                 >
                   {otpSent ? `Resend in ${otpTimer}s` : "Send OTP"}
                 </button>
@@ -118,7 +132,7 @@ const UserRegister = () => {
 
             {/* Password */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Password
               </label>
               <input
@@ -126,7 +140,7 @@ const UserRegister = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${inputBg}`}
                 placeholder="Enter your password"
                 required
               />
@@ -134,7 +148,7 @@ const UserRegister = () => {
 
             {/* Phone Number */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Phone Number
               </label>
               <input
@@ -142,7 +156,7 @@ const UserRegister = () => {
                 name="phone_number"
                 value={formData.phone_number}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${inputBg}`}
                 placeholder="+91 9876543210"
                 required
               />
@@ -150,15 +164,13 @@ const UserRegister = () => {
 
             {/* OTP */}
             <div>
-              <label className="block text-gray-700 font-medium mb-2">
-                OTP
-              </label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>OTP</label>
               <input
                 type="number"
                 name="otp"
                 value={formData.otp}
                 onChange={handleChange}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${inputBg}`}
                 placeholder="Enter OTP"
                 required
               />
@@ -166,16 +178,22 @@ const UserRegister = () => {
 
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white py-3 rounded-lg font-semibold hover:bg-purple-700 transition"
+              className={`w-full py-3 rounded-lg font-semibold transition ${buttonBg}`}
             >
               Register
             </button>
 
-            <div className="text-center mt-4 text-gray-500 text-sm">
+            <div className={`text-center mt-4 text-sm ${labelColor}`}>
               Already have an account?{" "}
-              <a href="/login" className="text-purple-600 hover:underline">
+              <Link to="/login" className={"text-purple-600 hover:underline"}>
                 Login
-              </a>
+              </Link>
+            </div>
+            <div className={`text-center mt-4 text-sm ${labelColor}`}>
+              If you are a vendor then register here{" "}
+              <Link to="/vendor-register" className={"text-purple-600 hover:underline"}>
+                Click
+              </Link>
             </div>
           </form>
         </motion.div>

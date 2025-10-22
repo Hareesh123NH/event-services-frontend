@@ -22,6 +22,7 @@ import RoleRedirect from "./components/security/RoleRedirect";
 import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
 import VendorProfile from "./components/vendor/VendorProfile";
 import { ThemeProvider } from "./components/ThemeContext";
+import VendorRegister from "./components/auth/VendorRegister";
 
 function App() {
   return (
@@ -51,6 +52,15 @@ function App() {
               element={
                 <MainLayout>
                   <UserRegister />
+                </MainLayout>
+              }
+            />
+
+            <Route
+              path="/vendor-register"
+              element={
+                <MainLayout>
+                  <VendorRegister />
                 </MainLayout>
               }
             />

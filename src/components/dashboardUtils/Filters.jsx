@@ -8,7 +8,7 @@ const Filters = ({ activeFilter, setActiveFilter }) => {
   const filters = filtersList;
 
   // Dynamic classes based on theme
-  const bgClass = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-200";
+  const bgClass = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-200 text-gray-900";
   const buttonActiveBg = theme === "dark" ? "bg-gray-100 text-gray-900" : "bg-gray-900 text-white";
   const buttonInactiveBg = theme === "dark" ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-white text-gray-700 hover:bg-gray-200";
 

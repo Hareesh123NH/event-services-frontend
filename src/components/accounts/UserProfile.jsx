@@ -32,8 +32,8 @@ const CollapsibleSection = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
   const { theme } = useContext(ThemeContext);
 
-  const sectionBg = theme === "dark" ? "bg-gray-900" : "bg-white";
-  const borderClass = theme === "dark" ? "border-gray-700" : "border-gray-200";
+  const sectionBg = theme === "dark" ? "bg-gray-900" : "bg-grey-200";
+  const borderClass = theme === "dark" ? "border-gray-700" : "border-gray-900";
   const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
 
   return (

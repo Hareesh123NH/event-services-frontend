@@ -1,7 +1,7 @@
-import React from "react";
-
+import { useContext } from "react";
 import { motion } from "framer-motion";
 import HomeNav from "./HomeNav";
+import { ThemeContext } from "./ThemeContext";
 
 const features = [
   { id: "features", title: "Event Planning", description: "Comprehensive tools to plan every detail of your event." },
@@ -15,17 +15,22 @@ const testimonials = [
 ];
 
 const Homepage = () => {
+  const { theme } = useContext(ThemeContext);
 
+  const pageBg = theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900";
+  const cardBg = theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-gray-200 text-gray-900";
+  const sectionBg = theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900";
+  const accentBg = theme === "dark" ? "bg-purple-800" : "bg-purple-600";
 
   return (
-    <div className="font-sans">
+    <div className={`font-sans ${pageBg}`}>
 
       <HomeNav />
 
       {/* Hero Section */}
       <motion.header
         id="hero"
-        className="relative bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-center overflow-hidden pt-24"
+        className={`relative ${accentBg} text-white text-center overflow-hidden pt-24`}
         initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -55,7 +60,7 @@ const Homepage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             href="/dashboard"
-            className="bg-white text-purple-600 font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition"
+            className={`font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition ${theme === "dark" ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-white text-purple-600"}`}
           >
             Get Started
           </motion.a>
@@ -63,7 +68,7 @@ const Homepage = () => {
       </motion.header>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-6 bg-gray-50 text-center">
+      <section id="features" className={`py-20 px-6 ${sectionBg} text-center`}>
         <motion.h2
           className="text-3xl md:text-4xl font-bold mb-12"
           initial={{ opacity: 0, y: 50 }}
@@ -81,7 +86,7 @@ const Homepage = () => {
               whileInView={{ y: 0, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="bg-white p-8 rounded-xl shadow hover:shadow-xl transition cursor-pointer"
+              className={`p-8 rounded-xl shadow hover:shadow-xl transition cursor-pointer ${cardBg}`}
             >
               <h3 className="text-xl font-semibold mb-4">{feature.title}</h3>
               <p>{feature.description}</p>
@@ -91,7 +96,7 @@ const Homepage = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 px-6 text-center">
+      <section id="testimonials" className={`py-20 px-6 text-center ${sectionBg}`}>
         <motion.h2
           className="text-3xl md:text-4xl font-bold mb-12"
           initial={{ opacity: 0, y: 50 }}
@@ -109,7 +114,7 @@ const Homepage = () => {
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="bg-purple-50 p-8 rounded-xl shadow"
+              className={`p-8 rounded-xl shadow ${cardBg}`}
             >
               <p className="mb-4 italic">"{t.text}"</p>
               <p className="font-semibold">{t.author}</p>
@@ -118,7 +123,6 @@ const Homepage = () => {
         </div>
       </section>
 
-  
     </div>
   );
 };

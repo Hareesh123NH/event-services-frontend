@@ -288,13 +288,13 @@ export const sidebarOptions = {
       { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
       { label: "My Services", path: "services", icon: Wrench },
       { label: "Add Service", path: "add-service", icon: PlusCircle },
-      { label: "Profile", path: "profile", icon: User },
+//       { label: "Profile", path: "profile", icon: User },
     ],
   
     admin: [
       { label: "Vendor Registrations", path: "vendor-registrations", icon: Users },
       { label: "All Services", path: "all-services", icon: Layers },
-      { label: "Profile", path: "profile", icon: User },
+//       { label: "Profile", path: "profile", icon: User },
     ],
   
     user: [

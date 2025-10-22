@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
 
 
-    let role = "user";
+    let role = "admin";
     if (formData.email.includes("admin")) role = "admin";
     else if (formData.email.includes("vendor")) role = "vendor";
     else if (formData.email.includes("manager")) role = "manager";

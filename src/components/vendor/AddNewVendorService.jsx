@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
-
-// Mock ThemeContext (replace with your actual ThemeContext if you have one)
-const ThemeContext = React.createContext({ theme: "light" });
+import { ThemeContext } from "../ThemeContext";
 
 const availableServices = [
     {
@@ -75,10 +73,10 @@ const AddNewVendorService = ({ onSave }) => {
     };
 
     // Theme-aware classes
-    const bgClass = theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-900";
+    const bgClass = theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-gray-200 text-gray-900";
     const inputBg = theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-300";
     const cardSelected = theme === "dark" ? "bg-blue-800 border-blue-400" : "bg-blue-100 border-blue-500";
-    const cardDefault = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300";
+    const cardDefault = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-700";
 
     return (
         <div className="h-[90vh] overflow-y-auto p-6">

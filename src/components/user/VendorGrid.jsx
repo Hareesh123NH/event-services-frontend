@@ -14,7 +14,7 @@ const VendorGrid = () => {
 
   // Theme classes
   const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-900";
-  const cardBg = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300";
+  const cardBg = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-300";
   const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-500";
   const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
   const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";

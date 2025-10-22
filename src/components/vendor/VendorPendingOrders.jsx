@@ -8,7 +8,7 @@ const VendorPendingOrders = ({ onAction }) => {
 
   const orders = pendingOrders.orders;
 
-  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-gray-200";
   const bgService = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
   const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
   const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";

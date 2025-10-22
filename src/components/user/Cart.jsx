@@ -74,8 +74,8 @@ const Cart = () => {
   );
 
   // ✅ Define colors based on theme
-  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
+  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-gray-100";
   const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
   const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";
   const buttonHover = theme === "dark" ? "hover:bg-gray-600" : "hover:bg-gray-200";

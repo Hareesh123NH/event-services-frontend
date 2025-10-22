@@ -41,9 +41,9 @@ const VendorProfile = () => {
 
   // Theme-based classes
   const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
-  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-gray-50";
   const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";
+  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";
 
   const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-gray-200 border-gray-300 text-gray-900";
   const inputDisabledBg = theme === "dark" ? "bg-gray-800 border-gray-600 text-gray-400 cursor-not-allowed" : "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed";

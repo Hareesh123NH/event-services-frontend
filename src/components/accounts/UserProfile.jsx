@@ -1,5 +1,5 @@
-// ProfilePage.js
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
+import { ThemeContext } from "../ThemeContext";
 
 // Initial addresses (simulated backend)
 const initialAddresses = [
@@ -30,10 +30,16 @@ const initialAddresses = [
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
+  const { theme } = useContext(ThemeContext);
+
+  const sectionBg = theme === "dark" ? "bg-gray-900" : "bg-white";
+  const borderClass = theme === "dark" ? "border-gray-700" : "border-gray-200";
+  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
+
   return (
-    <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg mb-6">
+    <div className={`${sectionBg} shadow-md rounded-lg mb-6`}>
       <button
-        className="w-full px-6 py-3 text-left font-semibold text-lg border-b border-gray-200 dark:border-gray-700"
+        className={`w-full px-6 py-3 text-left font-semibold text-lg border-b ${borderClass} ${textClass}`}
         onClick={() => setIsOpen(!isOpen)}
       >
         {title}
@@ -44,14 +50,17 @@ const CollapsibleSection = ({ title, children }) => {
 };
 
 const UserProfile = () => {
-  // Load from localStorage if exists
+  const { theme } = useContext(ThemeContext);
+
   const savedProfile = JSON.parse(localStorage.getItem("profile")) || {
     name: "John Doe",
     email: "john@example.com",
     phone: "+91-9876543210",
   };
-  const savedAddresses = JSON.parse(localStorage.getItem("addresses")) || initialAddresses;
-  const savedDefaultId = localStorage.getItem("defaultAddressId") || savedAddresses[0]._id;
+  const savedAddresses =
+    JSON.parse(localStorage.getItem("addresses")) || initialAddresses;
+  const savedDefaultId =
+    localStorage.getItem("defaultAddressId") || savedAddresses[0]._id;
 
   const [profile, setProfile] = useState(savedProfile);
   const [addresses, setAddresses] = useState(savedAddresses);
@@ -67,25 +76,21 @@ const UserProfile = () => {
     alternate_phone: "",
   });
 
-  // Save profile to localStorage
   const saveProfile = () => {
     localStorage.setItem("profile", JSON.stringify(profile));
     alert("Profile updated successfully!");
   };
 
-  // Update existing address
   const handleAddressChange = (id, field, value) => {
-    setAddresses(addresses.map(a => (a._id === id ? { ...a, [field]: value } : a)));
+    setAddresses(addresses.map((a) => (a._id === id ? { ...a, [field]: value } : a)));
   };
 
-  // Save updated address
   const updateAddress = (addr) => {
-    setAddresses(addresses.map(a => (a._id === addr._id ? addr : a)));
+    setAddresses(addresses.map((a) => (a._id === addr._id ? addr : a)));
     localStorage.setItem("addresses", JSON.stringify(addresses));
     alert("Address updated successfully!");
   };
 
-  // Add new address
   const handleAddAddress = () => {
     const id = Date.now().toString();
     const updated = [...addresses, { ...newAddress, _id: id }];
@@ -104,14 +109,22 @@ const UserProfile = () => {
     alert("New address added!");
   };
 
-  // Set default address
   const handleSetDefault = (id) => {
     setDefaultAddressId(id);
     localStorage.setItem("defaultAddressId", id);
   };
 
+  // Dynamic classes
+  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
+  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
+  const inputBg = theme === "dark" ? "bg-gray-800 text-gray-100 border-gray-700" : "bg-white text-gray-900 border-gray-300";
+  const buttonPrimary = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
+  const buttonSecondary = theme === "dark" ? "bg-green-600 hover:bg-green-700 text-white" : "bg-green-500 hover:bg-green-600 text-white";
+  const borderDefault = theme === "dark" ? "border-gray-700" : "border-gray-300";
+  const borderActive = "border-blue-500";
+
   return (
-    <div className="flex flex-col p-6 overflow-y-auto">
+    <div className={`flex flex-col p-6 overflow-y-auto min-h-screen ${pageBg} ${textClass}`}>
       <h1 className="text-3xl font-bold mb-6">Account</h1>
 
       {/* Update Profile Section */}
@@ -121,26 +134,26 @@ const UserProfile = () => {
             type="text"
             placeholder="Name"
             value={profile.name}
-            onChange={e => setProfile({ ...profile, name: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+            className={`p-2 rounded border ${inputBg}`}
           />
           <input
             type="email"
             placeholder="Email"
             value={profile.email}
-            onChange={e => setProfile({ ...profile, email: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+            className={`p-2 rounded border ${inputBg}`}
           />
           <input
             type="text"
             placeholder="Phone"
             value={profile.phone}
-            onChange={e => setProfile({ ...profile, phone: e.target.value })}
-            className="p-2 border rounded"
+            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+            className={`p-2 rounded border ${inputBg}`}
           />
         </div>
         <button
-          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className={`mt-4 px-4 py-2 rounded ${buttonPrimary}`}
           onClick={saveProfile}
         >
           Save Profile
@@ -149,17 +162,16 @@ const UserProfile = () => {
 
       {/* Addresses Section */}
       <CollapsibleSection title="Addresses">
-        {addresses.map(addr => (
+        {addresses.map((addr) => (
           <div
             key={addr._id}
-            className={`p-4 mb-4 border rounded ${
-              defaultAddressId === addr._id ? "border-blue-500" : "border-gray-200"
-            }`}
+            className={`p-4 mb-4 rounded border ${defaultAddressId === addr._id ? borderActive : borderDefault
+              }`}
           >
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-semibold">{addr.label}</h3>
               <button
-                className="text-sm text-blue-600"
+                className="text-sm text-blue-500"
                 onClick={() => handleSetDefault(addr._id)}
               >
                 {defaultAddressId === addr._id ? "Default" : "Set Default"}
@@ -167,19 +179,19 @@ const UserProfile = () => {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               {Object.keys(addr)
-                .filter(k => k !== "_id")
-                .map(key => (
+                .filter((k) => k !== "_id")
+                .map((key) => (
                   <input
                     key={key}
                     type="text"
                     value={addr[key]}
-                    onChange={e => handleAddressChange(addr._id, key, e.target.value)}
-                    className="p-2 border rounded"
+                    onChange={(e) => handleAddressChange(addr._id, key, e.target.value)}
+                    className={`p-2 rounded border ${inputBg}`}
                   />
                 ))}
             </div>
             <button
-              className="mt-3 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+              className={`mt-3 px-4 py-2 rounded ${buttonSecondary}`}
               onClick={() => updateAddress(addr)}
             >
               Update Address
@@ -191,19 +203,19 @@ const UserProfile = () => {
         <div className="mt-6 border-t pt-4">
           <h3 className="font-semibold mb-2">Add New Address</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {Object.keys(newAddress).map(key => (
+            {Object.keys(newAddress).map((key) => (
               <input
                 key={key}
                 type="text"
                 placeholder={key.replace("_", " ").toUpperCase()}
                 value={newAddress[key]}
-                onChange={e => setNewAddress({ ...newAddress, [key]: e.target.value })}
-                className="p-2 border rounded"
+                onChange={(e) => setNewAddress({ ...newAddress, [key]: e.target.value })}
+                className={`p-2 rounded border ${inputBg}`}
               />
             ))}
           </div>
           <button
-            className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            className={`mt-4 px-4 py-2 rounded ${buttonPrimary}`}
             onClick={handleAddAddress}
           >
             Add Address

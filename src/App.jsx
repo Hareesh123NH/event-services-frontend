@@ -21,167 +21,170 @@ import ProtectedRoute from "./components/security/ProtectedRoute";
 import RoleRedirect from "./components/security/RoleRedirect";
 import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
 import VendorProfile from "./components/vendor/VendorProfile";
+import { ThemeProvider } from "./components/ThemeContext";
 
 function App() {
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          {/* Layout pages */}
-          <Route
-            path="/"
-            element={
-              <MainLayout>
-                <Homepage />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/login"
-            element={
-              <MainLayout>
-                <Login />
-              </MainLayout>
-            }
-          />
-          <Route
-            path="/register"
-            element={
-              <MainLayout>
-                <UserRegister />
-              </MainLayout>
-            }
-          />
-
-          {/* Protected dashboard */}
-
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          >
-            {/* Default path — role-based redirect */}
-            <Route path="" element={<RoleRedirect />} />
-
-            {/* User role */}
+      <ThemeProvider>
+        <Router>
+          <Routes>
+            {/* Layout pages */}
             <Route
-              path="book-order"
+              path="/"
               element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <BookOrder />
-                </RoleProtectedRoute>
+                <MainLayout>
+                  <Homepage />
+                </MainLayout>
               }
             />
             <Route
-              path="history"
+              path="/login"
               element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <UserHistory />
-                </RoleProtectedRoute>
+                <MainLayout>
+                  <Login />
+                </MainLayout>
+              }
+            />
+            <Route
+              path="/register"
+              element={
+                <MainLayout>
+                  <UserRegister />
+                </MainLayout>
               }
             />
 
-            <Route
-              path="home"
-              element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <VendorGrid />
-                </RoleProtectedRoute>
-              }
-            />
+            {/* Protected dashboard */}
 
             <Route
-              path="detail/:id"
+              path="/dashboard"
               element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <VendorDetail />
-                </RoleProtectedRoute>
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
               }
-            />
-            <Route
-              path="cart"
-              element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <Cart />
-                </RoleProtectedRoute>
-              }
-            />
+            >
+              {/* Default path — role-based redirect */}
+              <Route path="" element={<RoleRedirect />} />
 
-            <Route
-              path="profile"
-              element={
-                <RoleProtectedRoute allowedRoles={["user"]}>
-                  <UserProfile />
-                </RoleProtectedRoute>
-              }
-            />
+              {/* User role */}
+              <Route
+                path="book-order"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <BookOrder />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="history"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <UserHistory />
+                  </RoleProtectedRoute>
+                }
+              />
 
-            {/* Vendor role */}
-            <Route
-              path="pending-orders"
-              element={
-                <RoleProtectedRoute allowedRoles={["vendor"]}>
-                  <VendorPendingOrders />
-                </RoleProtectedRoute>
-              }
-            />
-            <Route
-              path="services"
-              element={
-                <RoleProtectedRoute allowedRoles={["vendor"]}>
-                  <VendorServicesManager />
-                </RoleProtectedRoute>
-              }
-            />
-            <Route
-              path="add-service"
-              element={
-                <RoleProtectedRoute allowedRoles={["vendor"]}>
-                  <AddNewVendorService />
-                </RoleProtectedRoute>
-              }
-            />
-            <Route
-              path="vendor-profile"
-              element={
-                <RoleProtectedRoute allowedRoles={["vendor"]}>
-                  <VendorProfile />
-                </RoleProtectedRoute>
-              }
-            />
+              <Route
+                path="home"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <VendorGrid />
+                  </RoleProtectedRoute>
+                }
+              />
 
-            {/* Admin role */}
-            <Route
-              path="vendor-registrations"
-              element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                  <VendorRegistrationView />
-                </RoleProtectedRoute>
-              }
-            />
-            <Route
-              path="all-services"
-              element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                  <ServiceManager />
-                </RoleProtectedRoute>
-              }
-            />
-            <Route
-              path="add-admin"
-              element={
-                <RoleProtectedRoute allowedRoles={["admin"]}>
-                  <AddNewAdmin />
-                </RoleProtectedRoute>
-              }
-            />
-            {/* Shared */}
-          </Route>
-        </Routes>
-      </Router>
+              <Route
+                path="detail/:id"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <VendorDetail />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="cart"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <Cart />
+                  </RoleProtectedRoute>
+                }
+              />
+
+              <Route
+                path="profile"
+                element={
+                  <RoleProtectedRoute allowedRoles={["user"]}>
+                    <UserProfile />
+                  </RoleProtectedRoute>
+                }
+              />
+
+              {/* Vendor role */}
+              <Route
+                path="pending-orders"
+                element={
+                  <RoleProtectedRoute allowedRoles={["vendor"]}>
+                    <VendorPendingOrders />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="services"
+                element={
+                  <RoleProtectedRoute allowedRoles={["vendor"]}>
+                    <VendorServicesManager />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="add-service"
+                element={
+                  <RoleProtectedRoute allowedRoles={["vendor"]}>
+                    <AddNewVendorService />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="vendor-profile"
+                element={
+                  <RoleProtectedRoute allowedRoles={["vendor"]}>
+                    <VendorProfile />
+                  </RoleProtectedRoute>
+                }
+              />
+
+              {/* Admin role */}
+              <Route
+                path="vendor-registrations"
+                element={
+                  <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <VendorRegistrationView />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="all-services"
+                element={
+                  <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <ServiceManager />
+                  </RoleProtectedRoute>
+                }
+              />
+              <Route
+                path="add-admin"
+                element={
+                  <RoleProtectedRoute allowedRoles={["admin"]}>
+                    <AddNewAdmin />
+                  </RoleProtectedRoute>
+                }
+              />
+              {/* Shared */}
+            </Route>
+          </Routes>
+        </Router>
+      </ThemeProvider>
     </AuthProvider>
   );
 }

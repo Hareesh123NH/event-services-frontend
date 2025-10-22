@@ -1,27 +1,12 @@
 import React, { useState, useEffect } from "react";
 import Sidebar from "./dashboardUtils/Sidebar";
 import TopBar from "./dashboardUtils/TopBar";
-import Filters from "./dashboardUtils/Filters";
-import VendorGrid from "./dashboardUtils/VendorGrid";
-import VendorDetail from "./dashboardUtils/vendordetail";
 
 import {
-  mockVendors,
-  orderData, sidebarOptions,
-  vendorServiceDetails,
-  pendingOrders,
-  vendorRegistrations,
-  vendorServices,
+  sidebarOptions,
 } from "./data/duplicatedata";
-import UserHistory from "./order/UserHistory";
-import ProfilePage from "./accounts/Profile";
-import BookOrder from "./order/BookOrder";
-import VendorPendingOrders from "./vendor/VendorPendingOrders";
-import VendorRegistrationView from "./admin/VendorRegistrationView";
-import VendorServicesManager from "./vendor/VendorServicesManager";
-import AddNewVendorService from "./vendor/AddNewVendorService";
 import { Outlet } from "react-router-dom";
-import { useAuth } from "./auth/AuthContext";
+import { useAuth } from "./security/AuthContext";
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);

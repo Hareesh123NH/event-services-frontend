@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import LeftSideImage from "../auth/LeftSideImage";
+import LeftSideImage from "./LeftSideImage";
 
 const VendorRegister = () => {
   const [formData, setFormData] = useState({

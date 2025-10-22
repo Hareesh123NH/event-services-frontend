@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./AuthContext";
+import { useAuth } from "../security/AuthContext";
+
 
 const Login = () => {
   const { login } = useAuth();

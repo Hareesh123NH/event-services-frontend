@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import {  mockVendors } from "../data/duplicatedata";
-import Filters from "./Filters";
+import Filters from "../dashboardUtils/Filters";
 import { Outlet, useNavigate } from "react-router-dom";
 
 const VendorGrid = () => {

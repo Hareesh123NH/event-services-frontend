@@ -4,24 +4,23 @@ import Homepage from "./components/Home";
 import Login from "./components/auth/Login";
 import UserRegister from "./components/auth/userRegister";
 import MainLayout from "./components/MainLayout";
-import { AuthProvider } from "./components/auth/AuthContext";
-import ProtectedRoute from "./components/auth/ProtectedRoute";
 import BookOrder from "./components/order/BookOrder";
 import UserHistory from "./components/order/UserHistory";
 import VendorPendingOrders from "./components/vendor/VendorPendingOrders";
 import VendorServicesManager from "./components/vendor/VendorServicesManager";
 import AddNewVendorService from "./components/vendor/AddNewVendorService";
 import VendorRegistrationView from "./components/admin/VendorRegistrationView";
-import ProfilePage from "./components/accounts/Profile";
-import VendorGrid from "./components/dashboardUtils/VendorGrid";
-import { mockVendors } from "./components/data/duplicatedata";
-import RoleProtectedRoute from "./components/auth/RoleProtectedRoute";
-import RoleRedirect from "./components/auth/RoleRedirect";
-import VendorDetail from "./components/dashboardUtils/vendordetail";
-import Cart from "./components/dashboardUtils/Cart";
+import VendorGrid from "./components/user/VendorGrid";
+import VendorDetail from "./components/user/vendordetail";
+import Cart from "./components/user/Cart";
 import ServiceManager from "./components/admin/SerivceManager";
-import Profile from "./components/vendor/profile";
 import AddNewAdmin from "./components/admin/AddAdmin";
+import UserProfile from "./components/accounts/UserProfile";
+import { AuthProvider } from "./components/security/AuthContext";
+import ProtectedRoute from "./components/security/ProtectedRoute";
+import RoleRedirect from "./components/security/RoleRedirect";
+import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
+import VendorProfile from "./components/vendor/VendorProfile";
 
 function App() {
   return (
@@ -115,7 +114,7 @@ function App() {
               path="profile"
               element={
                 <RoleProtectedRoute allowedRoles={["user"]}>
-                  <ProfilePage />
+                  <UserProfile />
                 </RoleProtectedRoute>
               }
             />
@@ -149,7 +148,7 @@ function App() {
               path="vendor-profile"
               element={
                 <RoleProtectedRoute allowedRoles={["vendor"]}>
-                  <Profile />
+                  <VendorProfile />
                 </RoleProtectedRoute>
               }
             />

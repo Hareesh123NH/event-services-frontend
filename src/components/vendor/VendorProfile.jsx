@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Camera, Mail, Phone, MapPin, Save, Edit2, X } from "lucide-react";
 
-const Profile = () => {
+const VendorProfile = () => {
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -201,4 +201,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default VendorProfile;

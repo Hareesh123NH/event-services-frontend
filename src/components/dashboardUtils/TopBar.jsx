@@ -1,8 +1,12 @@
 import React from "react";
 import { Search, Sun, Moon, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../security/AuthContext";
 
 const TopBar = ({ search, setSearch, darkMode, setDarkMode, showProfile, setShowProfile }) => {
+
+  const { logout } = useAuth();
+
   return (
     <div className="flex items-center justify-between p-4 bg-white dark:bg-gray-800 shadow-md relative">
       {/* Search */}
@@ -77,13 +81,8 @@ const TopBar = ({ search, setSearch, darkMode, setDarkMode, showProfile, setShow
                 exit={{ opacity: 0, y: -10 }}
                 className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-2"
               >
-                <button className="block w-full text-left px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                  Profile
-                </button>
-                <button className="block w-full text-left px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                  Settings
-                </button>
-                <button className="block w-full text-left px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
+                <button className="block w-full text-left px-4 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700"
+                  onClick={logout}>
                   Logout
                 </button>
               </motion.div>

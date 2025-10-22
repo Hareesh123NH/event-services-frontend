@@ -43,7 +43,7 @@ const CollapsibleSection = ({ title, children }) => {
   );
 };
 
-const ProfilePage = () => {
+const UserProfile = () => {
   // Load from localStorage if exists
   const savedProfile = JSON.parse(localStorage.getItem("profile")) || {
     name: "John Doe",
@@ -214,4 +214,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default UserProfile;

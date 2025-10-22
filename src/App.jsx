@@ -20,6 +20,8 @@ import RoleRedirect from "./components/auth/RoleRedirect";
 import VendorDetail from "./components/dashboardUtils/vendordetail";
 import Cart from "./components/dashboardUtils/Cart";
 import ServiceManager from "./components/admin/SerivceManager";
+import Profile from "./components/vendor/profile";
+import AddNewAdmin from "./components/admin/AddAdmin";
 
 function App() {
   return (
@@ -118,8 +120,6 @@ function App() {
               }
             />
 
-
-
             {/* Vendor role */}
             <Route
               path="pending-orders"
@@ -145,6 +145,14 @@ function App() {
                 </RoleProtectedRoute>
               }
             />
+            <Route
+              path="vendor-profile"
+              element={
+                <RoleProtectedRoute allowedRoles={["vendor"]}>
+                  <Profile />
+                </RoleProtectedRoute>
+              }
+            />
 
             {/* Admin role */}
             <Route
@@ -163,9 +171,15 @@ function App() {
                 </RoleProtectedRoute>
               }
             />
-
+            <Route
+              path="add-admin"
+              element={
+                <RoleProtectedRoute allowedRoles={["admin"]}>
+                  <AddNewAdmin />
+                </RoleProtectedRoute>
+              }
+            />
             {/* Shared */}
-
           </Route>
         </Routes>
       </Router>

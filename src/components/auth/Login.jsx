@@ -9,6 +9,7 @@ const Login = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
+    role: "user"
   });
 
   const navigate = useNavigate();
@@ -20,20 +21,14 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-
-    let role = "admin";
-    if (formData.email.includes("admin")) role = "admin";
-    else if (formData.email.includes("vendor")) role = "vendor";
-    else if (formData.email.includes("manager")) role = "manager";
-
     const userData = {
       email: formData.email,
       name: "John Doe",
-      role,
+      role: formData.role,
       token: "fake-jwt-token",
     };
 
-    login(userData); 
+    login(userData);
     navigate("/dashboard");
   };
 
@@ -86,6 +81,23 @@ const Login = () => {
                 placeholder="Enter your password"
                 required
               />
+            </div>
+
+            <div>
+              <label className="block text-gray-700 font-medium mb-2">
+                Role
+              </label>
+              <select
+                name="role"
+                value={formData.role}
+                onChange={handleChange}
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                required
+              >
+                <option value="user">User</option>
+                <option value="vendor">Vendor</option>
+                <option value="admin">Admin</option>
+              </select>
             </div>
 
             <div className="flex justify-between items-center text-sm text-gray-500">

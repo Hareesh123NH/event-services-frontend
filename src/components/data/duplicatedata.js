@@ -10,7 +10,7 @@ import {
     PlusCircle,
     Users,
     Layers,
-  } from "lucide-react";
+} from "lucide-react";
 export const mockVendors = [
     {
         _id: "10",
@@ -229,20 +229,35 @@ export const mockVendors = [
 
 export const filtersList = [
     "All",
-    "Music",
-    "Telugu cinema",
-    "Mixes",
-    "Bigg Boss",
-    "Anirudh Ravichander",
-    "Anushka Shetty",
-    "Yuvan Shankar Raja",
-    "JavaScript",
-    "Live",
-    "User interface design",
-    "A. R. Rahman",
-    "Data Structures",
-    "Dramedy",
+    "Photography",
+    "Videography",
+    "Stage Decoration",
+    "Catering",
+    "Makeup & Styling",
+    "Lighting",
+    "Sound System",
+    "Venue Decoration",
+    "Flower Arrangement",
+    "Event Management",
+    "Mehendi",
+    "DJ & Music",
+    "Live Band",
+    "Invitation Design",
+    "Transportation",
+    "Tent House",
+    "Costume Rental",
+    "Cake & Bakery",
+    "Security Services",
+    "Cleaning & Maintenance",
+    "Guest Management",
+    "Entertainment",
+    "Anchoring",
+    "Photography Add-ons",
+    "Traditional Performers",
+    "Drone Shoot",
+    "Custom Backdrops"
 ];
+
 
 export const vendorServiceDetails = {
     success: true,
@@ -284,27 +299,27 @@ export const vendorServiceDetails = {
 
 export const sidebarOptions = {
     vendor: [
-      { label: "Dashboard", path: "overview", icon: LayoutDashboard },
-      { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
-      { label: "My Services", path: "services", icon: Wrench },
-      { label: "Add Service", path: "add-service", icon: PlusCircle },
-//       { label: "Profile", path: "profile", icon: User },
+        { label: "Dashboard", path: "overview", icon: LayoutDashboard },
+        { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
+        { label: "My Services", path: "services", icon: Wrench },
+        { label: "Add Service", path: "add-service", icon: PlusCircle },
+        //       { label: "Profile", path: "profile", icon: User },
     ],
-  
+
     admin: [
-      { label: "Vendor Registrations", path: "vendor-registrations", icon: Users },
-      { label: "All Services", path: "all-services", icon: Layers },
-//       { label: "Profile", path: "profile", icon: User },
+        { label: "Vendor Registrations", path: "vendor-registrations", icon: Users },
+        { label: "All Services", path: "all-services", icon: Layers },
+        //       { label: "Profile", path: "profile", icon: User },
     ],
-  
+
     user: [
-      { label: "Home", path: "home", icon: Home },
-      { label: "Book Order", path: "book-order", icon: BookOpen },
-      { label: "Order History", path: "history", icon: History },
-      { label: "Profile", path: "profile", icon: User },
-      { label: "Cart", path: "cart", icon: ShoppingCart },
+        { label: "Home", path: "home", icon: Home },
+        { label: "Book Order", path: "book-order", icon: BookOpen },
+        { label: "Order History", path: "history", icon: History },
+        { label: "Profile", path: "profile", icon: User },
+        { label: "Cart", path: "cart", icon: ShoppingCart },
     ],
-  };
+};
 
 export const orderData = {
     "success": true,

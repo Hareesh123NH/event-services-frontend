@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 
-import { filtersList, mockVendors } from "../data/duplicatedata";
+import {  mockVendors } from "../data/duplicatedata";
 import Filters from "./Filters";
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -11,7 +11,7 @@ const VendorGrid = () => {
   const [activeFilter, setActiveFilter] = useState("All");
   return (
     <>
-      <Filters filters={filtersList} activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
+      <Filters activeFilter={activeFilter} setActiveFilter={setActiveFilter} />
       <motion.div
         layout
         className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 overflow-y-auto"
@@ -37,7 +37,7 @@ const VendorGrid = () => {
                 <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
                   Service: {vendorItem.service.service_name}
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">
                   {vendorItem.service.description}
                 </p>
                 <p className="text-sm font-medium mt-2">

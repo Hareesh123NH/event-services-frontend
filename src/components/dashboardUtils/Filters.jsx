@@ -1,6 +1,8 @@
 import React from "react";
+import { filtersList } from "../data/duplicatedata";
 
-const Filters = ({ filters, activeFilter, setActiveFilter }) => {
+const Filters = ({ activeFilter, setActiveFilter }) => {
+  const filters = filtersList;
   return (
     <div >
       {/* Scrollable Buttons */}
@@ -13,8 +15,8 @@ const Filters = ({ filters, activeFilter, setActiveFilter }) => {
             key={filter}
             onClick={() => setActiveFilter(filter)}
             className={`px-4 py-2 rounded-full whitespace-nowrap text-sm text-center flex-shrink-0 ${activeFilter === filter
-                ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
-                : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
+              ? "bg-gray-900 text-white dark:bg-gray-100 dark:text-gray-900"
+              : "bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600"
               }`}
           >
             {filter}

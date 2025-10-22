@@ -3,13 +3,14 @@ import { Search, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../security/AuthContext";
 import { ThemeContext } from "../ThemeContext";
+import DarkMode from "./DarkMode";
 
 const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
   const { logout } = useAuth();
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { theme } = useContext(ThemeContext);
 
-  // Dynamic classes based on theme
-  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-white";
+  // Dynamic classes
+  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
   const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
   const inputTextClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
   const inputPlaceholderClass = theme === "dark" ? "placeholder-gray-400" : "placeholder-gray-500";
@@ -17,6 +18,7 @@ const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
   const profileBgClass = theme === "dark" ? "bg-gray-700" : "bg-gray-300";
   const dropdownBgClass = theme === "dark" ? "bg-gray-800" : "bg-white";
   const dropdownHoverClass = theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100";
+  const dropdownTextClass = theme === "dark" ? "text-gray-200" : "text-gray-900"; // explicitly set text color
   const iconColor = theme === "dark" ? "text-gray-300" : "text-gray-500";
 
   return (
@@ -35,13 +37,9 @@ const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
 
       {/* Dark Mode + Profile */}
       <div className="flex items-center space-x-4">
-        {/* Dark Mode Toggle */}
-        <button
-          onClick={toggleTheme}
-          className={`px-4 py-2 rounded ${btnBgClass}`}
-        >
-          {theme === "light" ? "🌙 Dark Mode" : "☀️ Light Mode"}
-        </button>
+
+
+        <DarkMode />
 
         {/* Profile Dropdown */}
         <div className="relative">
@@ -49,7 +47,7 @@ const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
             onClick={() => setShowProfile(!showProfile)}
             className={`w-9 h-9 rounded-full ${profileBgClass} flex items-center justify-center`}
           >
-            <User size={20} />
+            <User size={20} className={dropdownTextClass} />
           </button>
 
           <AnimatePresence>
@@ -61,7 +59,7 @@ const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
                 className={`absolute right-0 mt-2 w-40 rounded-lg shadow-lg p-2 ${dropdownBgClass}`}
               >
                 <button
-                  className={`block w-full text-left px-4 py-2 rounded ${dropdownHoverClass}`}
+                  className={`block w-full text-left px-4 py-2 rounded ${dropdownHoverClass} ${dropdownTextClass}`}
                   onClick={logout}
                 >
                   Logout

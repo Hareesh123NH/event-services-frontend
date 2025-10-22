@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
+import { ThemeContext } from "../ThemeContext";
 
 export const ServiceModal = ({ service, onClose, onSave }) => {
+  const { theme } = useContext(ThemeContext);
+
   const [formData, setFormData] = useState({
     service_name: "",
     description: "",
@@ -28,21 +31,29 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  // Theme-based classes
+  const modalBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
+  const textSecondary = theme === "dark" ? "text-gray-200" : "text-gray-700";
+  const inputBg = theme === "dark" ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900";
+  const cancelBtnBg = theme === "dark" ? "bg-gray-600 text-gray-100 hover:bg-gray-500" : "bg-gray-300 text-gray-800 hover:bg-gray-400";
+  const saveBtnBg = theme === "dark" ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white";
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         exit={{ scale: 0 }}
-        className="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md shadow-lg"
+        className={`${modalBg} rounded-xl p-6 w-full max-w-md shadow-lg`}
       >
-        <h2 className="text-xl font-semibold mb-5 text-gray-800 dark:text-gray-100">
+        <h2 className={`text-xl font-semibold mb-5 ${textPrimary}`}>
           {service ? "Edit Service" : "Add Service"}
         </h2>
 
         <div className="flex flex-col gap-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${textSecondary}`}>
               Service Name
             </label>
             <input
@@ -50,24 +61,24 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
               name="service_name"
               value={formData.service_name}
               onChange={handleChange}
-              className="border rounded px-3 py-2 w-full bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 ${inputBg}`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${textSecondary}`}>
               Description
             </label>
             <textarea
               name="description"
               value={formData.description}
               onChange={handleChange}
-              className="border rounded px-3 py-2 w-full h-20 bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+              className={`border rounded px-3 py-2 w-full h-20 focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none ${inputBg}`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${textSecondary}`}>
               Base Price
             </label>
             <input
@@ -75,19 +86,19 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
               name="base_price"
               value={formData.base_price}
               onChange={handleChange}
-              className="border rounded px-3 py-2 w-full bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 ${inputBg}`}
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-200 mb-1">
+            <label className={`block text-sm font-medium mb-1 ${textSecondary}`}>
               Pricing Type
             </label>
             <select
               name="pricing_type"
               value={formData.pricing_type}
               onChange={handleChange}
-              className="border rounded px-3 py-2 w-full bg-white text-gray-900 dark:bg-gray-700 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className={`border rounded px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 ${inputBg}`}
             >
               <option value="per_day">Per Day</option>
               <option value="per_hour">Per Hour</option>
@@ -98,13 +109,13 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
 
         <div className="flex justify-end gap-3 mt-6">
           <button
-            className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+            className={`px-4 py-2 rounded ${cancelBtnBg}`}
             onClick={onClose}
           >
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className={`px-4 py-2 rounded ${saveBtnBg}`}
             onClick={() => onSave(formData)}
           >
             Save

@@ -11,7 +11,7 @@ const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
   const { theme } = useContext(ThemeContext);
 
   // Dynamic classes based on theme
-  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-white";
+  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
   const textClass = theme === "dark" ? "text-gray-200" : "text-gray-700";
   const hoverClass = theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100";
   const tooltipClass = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-900";

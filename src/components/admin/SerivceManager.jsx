@@ -1,8 +1,8 @@
-// ServiceManager.jsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { ServiceModal } from "./Servicemodal";
+import { ThemeContext } from "../ThemeContext";
 
 // Sample initial services
 const initialServices = [
@@ -30,6 +30,8 @@ const initialServices = [
 ];
 
 const ServiceManager = () => {
+  const { theme } = useContext(ThemeContext);
+
   const [allServices, setAllServices] = useState(initialServices);
   const [editingService, setEditingService] = useState(null);
   const [addingService, setAddingService] = useState(false);
@@ -56,15 +58,23 @@ const ServiceManager = () => {
     }
   };
 
+  // Theme-based classes
+  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
+  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
+  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";
+  const buttonBg =
+    theme === "dark"
+      ? "bg-green-600 hover:bg-green-700 text-white"
+      : "bg-green-500 hover:bg-green-600 text-white";
+
   return (
-    <div className="p-4">
+    <div className={`p-4 min-h-screen ${pageBg}`}>
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
-        <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
-          Services
-        </h1>
+        <h1 className={`text-2xl font-semibold ${textPrimary}`}>Services</h1>
         <button
-          className="flex items-center gap-1 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
+          className={`flex items-center gap-1 px-3 py-1 rounded ${buttonBg}`}
           onClick={() => setAddingService(true)}
         >
           <PlusIcon className="h-5 w-5" />
@@ -83,22 +93,27 @@ const ServiceManager = () => {
               key={service.service_id}
               layout
               whileHover={{ scale: 1.03 }}
-              className="bg-white dark:bg-gray-800 rounded-xl shadow hover:shadow-lg cursor-pointer transition-all flex flex-col justify-between relative"
+              className={`${cardBg} rounded-xl shadow hover:shadow-lg cursor-pointer transition-all flex flex-col justify-between relative`}
             >
               {/* Edit icon */}
               <button
-                className="absolute top-2 right-2 p-1 text-gray-500 hover:text-blue-500"
+                className={`absolute top-2 right-2 p-1 rounded ${theme === "dark"
+                    ? "text-gray-300 hover:text-blue-400"
+                    : "text-gray-500 hover:text-blue-500"
+                  }`}
                 onClick={() => setEditingService(service)}
               >
                 <PencilIcon className="h-5 w-5" />
               </button>
 
               <div className="p-3 flex-1">
-                <h3 className="font-semibold text-lg">{service.service_name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                <h3 className={`font-semibold text-lg ${textPrimary}`}>
+                  {service.service_name}
+                </h3>
+                <p className={`text-xs mt-1 ${textSecondary}`}>
                   {service.description}
                 </p>
-                <p className="text-sm font-medium mt-2">
+                <p className={`text-sm font-medium mt-2 ${textPrimary}`}>
                   Price: ₹{service.base_price} ({service.pricing_type})
                 </p>
               </div>

@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
+
+// Mock ThemeContext (replace with your actual ThemeContext if you have one)
+const ThemeContext = React.createContext({ theme: "light" });
 
 const availableServices = [
     {
@@ -27,6 +30,8 @@ const availableServices = [
 ];
 
 const AddNewVendorService = ({ onSave }) => {
+    const { theme } = useContext(ThemeContext);
+
     const [selectedServiceId, setSelectedServiceId] = useState("");
     const [price, setPrice] = useState(0);
     const [discount, setDiscount] = useState(0);
@@ -52,13 +57,8 @@ const AddNewVendorService = ({ onSave }) => {
         setAddons(newAddons);
     };
 
-    const handleAddAddon = () => {
-        setAddons([...addons, { title: "", price: "", description: "" }]);
-    };
-
-    const handleRemoveAddon = (index) => {
-        setAddons(addons.filter((_, i) => i !== index));
-    };
+    const handleAddAddon = () => setAddons([...addons, { title: "", price: "", description: "" }]);
+    const handleRemoveAddon = (index) => setAddons(addons.filter((_, i) => i !== index));
 
     const handleSave = () => {
         if (!selectedServiceId) return alert("Select a service!");
@@ -74,49 +74,54 @@ const AddNewVendorService = ({ onSave }) => {
         onSave && onSave(payload);
     };
 
+    // Theme-aware classes
+    const bgClass = theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-white text-gray-900";
+    const inputBg = theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-300";
+    const cardSelected = theme === "dark" ? "bg-blue-800 border-blue-400" : "bg-blue-100 border-blue-500";
+    const cardDefault = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300";
+
     return (
         <div className="h-[90vh] overflow-y-auto p-6">
             <motion.div
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white dark:bg-gray-800 dark:text-gray-200 shadow-md rounded-2xl border border-gray-100 dark:border-gray-700 p-6 flex flex-col gap-4"
+                className={`shadow-md rounded-2xl border p-6 flex flex-col gap-4 ${bgClass} ${theme === "dark" ? "border-gray-700" : "border-gray-100"}`}
             >
                 <h2 className="text-lg font-semibold">Add New Vendor Service</h2>
 
                 {/* Select Service */}
                 <h3 className="text-xl font-semibold mb-2">Select Service</h3>
                 <div className="flex space-x-4 overflow-x-auto mb-4">
-                    {availableServices.map((service) => (
-                        <div
-                            key={service.service_id}
-                            className={`p-3 border rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition ${selectedServiceId === service.service_id
-                                ? "border-blue-500 bg-blue-100 dark:bg-blue-800 dark:border-blue-400"
-                                : "border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
-                                }`}
-                            onClick={() => {
-                                setSelectedServiceId(service.service_id);
-                                setPrice(service.base_price);
-                                setDiscount(0);
-                                setNotes("");
-                                setAddons([]);
-                                setDescription(service.description);
-                            }}
-                        >
-                            <p className="font-semibold">{service.service_name}</p>
-                            <p>Base Price : ₹{service.base_price}/{service.pricing_type}</p>
-                        </div>
-                    ))}
+                    {availableServices.map((service) => {
+                        const selected = selectedServiceId === service.service_id;
+                        return (
+                            <div
+                                key={service.service_id}
+                                className={`p-3 border rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition ${selected ? cardSelected : cardDefault}`}
+                                onClick={() => {
+                                    setSelectedServiceId(service.service_id);
+                                    setPrice(service.base_price);
+                                    setDiscount(0);
+                                    setNotes("");
+                                    setAddons([]);
+                                    setDescription(service.description);
+                                }}
+                            >
+                                <p className="font-semibold">{service.service_name}</p>
+                                <p>Base Price: ₹{service.base_price}/{service.pricing_type}</p>
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {selectedService && (
-
-                    <>  {/*Description */}
+                    <>
+                        {/* Description */}
                         <div className="mb-3">
                             <label className="font-medium">Description</label>
                             <p>{description}</p>
                         </div>
-
 
                         {/* Price */}
                         <div className="mb-3">
@@ -125,7 +130,7 @@ const AddNewVendorService = ({ onSave }) => {
                                 type="number"
                                 value={price}
                                 onChange={(e) => setPrice(parseFloat(e.target.value) || 0)}
-                                className="w-full mt-1 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                                className={`w-full mt-1 p-2 rounded-md border ${inputBg}`}
                             />
                         </div>
 
@@ -136,7 +141,7 @@ const AddNewVendorService = ({ onSave }) => {
                                 type="number"
                                 value={discount}
                                 onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                                className="w-full mt-1 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                                className={`w-full mt-1 p-2 rounded-md border ${inputBg}`}
                             />
                         </div>
 
@@ -147,7 +152,7 @@ const AddNewVendorService = ({ onSave }) => {
                                 type="number"
                                 value={finalPrice}
                                 disabled
-                                className="w-full mt-1 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-100 dark:bg-gray-800 text-gray-600"
+                                className={`w-full mt-1 p-2 rounded-md border ${inputBg} text-gray-600`}
                             />
                         </div>
 
@@ -158,7 +163,7 @@ const AddNewVendorService = ({ onSave }) => {
                                 value={notes}
                                 onChange={(e) => setNotes(e.target.value)}
                                 placeholder="Enter notes..."
-                                className="w-full mt-1 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900"
+                                className={`w-full mt-1 p-2 rounded-md border ${inputBg}`}
                             />
                         </div>
 
@@ -177,7 +182,7 @@ const AddNewVendorService = ({ onSave }) => {
                             {addons.length === 0 && <p className="text-gray-500 text-sm">No add-ons yet.</p>}
 
                             {addons.map((addon, index) => (
-                                <div key={index} className="p-3 mb-3 border border-gray-200 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900">
+                                <div key={index} className={`p-3 mb-3 border rounded-lg ${inputBg}`}>
                                     <div className="flex justify-between mb-2">
                                         <h4 className="font-semibold text-sm">Add-on {index + 1}</h4>
                                         <button
@@ -193,7 +198,7 @@ const AddNewVendorService = ({ onSave }) => {
                                         placeholder="Title"
                                         value={addon.title}
                                         onChange={(e) => handleAddonChange(index, "title", e.target.value)}
-                                        className="w-full mb-2 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                        className={`w-full mb-2 p-2 rounded-md border ${inputBg}`}
                                     />
 
                                     <input
@@ -201,7 +206,7 @@ const AddNewVendorService = ({ onSave }) => {
                                         placeholder="Price"
                                         value={addon.price}
                                         onChange={(e) => handleAddonChange(index, "price", parseFloat(e.target.value) || 0)}
-                                        className="w-full mb-2 p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                        className={`w-full mb-2 p-2 rounded-md border ${inputBg}`}
                                     />
 
                                     <textarea
@@ -209,7 +214,7 @@ const AddNewVendorService = ({ onSave }) => {
                                         value={addon.description}
                                         onChange={(e) => handleAddonChange(index, "description", e.target.value)}
                                         rows={2}
-                                        className="w-full p-2 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800"
+                                        className={`w-full p-2 rounded-md border ${inputBg}`}
                                     />
                                 </div>
                             ))}

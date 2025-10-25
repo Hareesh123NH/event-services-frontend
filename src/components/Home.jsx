@@ -1,7 +1,6 @@
-import { useContext } from "react";
 import { motion } from "framer-motion";
 import HomeNav from "./HomeNav";
-import { ThemeContext } from "./ThemeContext";
+import { useThemeClasses } from "./theme/themeClasses";
 
 const features = [
   { id: "features", title: "Event Planning", description: "Comprehensive tools to plan every detail of your event." },
@@ -15,12 +14,8 @@ const testimonials = [
 ];
 
 const Homepage = () => {
-  const { theme } = useContext(ThemeContext);
 
-  const pageBg = theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-white text-gray-900";
-  const cardBg = theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-gray-200 text-gray-900";
-  const sectionBg = theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900";
-  const accentBg = theme === "dark" ? "bg-purple-800" : "bg-purple-600";
+  const { pageBg, cardBg, sectionBg, accentBg } = useThemeClasses();
 
   return (
     <div className={`font-sans ${pageBg}`}>

@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const availableServices = [
     {
@@ -28,7 +28,6 @@ const availableServices = [
 ];
 
 const AddNewVendorService = ({ onSave }) => {
-    const { theme } = useContext(ThemeContext);
 
     const [selectedServiceId, setSelectedServiceId] = useState("");
     const [price, setPrice] = useState(0);
@@ -72,19 +71,14 @@ const AddNewVendorService = ({ onSave }) => {
         onSave && onSave(payload);
     };
 
-    // Theme-aware classes
-    const bgClass = theme === "dark" ? "bg-gray-800 text-gray-200" : "bg-gray-200 text-gray-900";
-    const inputBg = theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-300";
-    const cardSelected = theme === "dark" ? "bg-blue-800 border-blue-400" : "bg-blue-100 border-blue-500";
-    const cardDefault = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-700";
-
+    const { bgClass, inputBg, cardDefault, cardSelected, pageBg } = useThemeClasses();
     return (
         <div className="h-[90vh] overflow-y-auto p-6">
             <motion.div
                 layout
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className={`shadow-md rounded-2xl border p-6 flex flex-col gap-4 ${bgClass} ${theme === "dark" ? "border-gray-700" : "border-gray-100"}`}
+                className={`shadow-md rounded-2xl border p-6 flex flex-col gap-4 ${bgClass} ${pageBg}`}
             >
                 <h2 className="text-lg font-semibold">Add New Vendor Service</h2>
 

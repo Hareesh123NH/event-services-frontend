@@ -1,26 +1,17 @@
-import React, { useContext } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { vendorServiceDetails } from "../data/duplicatedata";
 import { useNavigate, useParams } from "react-router-dom";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorDetail = () => {
   const navigate = useNavigate();
-  const { theme } = useContext(ThemeContext);
 
   const { id } = useParams();
   const vendorItem = vendorServiceDetails.data;
   if (!vendorItem) return <p>Loading vendor details...</p>;
 
-  // Theme classes
-  const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900";
-  const cardBg = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-white border-gray-900";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-800";
-  const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-200";
-  const buttonBlue = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-500 hover:bg-blue-600 text-white";
-  const buttonGreen = theme === "dark" ? "bg-green-700 hover:bg-green-800 text-white" : "bg-green-500 hover:bg-green-600 text-white";
-  const backBtn = theme === "dark" ? "bg-gray-700 text-gray-200 hover:bg-gray-600" : "bg-gray-300 text-gray-700 hover:bg-gray-400";
+  const { pageBg, cardBg, textPrimary, textSecondary, borderColor, buttonBlue, buttonGreen, backBtn } = useThemeClasses();
 
   return (
     <div className={`flex-1 overflow-y-auto p-4 ${pageBg}`}>

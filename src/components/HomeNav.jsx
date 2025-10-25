@@ -1,21 +1,15 @@
-import { useState, useContext } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import DarkMode from "./dashboardUtils/DarkMode";
-import { ThemeContext } from "./ThemeContext";
+
+import { useThemeClasses } from "./theme/themeClasses";
 
 const HomeNav = () => {
     const navigate = useNavigate();
-    const { theme } = useContext(ThemeContext);
     const [menuOpen, setMenuOpen] = useState(false);
 
-    const navBg = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
-    const navText = theme === "dark" ? "text-white" : "text-purple-600";
-    const btnBg =
-        theme === "dark"
-            ? "bg-purple-700 hover:bg-purple-800 text-white"
-            : "bg-purple-600 hover:bg-purple-700 text-white";
-    const mobileMenuBg = theme === "dark" ? "bg-gray-800" : "bg-white";
+    const { navBg, navText, btnBg, mobileMenuBg } = useThemeClasses();
 
     return (
         <>

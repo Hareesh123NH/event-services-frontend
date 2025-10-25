@@ -1,6 +1,6 @@
 import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../ThemeContext";
+import { ThemeContext } from "../theme/ThemeContext";
 
 const AddNewAdmin = () => {
   const { theme } = useContext(ThemeContext);

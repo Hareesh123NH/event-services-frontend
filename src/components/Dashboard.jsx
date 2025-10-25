@@ -4,7 +4,7 @@ import TopBar from "./dashboardUtils/TopBar";
 import { sidebarOptions } from "./data/duplicatedata";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "./security/AuthContext";
-import { ThemeContext } from "./ThemeContext";
+import { ThemeContext } from "./theme/ThemeContext";
 
 const Dashboard = () => {
   const { user } = useAuth();

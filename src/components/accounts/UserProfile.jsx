@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { ThemeContext } from "../ThemeContext";
+import React, { useState } from "react";
+import { useThemeClasses } from "../theme/themeClasses"
 
 // Initial addresses (simulated backend)
 const initialAddresses = [
@@ -30,11 +30,9 @@ const initialAddresses = [
 // Collapsible Section Component
 const CollapsibleSection = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
-  const { theme } = useContext(ThemeContext);
 
-  const sectionBg = theme === "dark" ? "bg-gray-900" : "bg-grey-200";
-  const borderClass = theme === "dark" ? "border-gray-700" : "border-gray-900";
-  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
+  const { sectionBg, borderClass, textClass } = useThemeClasses();
+
 
   return (
     <div className={`${sectionBg} shadow-md rounded-lg mb-6`}>
@@ -50,7 +48,6 @@ const CollapsibleSection = ({ title, children }) => {
 };
 
 const UserProfile = () => {
-  const { theme } = useContext(ThemeContext);
 
   const savedProfile = JSON.parse(localStorage.getItem("profile")) || {
     name: "John Doe",
@@ -114,14 +111,16 @@ const UserProfile = () => {
     localStorage.setItem("defaultAddressId", id);
   };
 
-  // Dynamic classes
-  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
-  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
-  const inputBg = theme === "dark" ? "bg-gray-800 text-gray-100 border-gray-700" : "bg-white text-gray-900 border-gray-300";
-  const buttonPrimary = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
-  const buttonSecondary = theme === "dark" ? "bg-green-600 hover:bg-green-700 text-white" : "bg-green-500 hover:bg-green-600 text-white";
-  const borderDefault = theme === "dark" ? "border-gray-700" : "border-gray-300";
-  const borderActive = "border-blue-500";
+
+  const {
+    pageBg,
+    textClass,
+    inputBg,
+    buttonPrimary,
+    buttonSecondary,
+    borderDefault,
+    borderActive,
+  } = useThemeClasses();
 
   return (
     <div className={`flex flex-col p-6 overflow-y-auto min-h-screen ${pageBg} ${textClass}`}>

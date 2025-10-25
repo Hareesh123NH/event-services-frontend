@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
+import { section } from "framer-motion/client";
 
 const cartData = [
   {
@@ -72,12 +73,12 @@ const Cart = () => {
     0
   );
 
-  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg, cartButton } = useThemeClasses();
+  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg, cartButton, sectionBg } = useThemeClasses();
 
   return (
     <motion.div
       layout
-      className={`p-4 md:p-8 ${bgPage} min-h-screen flex flex-col`}
+      className={`p-4 md:p-8 ${sectionBg} min-h-screen flex flex-col`}
     >
       <h2
         className={`text-3xl font-semibold mb-6 ${textPrimary} text-center`}

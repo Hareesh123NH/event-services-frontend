@@ -72,15 +72,13 @@ export const useThemeClasses = () => {
         inputText: isDark ? "text-gray-100" : "text-gray-800",
         inputTextClass: isDark ? "text-gray-100" : "text-gray-900",
         inputPlaceholderClass: isDark ? "placeholder-gray-400" : "placeholder-gray-500",
-        inputBg: isDark ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-900",
-
+        
         //Label
         linkText: isDark ? "text-purple-400 hover:text-purple-300" : "text-purple-600 hover:text-purple-700",
         labelColor: isDark ? "text-gray-300" : "text-gray-700",
         labelClass: isDark ? "text-gray-200" : "text-gray-700",
 
         //Card
-        cardSelected: isDark ? "bg-blue-800 border-blue-400" : "bg-blue-100 border-blue-500",
         cardBg: isDark ? "bg-gray-800 text-gray-100" : "bg-gray-200 text-gray-900",
         cardDefault: isDark ? "bg-gray-800 border-gray-700" : "bg-white border-gray-700",
         bgCard: isDark ? "bg-gray-800" : "bg-gray-200",

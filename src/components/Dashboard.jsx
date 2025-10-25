@@ -1,14 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import Sidebar from "./dashboardUtils/Sidebar";
 import TopBar from "./dashboardUtils/TopBar";
 import { sidebarOptions } from "./data/duplicatedata";
 import { Outlet } from "react-router-dom";
 import { useAuth } from "./security/AuthContext";
-import { ThemeContext } from "./ThemeContext";
+import { useThemeClasses } from "./theme/themeClasses";
 
 const Dashboard = () => {
   const { user } = useAuth();
-  const { theme } = useContext(ThemeContext);
 
   const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth >= 768);
   const [search, setSearch] = useState("");
@@ -21,9 +20,7 @@ const Dashboard = () => {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Theme-based classes
-  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const textClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
+  const { bgClass, textClass } = useThemeClasses();
 
   return (
     <div className={`flex h-screen overflow-hidden ${bgClass} ${textClass}`}>

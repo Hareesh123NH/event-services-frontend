@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
-import { ThemeContext } from "../ThemeContext"; // ✅ Import theme
+import { useThemeClasses } from "../theme/themeClasses";
 
 const cartData = [
   {
@@ -36,7 +36,6 @@ const cartData = [
 ];
 
 const Cart = () => {
-  const { theme } = useContext(ThemeContext); // ✅ Use theme context
   const navigate = useNavigate();
 
   const [cartItems, setCartItems] = useState(
@@ -52,12 +51,12 @@ const Cart = () => {
       prev.map((item) =>
         item._id === id
           ? {
-              ...item,
-              quantity:
-                action === "increase"
-                  ? item.quantity + 1
-                  : Math.max(1, item.quantity - 1),
-            }
+            ...item,
+            quantity:
+              action === "increase"
+                ? item.quantity + 1
+                : Math.max(1, item.quantity - 1),
+          }
           : item
       )
     );
@@ -73,12 +72,7 @@ const Cart = () => {
     0
   );
 
-  // ✅ Define colors based on theme
-  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-gray-100";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";
-  const buttonHover = theme === "dark" ? "hover:bg-gray-600" : "hover:bg-gray-200";
+  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg, cartButton } = useThemeClasses();
 
   return (
     <motion.div
@@ -124,9 +118,7 @@ const Cart = () => {
                   <div className="flex items-center gap-4">
                     {/* Quantity Controls */}
                     <div
-                      className={`flex items-center rounded-lg px-2 py-1 ${
-                        theme === "dark" ? "bg-gray-700" : "bg-gray-200"
-                      }`}
+                      className={`flex items-center rounded-lg px-2 py-1 ${imgBg}`}
                     >
                       <button
                         onClick={() =>
@@ -152,11 +144,7 @@ const Cart = () => {
                     {/* Remove Button */}
                     <button
                       onClick={() => handleRemove(item._id)}
-                      className={`p-2 text-red-500 ${
-                        theme === "dark"
-                          ? "bg-gray-700 hover:bg-gray-600"
-                          : "bg-red-100 hover:bg-red-200"
-                      } rounded-lg transition`}
+                      className={`p-2 text-red-500 ${cartButton} rounded-lg transition`}
                       title="Remove item"
                     >
                       <Trash2 size={20} />

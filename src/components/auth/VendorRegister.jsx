@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
-import { ThemeContext } from "../ThemeContext";
 import { Link } from "react-router-dom";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorRegister = () => {
-  const { theme } = useContext(ThemeContext); // ✅ use theme
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -74,29 +73,8 @@ const VendorRegister = () => {
     alert("Vendor Registered Successfully!");
   };
 
-  // ✅ Theme-based classes
-  const bgGradient =
-    theme === "dark"
-      ? "bg-gradient-to-br from-gray-800 to-gray-900"
-      : "bg-gradient-to-br from-purple-100 to-indigo-200";
-  const formBg = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-900";
-  const labelColor = theme === "dark" ? "text-gray-200" : "text-gray-900";
-  const inputBg =
-    theme === "dark"
-      ? "bg-gray-700 border-gray-600 focus:ring-purple-500"
-      : "bg-white border-gray-300 focus:ring-purple-500";
-  const buttonBg =
-    theme === "dark"
-      ? "bg-purple-700 hover:bg-purple-800 text-white"
-      : "bg-purple-600 hover:bg-purple-700 text-white";
-  const cardBg =
-    theme === "dark"
-      ? "bg-gray-700 border-gray-600 text-white"
-      : "bg-white border-gray-300 text-gray-800";
-  const cardSelected =
-    theme === "dark"
-      ? "border-purple-500 bg-purple-900"
-      : "border-purple-500 bg-purple-100";
+  const { bgGradient, cardBg, formBg, labelColor, inputBg, btnBg, cardSelected, isDark } = useThemeClasses();
+
 
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${bgGradient}`}>
@@ -153,7 +131,7 @@ const VendorRegister = () => {
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent}
-                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent ? "bg-gray-400 cursor-not-allowed" : buttonBg
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent ? "bg-gray-400 cursor-not-allowed" : btnBg
                     }`}
                 >
                   {otpSent ? `Resend in ${otpTimer}s` : "Send OTP"}
@@ -249,7 +227,7 @@ const VendorRegister = () => {
                 <div className="flex items-center space-x-3">
                   <label
                     htmlFor={field}
-                    className={`cursor-pointer inline-block bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-200 ${theme === "dark" ? "bg-gray-900 text-gray-200 border-gray-600 hover:bg-gray-600" : ""
+                    className={`cursor-pointer inline-block bg-gray-100 text-gray-700 border border-gray-300 rounded-lg px-4 py-2 hover:bg-gray-200 ${isDark ? "bg-gray-900 text-gray-200 border-gray-600 hover:bg-gray-600" : ""
                       }`}
                   >
                     Choose File
@@ -263,9 +241,9 @@ const VendorRegister = () => {
                     className="hidden"
                   />
                   <div
-                    className={`flex items-center justify-between border rounded-lg px-3 py-2 w-full ${theme === "dark"
-                        ? "border-gray-600 bg-gray-700"
-                        : "border-gray-300 bg-gray-50"
+                    className={`flex items-center justify-between border rounded-lg px-3 py-2 w-full ${isDark
+                      ? "border-gray-600 bg-gray-700"
+                      : "border-gray-300 bg-gray-50"
                       }`}
                   >
                     <span className="text-sm truncate">
@@ -310,7 +288,7 @@ const VendorRegister = () => {
             {/* Submit */}
             <button
               type="submit"
-              className={`w-full py-3 rounded-lg font-semibold transition ${buttonBg}`}
+              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg}`}
             >
               Register Vendor
             </button>

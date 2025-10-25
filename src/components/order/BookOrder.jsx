@@ -1,9 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
-import { cartData, addresses as storedAddresses } from "../data/duplicatedata";
-import { ThemeContext } from "../ThemeContext";
+import React, { useState, useEffect } from "react";
+import { addresses as storedAddresses } from "../data/duplicatedata";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const BookOrder = () => {
-    const { theme } = useContext(ThemeContext); // 'light' or 'dark'
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddressId, setSelectedAddressId] = useState("");
@@ -95,15 +94,14 @@ const BookOrder = () => {
         return sum + (service?.final_price || 0) * (s.quantity || 1);
     }, 0);
 
-    // Theme classes
-    const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-900";
+
+    const { pageBg, panelBg, inputBg, cardBgActive, cardBgSelected, cardBgOrder, buttonBlue, isDark } = useThemeClasses();
+
     const cardBg = (isSelected, isActive) => {
-        if (isActive) return theme === "dark" ? "border-green-500 bg-green-800" : "border-green-900 bg-green-200";
-        if (isSelected) return theme === "dark" ? "border-blue-500 bg-blue-800" : "border-blue-900 bg-blue-400";
-        return theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-400 bg-white";
+        if (isActive) return cardBgActive;
+        if (isSelected) return cardBgSelected;
+        return cardBgOrder;
     };
-    const panelBg = theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-500 bg-white";
-    const inputBg = theme === "dark" ? "border-gray-700 bg-gray-800 text-white" : "border-gray-500 bg-white text-gray-900";
 
     return (
         <div className={`h-screen overflow-y-auto p-4 ${pageBg}`}>
@@ -128,8 +126,8 @@ const BookOrder = () => {
                         <div
                             key={addr._id}
                             className={`p-3 rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition border ${selectedAddressId === addr._id
-                                ? theme === "dark" ? "border-blue-400 bg-blue-800" : "border-blue-600 bg-blue-200"
-                                : theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"
+                                ? isDark ? "border-blue-400 bg-blue-800" : "border-blue-600 bg-blue-200"
+                                : isDark ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"
                                 }`}
                             onClick={() => setSelectedAddressId(addr._id)}
                         >
@@ -200,7 +198,7 @@ const BookOrder = () => {
                         </div>
 
                         <button
-                            className={theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded" : "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"}
+                            className={isDark ? "bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded" : "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"}
                             onClick={handleSaveForm}
                         >
                             Save Service

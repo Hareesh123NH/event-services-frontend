@@ -2,19 +2,16 @@ import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
+
 
 
 const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { theme } = useContext(ThemeContext);
-
+  
   // Dynamic classes based on theme
-  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
-  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const hoverClass = theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100";
-  const tooltipClass = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-900";
+  const { bgClass, textClass, hoverClass, tooltipClass} = useThemeClasses();
 
   return (
     <motion.aside

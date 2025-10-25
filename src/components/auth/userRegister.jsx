@@ -2,11 +2,10 @@ import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
 import { Link, useNavigate } from "react-router-dom";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const UserRegister = () => {
   const navigate = useNavigate();
-  const { theme } = useContext(ThemeContext); // ✅ Access theme from context
 
   const [formData, setFormData] = useState({
     full_name: "",
@@ -51,20 +50,8 @@ const UserRegister = () => {
   };
 
   // ✅ Dynamic styles based on theme
-  const bgGradient =
-    theme === "dark"
-      ? "bg-gradient-to-br from-gray-800 to-gray-900"
-      : "bg-gradient-to-br from-purple-100 to-indigo-200";
-  const formBg = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-gray-800";
-  const labelColor = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const inputBg =
-    theme === "dark"
-      ? "bg-gray-700 border-gray-600 focus:ring-purple-500"
-      : "bg-white border-gray-300 focus:ring-purple-500";
-  const buttonBg =
-    theme === "dark"
-      ? "bg-purple-700 hover:bg-purple-800 text-white"
-      : "bg-purple-600 hover:bg-purple-700 text-white";
+  const { bgGradient, formBg, labelColor, inputBg, btnBg } = useThemeClasses();
+
 
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${bgGradient}`}>
@@ -121,9 +108,8 @@ const UserRegister = () => {
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent}
-                  className={`px-4 py-2 rounded-lg font-semibold transition ${
-                    otpSent ? "bg-gray-400 cursor-not-allowed" : buttonBg
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent ? "bg-gray-400 cursor-not-allowed" : btnBg
+                    }`}
                 >
                   {otpSent ? `Resend in ${otpTimer}s` : "Send OTP"}
                 </button>
@@ -178,7 +164,7 @@ const UserRegister = () => {
 
             <button
               type="submit"
-              className={`w-full py-3 rounded-lg font-semibold transition ${buttonBg}`}
+              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg}`}
             >
               Register
             </button>

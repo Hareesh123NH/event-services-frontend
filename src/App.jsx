@@ -21,7 +21,7 @@ import ProtectedRoute from "./components/security/ProtectedRoute";
 import RoleRedirect from "./components/security/RoleRedirect";
 import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
 import VendorProfile from "./components/vendor/VendorProfile";
-import { ThemeProvider } from "./components/ThemeContext";
+import { ThemeProvider } from "./components/theme/ThemeContext";
 import VendorRegister from "./components/auth/VendorRegister";
 
 function App() {

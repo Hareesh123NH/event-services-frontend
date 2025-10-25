@@ -1,5 +1,5 @@
 import { Sun, Moon } from "lucide-react";
-import { ThemeContext } from "../ThemeContext";
+import { ThemeContext } from "../theme/ThemeContext";
 import { useContext } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 

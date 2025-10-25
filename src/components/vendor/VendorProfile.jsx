@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Camera, Mail, Phone, MapPin, Save, Edit2, X } from "lucide-react";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorProfile = () => {
-  const { theme } = useContext(ThemeContext);
 
   const [profile, setProfile] = useState({
     name: "John Doe",
@@ -39,22 +38,14 @@ const VendorProfile = () => {
     setEditing(false);
   };
 
-  // Theme-based classes
-  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
-  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-gray-50";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";
 
-  const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-200" : "bg-gray-200 border-gray-300 text-gray-900";
-  const inputDisabledBg = theme === "dark" ? "bg-gray-800 border-gray-600 text-gray-400 cursor-not-allowed" : "bg-gray-100 border-gray-300 text-gray-500 cursor-not-allowed";
-  const borderEditing = "border-blue-400 focus:ring-2 focus:ring-blue-300";
-
+  const { imgBg, pageBg, cardBg, textPrimary, textSecondary, inputBg, inputDisabledBg, borderEditing, } = useThemeClasses();
   return (
-    <div className={`flex-1 overflow-y-auto px-6 py-6 md:px-10 ${bgPage} ${textPrimary}`}>
+    <div className={`flex-1 overflow-y-auto px-6 py-6 md:px-10 ${pageBg} ${textPrimary}`}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`max-w-3xl mx-auto ${bgCard} rounded-2xl shadow-lg p-6 md:p-8 relative`}
+        className={`max-w-3xl mx-auto ${cardBg} rounded-2xl shadow-lg p-6 md:p-8 relative`}
       >
         {/* Edit Icon */}
         {!editing && (
@@ -73,7 +64,7 @@ const VendorProfile = () => {
             <img
               src={formData.profileImage}
               alt="Profile"
-              className={`w-24 h-24 rounded-full object-cover border-4 ${theme === "dark" ? "border-gray-700" : "border-gray-200"}`}
+              className={`w-24 h-24 rounded-full object-cover border-4 ${imgBg}`}
             />
             {editing && (
               <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">

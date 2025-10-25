@@ -1,18 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { pendingOrders } from "../data/duplicatedata";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorPendingOrders = ({ onAction }) => {
-  const { theme } = useContext(ThemeContext);
 
   const orders = pendingOrders.orders;
 
-  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-gray-200";
-  const bgService = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";
-  const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-200";
+  const { bgCard, bgService, textPrimary, textSecondary, borderColor } = useThemeClasses();
 
   if (!orders || orders.length === 0) {
     return (

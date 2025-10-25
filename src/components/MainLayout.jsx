@@ -1,13 +1,11 @@
 // layouts/MainLayout.jsx
-import React, { useContext } from "react";
+import React from "react";
 import HomeNav from "../components/HomeNav";
-import { ThemeContext } from "./ThemeContext";
+import { useThemeClasses } from "./theme/themeClasses";
 
 const MainLayout = ({ children }) => {
-  const { theme } = useContext(ThemeContext);
 
-  const pageBg = theme === "dark" ? "bg-gray-900 text-gray-100" : "bg-gray-50 text-gray-900";
-  const footerBg = theme === "dark" ? "bg-gray-800 text-gray-100" : "bg-gray-200 text-gray-900";
+  const { pageBg, footerBg } = useThemeClasses();
 
   return (
     <div className={`font-sans min-h-screen flex flex-col ${pageBg}`}>

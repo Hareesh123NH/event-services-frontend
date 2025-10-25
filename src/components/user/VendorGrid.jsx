@@ -1,25 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import { mockVendors } from "../data/duplicatedata";
 import Filters from "../dashboardUtils/Filters";
-import { Outlet, useNavigate } from "react-router-dom";
-import { ThemeContext } from "../ThemeContext";
+import { useNavigate } from "react-router-dom";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorGrid = () => {
   const navigate = useNavigate();
-  const { theme } = useContext(ThemeContext); // 'light' or 'dark'
   const vendors = mockVendors;
   const [activeFilter, setActiveFilter] = useState("All");
 
-  // Theme classes
-  const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-900";
-  const cardBg = theme === "dark" ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-300";
-  const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-500";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-900";
-  const buttonBlue = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-500 hover:bg-blue-600 text-white";
-  const buttonGreen = theme === "dark" ? "bg-green-700 hover:bg-green-800 text-white" : "bg-green-500 hover:bg-green-600 text-white";
+  const { pageBg, cardBg, borderColor, textPrimary, textSecondary, buttonBlue, buttonGreen } = useThemeClasses();
 
   return (
     <>

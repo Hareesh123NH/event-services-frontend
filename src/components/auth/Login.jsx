@@ -1,13 +1,12 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const Login = () => {
   const { login } = useAuth();
-  const { theme } = useContext(ThemeContext);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -34,19 +33,10 @@ const Login = () => {
     navigate("/dashboard");
   };
 
-  // 🎨 Theme-based classes
-  const isDark = theme === "dark";
-  const pageBg = isDark
-    ? "bg-gradient-to-br from-gray-900 to-gray-800"
-    : "bg-gradient-to-br from-purple-100 to-indigo-200";
-  const formBg = isDark ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-900";
-  const inputBg = isDark
-    ? "bg-gray-800 border-gray-700 text-white placeholder-gray-400"
-    : "bg-gray-50 border-gray-300 text-gray-900 placeholder-gray-500";
-  const labelText = isDark ? "text-gray-300" : "text-gray-700";
-  const linkText = isDark ? "text-purple-400 hover:text-purple-300" : "text-purple-600 hover:text-purple-700";
-  const buttonBg = isDark ? "bg-purple-700 hover:bg-purple-800" : "bg-purple-600 hover:bg-purple-700";
 
+
+
+  const { pageBg, formBg, inputBg, labelColor, linkText, buttonBg } = useThemeClasses();
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${pageBg}`}>
       {/* Left Side - Image */}
@@ -70,7 +60,7 @@ const Login = () => {
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
-              <label className={`block font-medium mb-2 ${labelText}`}>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Email
               </label>
               <input
@@ -85,7 +75,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className={`block font-medium mb-2 ${labelText}`}>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Password
               </label>
               <input
@@ -100,7 +90,7 @@ const Login = () => {
             </div>
 
             <div>
-              <label className={`block font-medium mb-2 ${labelText}`}>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
                 Role
               </label>
               <select
@@ -141,17 +131,15 @@ const Login = () => {
             <div className="flex justify-center space-x-4 mt-4">
               <button
                 type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${
-                  isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
-                }`}
+                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
+                  }`}
               >
                 <img src="/google-icon.svg" alt="Google" className="h-6 w-6" />
               </button>
               <button
                 type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${
-                  isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
-                }`}
+                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
+                  }`}
               >
                 <img src="/apple-icon.svg" alt="Apple" className="h-6 w-6" />
               </button>

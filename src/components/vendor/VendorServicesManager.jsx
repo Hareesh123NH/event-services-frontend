@@ -1,16 +1,12 @@
 import { motion } from "framer-motion";
 import VendorServiceBlock from "./VendorServiceBlock";
 import { vendorServices } from "../data/duplicatedata";
-import { useContext } from "react";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorServicesManager = () => {
-  const { theme } = useContext(ThemeContext);
   const services = vendorServices.services;
 
-  const containerBg =
-    theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-50 text-gray-900";
-
+  const { containerBg } = useThemeClasses();
   return (
     <motion.div
       layout

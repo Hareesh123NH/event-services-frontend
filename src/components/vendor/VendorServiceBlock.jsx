@@ -1,19 +1,12 @@
 import { Star, CalendarCheck, Tag, Save, Plus } from "lucide-react";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../ThemeContext"; // <-- make sure this path is correct
+import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorServiceBlock = ({ serviceItem, index }) => {
-  const { theme } = useContext(ThemeContext);
 
-  // theme-based styles
-  const bgPage = theme === "dark" ? "bg-gray-900" : "bg-gray-100";
-  const bgCard = theme === "dark" ? "bg-gray-800" : "bg-gray-200";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const textSecondary = theme === "dark" ? "text-gray-300" : "text-gray-900";
-  const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-200";
-  const inputBg = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const inputText = theme === "dark" ? "text-gray-100" : "text-gray-800";
+
+  const { bgCard, bgPage, textPrimary, textSecondary, borderColor, inputBg, inputText, buttonText, greenButton, redButton } = useThemeClasses();
 
   const [data, setData] = useState({
     price: serviceItem.price || "",
@@ -100,15 +93,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
           {serviceItem.total_bookings} bookings
         </span>
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${
-            serviceItem.status === "active"
-              ? theme === "dark"
-                ? "bg-green-700 text-green-100"
-                : "bg-green-100 text-green-700"
-              : theme === "dark"
-              ? "bg-red-700 text-red-100"
-              : "bg-red-100 text-red-700"
-          }`}
+          className={`px-3 py-1 rounded-full text-xs font-medium ${serviceItem.status === "active" ? { greenButton } : { redButton }}`}
         >
           {serviceItem.status}
         </span>
@@ -155,9 +140,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
             <label className="text-sm font-semibold">Add-ons</label>
             <button
               onClick={handleAddAddon}
-              className={`text-sm flex items-center gap-1 hover:underline ${
-                theme === "dark" ? "text-blue-400" : "text-blue-600"
-              }`}
+              className={`text-sm flex items-center gap-1 hover:underline ${buttonText}`}
             >
               <Plus className="w-4 h-4" /> Add New
             </button>

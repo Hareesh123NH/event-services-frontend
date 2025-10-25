@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
-import { cartData, addresses as storedAddresses } from "../data/duplicatedata";
-import { ThemeContext } from "../ThemeContext";
+import { addresses as storedAddresses } from "../data/duplicatedata";
+import { useThemeClasses } from "../theme/themeClasses";
+import { ThemeContext } from "../theme/ThemeContext";
 
 const BookOrder = () => {
-    const { theme } = useContext(ThemeContext); // 'light' or 'dark'
+
+    const { theme } = useContext(ThemeContext);
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddressId, setSelectedAddressId] = useState("");
@@ -95,15 +97,14 @@ const BookOrder = () => {
         return sum + (service?.final_price || 0) * (s.quantity || 1);
     }, 0);
 
-    // Theme classes
-    const pageBg = theme === "dark" ? "bg-gray-900 text-white" : "bg-gray-200 text-gray-900";
+
+    const { pageBg, panelBg, inputBg, cardBgActive, cardBgSelected, cardBgOrder, buttonBlue } = useThemeClasses();
+
     const cardBg = (isSelected, isActive) => {
-        if (isActive) return theme === "dark" ? "border-green-500 bg-green-800" : "border-green-900 bg-green-200";
-        if (isSelected) return theme === "dark" ? "border-blue-500 bg-blue-800" : "border-blue-900 bg-blue-400";
-        return theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-400 bg-white";
+        if (isActive) return cardBgActive;
+        if (isSelected) return cardBgSelected;
+        return cardBgOrder;
     };
-    const panelBg = theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-500 bg-white";
-    const inputBg = theme === "dark" ? "border-gray-700 bg-gray-800 text-white" : "border-gray-500 bg-white text-gray-900";
 
     return (
         <div className={`h-screen overflow-y-auto p-4 ${pageBg}`}>

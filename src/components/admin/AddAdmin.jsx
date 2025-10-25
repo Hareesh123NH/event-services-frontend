@@ -1,9 +1,10 @@
 import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../theme/ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses"
+
 
 const AddNewAdmin = () => {
-  const { theme } = useContext(ThemeContext);
+ 
 
   const [formData, setFormData] = useState({
     name: "",
@@ -24,12 +25,7 @@ const AddNewAdmin = () => {
   };
 
   // Dynamic classes based on theme
-  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
-  const textClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const labelClass = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-900";
-  const buttonBg = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
+  const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg} = useThemeClasses();
 
   return (
     <div className={`flex justify-center items-start py-10 w-full min-h-screen ${pageBg}`}>

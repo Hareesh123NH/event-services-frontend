@@ -2,7 +2,8 @@ import React, { useState, useContext } from "react";
 import { motion } from "framer-motion";
 import { PencilIcon, PlusIcon } from "@heroicons/react/24/outline";
 import { ServiceModal } from "./Servicemodal";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
+
 
 // Sample initial services
 const initialServices = [
@@ -30,7 +31,7 @@ const initialServices = [
 ];
 
 const ServiceManager = () => {
-  const { theme } = useContext(ThemeContext);
+
 
   const [allServices, setAllServices] = useState(initialServices);
   const [editingService, setEditingService] = useState(null);
@@ -59,14 +60,8 @@ const ServiceManager = () => {
   };
 
   // Theme-based classes
-  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-500";
-  const buttonBg =
-    theme === "dark"
-      ? "bg-green-600 hover:bg-green-700 text-white"
-      : "bg-green-500 hover:bg-green-600 text-white";
+  const { pageBg, cardBg, textPrimary,textSecondary, buttonBg} = useThemeClasses();
+  
 
   return (
     <div className={`p-4 min-h-screen ${pageBg}`}>

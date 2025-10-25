@@ -2,24 +2,19 @@ import React, { useContext } from "react";
 import { Search, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../security/AuthContext";
-import { ThemeContext } from "../ThemeContext";
+
 import DarkMode from "./DarkMode";
+import { useThemeClasses } from "../theme/themeClasses";
 
 const TopBar = ({ search, setSearch, showProfile, setShowProfile }) => {
   const { logout } = useAuth();
-  const { theme } = useContext(ThemeContext);
+
 
   // Dynamic classes
-  const bgClass = theme === "dark" ? "bg-gray-900" : "bg-gray-200";
-  const textClass = theme === "dark" ? "text-gray-200" : "text-gray-900";
-  const inputTextClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
-  const inputPlaceholderClass = theme === "dark" ? "placeholder-gray-400" : "placeholder-gray-500";
-  const btnBgClass = theme === "dark" ? "bg-gray-800 text-white" : "bg-gray-200 text-black";
-  const profileBgClass = theme === "dark" ? "bg-gray-700" : "bg-gray-300";
-  const dropdownBgClass = theme === "dark" ? "bg-gray-800" : "bg-white";
-  const dropdownHoverClass = theme === "dark" ? "hover:bg-gray-700" : "hover:bg-gray-100";
-  const dropdownTextClass = theme === "dark" ? "text-gray-200" : "text-gray-900"; // explicitly set text color
-  const iconColor = theme === "dark" ? "text-gray-300" : "text-gray-500";
+  const { bgClass, inputTextClass, inputPlaceholderClass, btnBgClass, profileBgClass, dropdownBgClass,dropdownHoverClass,dropdownTextClass,iconColor,textClass} = useThemeClasses
+  ();
+
+  
 
   return (
     <div className={`flex items-center justify-between p-4 shadow-md relative ${bgClass}`}>

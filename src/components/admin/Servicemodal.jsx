@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import { motion } from "framer-motion";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
 
 export const ServiceModal = ({ service, onClose, onSave }) => {
-  const { theme } = useContext(ThemeContext);
+  
 
   const [formData, setFormData] = useState({
     service_name: "",
@@ -32,12 +32,8 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
   };
 
   // Theme-based classes
-  const modalBg = theme === "dark" ? "bg-gray-800" : "bg-white";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
-  const textSecondary = theme === "dark" ? "text-gray-200" : "text-gray-700";
-  const inputBg = theme === "dark" ? "bg-gray-700 text-gray-100" : "bg-white text-gray-900";
-  const cancelBtnBg = theme === "dark" ? "bg-gray-600 text-gray-100 hover:bg-gray-500" : "bg-gray-300 text-gray-800 hover:bg-gray-400";
-  const saveBtnBg = theme === "dark" ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-blue-500 hover:bg-blue-600 text-white";
+  const { modalBg, inputBg, textPrimary,textSecondary,cancelBtnBg,saveBtnBg } = useThemeClasses();
+  
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">

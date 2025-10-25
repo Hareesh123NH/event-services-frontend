@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { addresses as storedAddresses } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
-import { ThemeContext } from "../theme/ThemeContext";
 
 const BookOrder = () => {
-
-    const { theme } = useContext(ThemeContext);
 
     const [addresses, setAddresses] = useState([]);
     const [selectedAddressId, setSelectedAddressId] = useState("");
@@ -98,7 +95,7 @@ const BookOrder = () => {
     }, 0);
 
 
-    const { pageBg, panelBg, inputBg, cardBgActive, cardBgSelected, cardBgOrder, buttonBlue } = useThemeClasses();
+    const { pageBg, panelBg, inputBg, cardBgActive, cardBgSelected, cardBgOrder, buttonBlue, isDark } = useThemeClasses();
 
     const cardBg = (isSelected, isActive) => {
         if (isActive) return cardBgActive;
@@ -129,8 +126,8 @@ const BookOrder = () => {
                         <div
                             key={addr._id}
                             className={`p-3 rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition border ${selectedAddressId === addr._id
-                                ? theme === "dark" ? "border-blue-400 bg-blue-800" : "border-blue-600 bg-blue-200"
-                                : theme === "dark" ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"
+                                ? isDark ? "border-blue-400 bg-blue-800" : "border-blue-600 bg-blue-200"
+                                : isDark ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"
                                 }`}
                             onClick={() => setSelectedAddressId(addr._id)}
                         >
@@ -201,7 +198,7 @@ const BookOrder = () => {
                         </div>
 
                         <button
-                            className={theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded" : "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"}
+                            className={isDark ? "bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded" : "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"}
                             onClick={handleSaveForm}
                         >
                             Save Service

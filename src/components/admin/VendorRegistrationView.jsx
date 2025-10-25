@@ -6,7 +6,7 @@ import { useThemeClasses } from "../theme/themeClasses";
 
 
 const VendorRegistrationView = () => {
- 
+
   const vendors = vendorRegistrations;
 
   if (!vendors || vendors.length === 0) {
@@ -44,8 +44,8 @@ const VendorRegistrationView = () => {
   };
 
   // Theme-based classes
-  const { pageBg,textPrimary,textSecondary,cardBg,fileText,cardBorder } = useThemeClasses();
-  
+  const { pageBg, textPrimary, textSecondary, cardBg, fileText, cardBorder, textClass, modalBg } = useThemeClasses();
+
   return (
     <motion.div
       layout
@@ -91,17 +91,17 @@ const VendorRegistrationView = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: index * 0.2 }}
-              className={`${theme === "dark" ? "bg-gray-700" : "bg-gray-100"} mt-3 p-3 rounded-xl`}
+              className={`${modalBg} mt-3 p-3 rounded-xl`}
             >
               <div className="flex items-center mb-1">
-                <Briefcase className={`w-4 h-4 mr-2 ${theme === "dark" ? "text-gray-300" : "text-gray-700"}`} />
+                <Briefcase className={`w-4 h-4 mr-2 ${textClass}`} />
                 <span className={`${textPrimary} font-medium`}>
                   {vendor.service.service_name}
                 </span>
               </div>
               <div className={`${textSecondary} text-sm`}>
                 ₹{vendor.service.base_price}{" "}
-                <span className={`text-xs ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`}>
+                <span className={`text-xs ${textSecondary}`}>
                   ({vendor.service.pricing_type})
                 </span>
               </div>
@@ -120,7 +120,7 @@ const VendorRegistrationView = () => {
                     className={`flex items-center text-sm cursor-pointer ${fileText}`}
                     onClick={() => handleFileClick(file.id, file.name)}
                   >
-                    <FileText className={`w-4 h-4 mr-2 ${theme === "dark" ? "text-gray-400" : "text-gray-500"}`} />
+                    <FileText className={`w-4 h-4 mr-2 ${textSecondary}`} />
                     {file.name}
                   </motion.li>
                 ))}

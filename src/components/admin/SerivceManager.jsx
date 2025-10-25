@@ -60,8 +60,8 @@ const ServiceManager = () => {
   };
 
   // Theme-based classes
-  const { pageBg, cardBg, textPrimary,textSecondary, buttonBg} = useThemeClasses();
-  
+  const { pageBg, cardBg, textPrimary, textSecondary, buttonBg, isDark } = useThemeClasses();
+
 
   return (
     <div className={`p-4 min-h-screen ${pageBg}`}>
@@ -92,9 +92,9 @@ const ServiceManager = () => {
             >
               {/* Edit icon */}
               <button
-                className={`absolute top-2 right-2 p-1 rounded ${theme === "dark"
-                    ? "text-gray-300 hover:text-blue-400"
-                    : "text-gray-500 hover:text-blue-500"
+                className={`absolute top-2 right-2 p-1 rounded ${isDark
+                  ? "text-gray-300 hover:text-blue-400"
+                  : "text-gray-500 hover:text-blue-500"
                   }`}
                 onClick={() => setEditingService(service)}
               >

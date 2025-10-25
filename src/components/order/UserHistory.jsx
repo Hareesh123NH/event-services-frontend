@@ -4,7 +4,7 @@ import { orderData } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const UserHistory = () => {
-    const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg,borderColor,secondaryText} = useThemeClasses();
+    const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg, borderColor, secondaryText, isDark } = useThemeClasses();
 
 
     const orders = orderData.orders;
@@ -73,7 +73,7 @@ const UserHistory = () => {
                                 {order.services.map((service, index) => (
                                     <div
                                         key={service._id}
-                                        className={`min-w-[220px] ${theme === "dark" ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-200"} border rounded-lg p-3 shadow-sm flex-shrink-0`}
+                                        className={`min-w-[220px] ${isDark ? "bg-gray-900 border-gray-700" : "bg-gray-50 border-gray-200"} border rounded-lg p-3 shadow-sm flex-shrink-0`}
                                     >
                                         <p className={`font-medium text-sm mb-1 ${textClass}`}>
                                             Service {index + 1}

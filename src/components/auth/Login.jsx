@@ -36,7 +36,7 @@ const Login = () => {
 
 
 
-  const { pageBg, formBg, inputBg, labelColor, linkText, buttonBg } = useThemeClasses();
+  const { pageBg, formBg, inputBg, labelColor, linkText, btnBg, authButton } = useThemeClasses();
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${pageBg}`}>
       {/* Left Side - Image */}
@@ -117,7 +117,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className={`w-full py-3 rounded-lg font-semibold transition ${buttonBg} text-white`}
+              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg} text-white`}
             >
               Login
             </button>
@@ -131,15 +131,13 @@ const Login = () => {
             <div className="flex justify-center space-x-4 mt-4">
               <button
                 type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
-                  }`}
+                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${authButton}`}
               >
                 <img src="/google-icon.svg" alt="Google" className="h-6 w-6" />
               </button>
               <button
                 type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${isDark ? "border-gray-600 bg-gray-800" : "border-gray-300 bg-white"
-                  }`}
+                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${authButton}`}
               >
                 <img src="/apple-icon.svg" alt="Apple" className="h-6 w-6" />
               </button>

@@ -72,7 +72,7 @@ const Cart = () => {
     0
   );
 
-  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg ,cartButton} = useThemeClasses();
+  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg, cartButton } = useThemeClasses();
 
   return (
     <motion.div

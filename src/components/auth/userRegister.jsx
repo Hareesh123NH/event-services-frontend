@@ -6,7 +6,7 @@ import { useThemeClasses } from "../theme/themeClasses";
 
 const UserRegister = () => {
   const navigate = useNavigate();
- 
+
   const [formData, setFormData] = useState({
     full_name: "",
     email: "",
@@ -50,8 +50,8 @@ const UserRegister = () => {
   };
 
   // ✅ Dynamic styles based on theme
-  const { bgGradient, formBg, labelColor, inputBg, buttonBg} = useThemeClasses();
-  
+  const { bgGradient, formBg, labelColor, inputBg, btnBg } = useThemeClasses();
+
 
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${bgGradient}`}>
@@ -108,9 +108,8 @@ const UserRegister = () => {
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent}
-                  className={`px-4 py-2 rounded-lg font-semibold transition ${
-                    otpSent ? "bg-gray-400 cursor-not-allowed" : buttonBg
-                  }`}
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent ? "bg-gray-400 cursor-not-allowed" : btnBg
+                    }`}
                 >
                   {otpSent ? `Resend in ${otpTimer}s` : "Send OTP"}
                 </button>
@@ -165,7 +164,7 @@ const UserRegister = () => {
 
             <button
               type="submit"
-              className={`w-full py-3 rounded-lg font-semibold transition ${buttonBg}`}
+              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg}`}
             >
               Register
             </button>

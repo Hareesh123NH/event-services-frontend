@@ -15,7 +15,7 @@ const testimonials = [
 
 const Homepage = () => {
 
-  const { pageBg, cardBg, sectionBg, accentBg } = useThemeClasses();
+  const { pageBg, cardBg, sectionBg, accentBg, isDark } = useThemeClasses();
 
   return (
     <div className={`font-sans ${pageBg}`}>
@@ -55,7 +55,7 @@ const Homepage = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             href="/dashboard"
-            className={`font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition ${theme === "dark" ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-white text-purple-600"}`}
+            className={`font-semibold px-8 py-3 rounded-lg shadow-lg hover:bg-gray-100 transition ${isDark ? "bg-gray-700 text-white hover:bg-gray-600" : "bg-white text-purple-600"}`}
           >
             Get Started
           </motion.a>

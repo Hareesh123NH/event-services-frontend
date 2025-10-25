@@ -23,7 +23,7 @@ const UserHistory = () => {
                     key={order._id}
                     layout
                     whileHover={{ scale: 1.01 }}
-                    className={`${cardBg} rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between`}
+                    className={`${cardBg} rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between border-1`}
                 >
                     {/* LEFT: Order Info */}
                     <div className={`p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r ${borderColor}`}>

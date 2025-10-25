@@ -1,19 +1,11 @@
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { orderData } from "../data/duplicatedata";
-import { ThemeContext } from "../ThemeContext"; // adjust path if needed
+import { useThemeClasses } from "../theme/themeClasses";
 
 const UserHistory = () => {
-    const { theme } = useContext(ThemeContext);
+    const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg,borderColor,secondaryText} = useThemeClasses();
 
-    const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-300";
-    const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
-    const textClass = theme === "dark" ? "text-gray-100" : "text-gray-900";
-    const labelClass = theme === "dark" ? "text-gray-200" : "text-gray-700";
-    const inputBg = theme === "dark" ? "bg-gray-700 border-gray-600 text-gray-100" : "bg-white border-gray-300 text-gray-900";
-    const buttonBg = theme === "dark" ? "bg-blue-700 hover:bg-blue-800 text-white" : "bg-blue-600 hover:bg-blue-700 text-white";
-    const borderColor = theme === "dark" ? "border-gray-700" : "border-gray-900";
-    const secondaryText = theme === "dark" ? "text-gray-400" : "text-gray-1200";
 
     const orders = orderData.orders;
     if (!orders || orders.length === 0) {

@@ -2,10 +2,11 @@ import React, { useContext } from "react";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, FileText, Briefcase } from "lucide-react";
 import { token, vendorRegistrations } from "../data/duplicatedata";
-import { ThemeContext } from "../ThemeContext";
+import { useThemeClasses } from "../theme/themeClasses";
+
 
 const VendorRegistrationView = () => {
-  const { theme } = useContext(ThemeContext);
+ 
   const vendors = vendorRegistrations;
 
   if (!vendors || vendors.length === 0) {
@@ -43,13 +44,8 @@ const VendorRegistrationView = () => {
   };
 
   // Theme-based classes
-  const pageBg = theme === "dark" ? "bg-gray-900" : "bg-gray-50";
-  const cardBg = theme === "dark" ? "bg-gray-800" : "bg-white";
-  const textPrimary = theme === "dark" ? "text-gray-100" : "text-gray-800";
-  const textSecondary = theme === "dark" ? "text-gray-400" : "text-gray-600";
-  const fileText = theme === "dark" ? "text-blue-400" : "text-blue-600";
-  const cardBorder = theme === "dark" ? "border-gray-700" : "border-gray-100";
-
+  const { pageBg,textPrimary,textSecondary,cardBg,fileText,cardBorder } = useThemeClasses();
+  
   return (
     <motion.div
       layout

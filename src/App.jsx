@@ -15,7 +15,7 @@ import VendorDetail from "./components/user/vendordetail";
 import Cart from "./components/user/Cart";
 import ServiceManager from "./components/admin/SerivceManager";
 import AddNewAdmin from "./components/admin/AddAdmin";
-import UserProfile from "./components/accounts/UserProfile";
+import UserProfile from "./components/user/UserProfile";
 import { AuthProvider } from "./components/security/AuthContext";
 import ProtectedRoute from "./components/security/ProtectedRoute";
 import RoleRedirect from "./components/security/RoleRedirect";

@@ -33,36 +33,46 @@ const Login = () => {
     navigate("/dashboard");
   };
 
+  const {
+    pageBg,
+    formBg,
+    inputBg,
+    labelColor,
+    linkText,
+    btnBg,
+    authButton,
+  } = useThemeClasses();
 
-
-
-  const { pageBg, formBg, inputBg, labelColor, linkText, btnBg, authButton } = useThemeClasses();
   return (
-    <div className={`min-h-screen flex flex-col md:flex-row ${pageBg}`}>
-      {/* Left Side - Image */}
-      <LeftSideImage
-        url={
-          "https://irentmo.com/wp-content/uploads/2023/04/Screen-Shot-2023-05-01-at-7.14.07-AM-min-1-300x200.png"
-        }
-      />
+    <div
+      className={`min-h-screen flex flex-col md:flex-row items-center justify-center ${pageBg} transition-all`}
+    >
+      {/* Left Side Image */}
+      <div className="hidden md:flex md:w-1/2">
+        <LeftSideImage
+          url="https://irentmo.com/wp-content/uploads/2023/04/Screen-Shot-2023-05-01-at-7.14.07-AM-min-1-300x200.png"
+        />
+      </div>
 
       {/* Right Side - Login Form */}
-      <div className={`md:w-1/2 w-full flex justify-center items-center p-8 md:p-16 ${formBg}`}>
+      <div
+        className={`w-full md:w-1/2 flex justify-center items-center px-6 sm:px-8 py-10 md:py-16 ${formBg}`}
+      >
         <motion.div
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.8 }}
-          className="w-full max-w-md"
+          className="w-full max-w-sm sm:max-w-md"
         >
           <h2 className="text-3xl font-bold text-center text-purple-500 mb-8">
             Welcome Back
           </h2>
 
+          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Email Field */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>
-                Email
-              </label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>Email</label>
               <input
                 type="email"
                 name="email"
@@ -74,10 +84,9 @@ const Login = () => {
               />
             </div>
 
+            {/* Password Field */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>
-                Password
-              </label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>Password</label>
               <input
                 type="password"
                 name="password"
@@ -89,10 +98,9 @@ const Login = () => {
               />
             </div>
 
+            {/* Role Dropdown */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>
-                Role
-              </label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>Role</label>
               <select
                 name="role"
                 value={formData.role}
@@ -106,46 +114,24 @@ const Login = () => {
               </select>
             </div>
 
+            {/* Forgot & Register Links */}
             <div className="flex justify-between items-center text-sm">
-              <a href="#" className={`${linkText}`}>
-                Forgot Password?
-              </a>
-              <Link to="/register" className={`${linkText}`}>
-                Register Now
-              </Link>
+              <a href="#" className={`${linkText}`}>Forgot Password?</a>
+              <Link to="/register" className={`${linkText}`}>Register Now</Link>
             </div>
 
+            {/* Login Button */}
             <button
               type="submit"
               className={`w-full py-3 rounded-lg font-semibold transition ${btnBg} text-white`}
             >
               Login
             </button>
-
-            <div className="flex items-center justify-center mt-4">
-              <div className="border-t w-1/4 border-gray-300"></div>
-              <p className="mx-2 text-gray-500">or</p>
-              <div className="border-t w-1/4 border-gray-300"></div>
-            </div>
-
-            <div className="flex justify-center space-x-4 mt-4">
-              <button
-                type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${authButton}`}
-              >
-                <img src="/google-icon.svg" alt="Google" className="h-6 w-6" />
-              </button>
-              <button
-                type="button"
-                className={`border px-4 py-2 rounded-lg hover:bg-opacity-80 transition ${authButton}`}
-              >
-                <img src="/apple-icon.svg" alt="Apple" className="h-6 w-6" />
-              </button>
-            </div>
           </form>
         </motion.div>
       </div>
     </div>
+
   );
 };
 

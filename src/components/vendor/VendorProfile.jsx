@@ -4,7 +4,6 @@ import { Camera, Mail, Phone, MapPin, Save, Edit2, X } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorProfile = () => {
-
   const [profile, setProfile] = useState({
     name: "John Doe",
     email: "john@example.com",
@@ -38,20 +37,29 @@ const VendorProfile = () => {
     setEditing(false);
   };
 
+  const {
+    imgBg,
+    pageBg,
+    cardBg,
+    textPrimary,
+    textSecondary,
+    inputBg,
+    inputDisabledBg,
+    borderEditing,
+  } = useThemeClasses();
 
-  const { imgBg, pageBg, cardBg, textPrimary, textSecondary, inputBg, inputDisabledBg, borderEditing, } = useThemeClasses();
   return (
-    <div className={`flex-1 overflow-y-auto px-6 py-6 md:px-10 ${pageBg} ${textPrimary}`}>
+    <div className={`flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 ${pageBg} ${textPrimary}`}>
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`max-w-3xl mx-auto ${cardBg} rounded-2xl shadow-lg p-6 md:p-8 relative`}
+        className={`max-w-3xl mx-auto ${cardBg} rounded-2xl shadow-md sm:shadow-lg p-4 sm:p-8 relative`}
       >
         {/* Edit Icon */}
         {!editing && (
           <button
             onClick={() => setEditing(true)}
-            className="absolute top-4 right-4 text-gray-500 hover:text-blue-600 transition"
+            className="absolute top-3 right-3 sm:top-4 sm:right-4 text-gray-500 hover:text-blue-600 transition"
             title="Edit Profile"
           >
             <Edit2 size={20} />
@@ -59,12 +67,12 @@ const VendorProfile = () => {
         )}
 
         {/* Header */}
-        <div className="flex items-center gap-6 mb-6">
+        <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
           <div className="relative">
             <img
               src={formData.profileImage}
               alt="Profile"
-              className={`w-24 h-24 rounded-full object-cover border-4 ${imgBg}`}
+              className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 ${imgBg}`}
             />
             {editing && (
               <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
@@ -73,14 +81,14 @@ const VendorProfile = () => {
               </label>
             )}
           </div>
-          <div>
-            <h1 className="text-2xl font-semibold">{formData.name}</h1>
-            <p className={textSecondary}>{formData.email}</p>
+          <div className="text-center sm:text-left">
+            <h1 className="text-xl sm:text-2xl font-semibold">{formData.name}</h1>
+            <p className={`${textSecondary} text-sm sm:text-base`}>{formData.email}</p>
           </div>
         </div>
 
         {/* Editable Fields */}
-        <div className="space-y-5">
+        <div className="space-y-4 sm:space-y-5">
           {/* Name */}
           <div>
             <label className={`block text-sm mb-1 ${textSecondary}`}>Name</label>
@@ -90,7 +98,7 @@ const VendorProfile = () => {
               value={formData.name}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 rounded-md border ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 sm:p-2.5 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
@@ -104,7 +112,7 @@ const VendorProfile = () => {
               name="email"
               value={formData.email}
               disabled
-              className={`w-full p-2 mt-1 rounded-md border ${inputDisabledBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${inputDisabledBg}`}
             />
           </div>
 
@@ -119,7 +127,7 @@ const VendorProfile = () => {
               value={formData.phone_number}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
@@ -134,7 +142,7 @@ const VendorProfile = () => {
               value={formData.address}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
             />
           </div>
 
@@ -147,24 +155,24 @@ const VendorProfile = () => {
               value={formData.description}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
             />
           </div>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row justify-end gap-3 sm:gap-4 mt-6">
           {editing ? (
             <>
               <button
                 onClick={handleCancel}
-                className="px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg flex items-center gap-2 transition"
+                className="w-full sm:w-auto px-4 py-2 bg-gray-400 hover:bg-gray-500 text-white rounded-lg flex items-center justify-center gap-2 transition text-sm sm:text-base"
               >
                 <X size={16} /> Cancel
               </button>
               <button
                 onClick={handleSave}
-                className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition"
+                className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 transition text-sm sm:text-base"
               >
                 <Save size={16} /> Save
               </button>
@@ -172,7 +180,7 @@ const VendorProfile = () => {
           ) : (
             <button
               onClick={() => setEditing(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center gap-2 transition"
+              className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 transition text-sm sm:text-base"
             >
               <Edit2 size={16} /> Edit Profile
             </button>

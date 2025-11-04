@@ -3,238 +3,298 @@ import { addresses as storedAddresses } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const BookOrder = () => {
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [eventDate, setEventDate] = useState("");
+  const [cartServices, setCartServices] = useState([]);
+  const [selectedServices, setSelectedServices] = useState([]);
+  const [activeService, setActiveService] = useState(null);
+  const [formData, setFormData] = useState({
+    scheduled_from: "",
+    scheduled_to: "",
+    quantity: 1,
+  });
 
-    const [addresses, setAddresses] = useState([]);
-    const [selectedAddressId, setSelectedAddressId] = useState("");
-    const [eventDate, setEventDate] = useState("");
-    const [cartServices, setCartServices] = useState([]);
-    const [selectedServices, setSelectedServices] = useState([]);
-    const [activeService, setActiveService] = useState(null);
-    const [formData, setFormData] = useState({
-        scheduled_from: "",
-        scheduled_to: "",
-        quantity: 1,
+  useEffect(() => {
+    setAddresses(storedAddresses);
+    const defaultAddressId = localStorage.getItem("defaultAddressId");
+    setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
+    const cart = JSON.parse(localStorage.getItem("cart")) || [];
+    setCartServices(cart);
+  }, []);
+
+  const isFormComplete = () =>
+    formData.scheduled_from && formData.scheduled_to && formData.quantity;
+
+  const toggleServiceSelection = (service) => {
+    if (activeService && activeService._id !== service._id) {
+      if (!isFormComplete()) {
+        setSelectedServices((prev) =>
+          prev.filter((s) => s.vendorserviceid !== activeService._id)
+        );
+      }
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+      setActiveService(service);
+      return;
+    }
+
+    const isAlreadySelected = selectedServices.find(
+      (s) => s.vendorserviceid === service._id
+    );
+
+    if (isAlreadySelected) {
+      setSelectedServices((prev) =>
+        prev.filter((s) => s.vendorserviceid !== service._id)
+      );
+      setActiveService(null);
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+    } else {
+      setActiveService(service);
+    }
+  };
+
+  const handleSaveForm = () => {
+    if (!isFormComplete()) {
+      alert("Please fill all fields before saving this service.");
+      return;
+    }
+
+    setSelectedServices((prev) => {
+      const exists = prev.find((s) => s.vendorserviceid === activeService._id);
+      if (exists) {
+        return prev.map((s) =>
+          s.vendorserviceid === activeService._id
+            ? { ...s, ...formData }
+            : s
+        );
+      } else {
+        return [...prev, { vendorserviceid: activeService._id, ...formData }];
+      }
     });
 
-    useEffect(() => {
-        setAddresses(storedAddresses);
+    setActiveService(null);
+    setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+  };
 
-        const defaultAddressId = localStorage.getItem("defaultAddressId");
-        setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
-
-        const cart = JSON.parse(localStorage.getItem("cart")) || [];
-        setCartServices(cart);
-    }, []);
-
-    const isFormComplete = () =>
-        formData.scheduled_from && formData.scheduled_to && formData.quantity;
-
-    const toggleServiceSelection = (service) => {
-        if (activeService && activeService._id !== service._id) {
-            if (!isFormComplete()) {
-                setSelectedServices((prev) =>
-                    prev.filter((s) => s.vendorserviceid !== activeService._id)
-                );
-            }
-            setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
-            setActiveService(service);
-            return;
-        }
-
-        const isAlreadySelected = selectedServices.find(
-            (s) => s.vendorserviceid === service._id
-        );
-
-        if (isAlreadySelected) {
-            setSelectedServices((prev) =>
-                prev.filter((s) => s.vendorserviceid !== service._id)
-            );
-            setActiveService(null);
-            setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
-        } else {
-            setActiveService(service);
-        }
+  const handleSubmit = () => {
+    const orderData = {
+      event_addressId: selectedAddressId,
+      event_date: eventDate,
+      services: selectedServices,
     };
+    console.log("✅ Order submitted:", orderData);
+    alert("Order Booked!");
+  };
 
-    const handleSaveForm = () => {
-        if (!isFormComplete()) {
-            alert("Please fill all fields before saving this service.");
-            return;
-        }
+  const totalAmount = selectedServices.reduce((sum, s) => {
+    const service = cartServices.find((x) => x._id === s.vendorserviceid);
+    return sum + (service?.final_price || 0) * (s.quantity || 1);
+  }, 0);
 
-        setSelectedServices((prev) => {
-            const exists = prev.find((s) => s.vendorserviceid === activeService._id);
-            if (exists) {
-                return prev.map((s) =>
-                    s.vendorserviceid === activeService._id
-                        ? { ...s, ...formData }
-                        : s
-                );
-            } else {
-                return [...prev, { vendorserviceid: activeService._id, ...formData }];
-            }
-        });
+  const {
+    pageBg,
+    panelBg,
+    inputBg,
+    cardBgActive,
+    cardBgSelected,
+    cardBgOrder,
+    isDark,
+  } = useThemeClasses();
 
-        setActiveService(null);
-        setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
-    };
+  const cardBg = (isSelected, isActive) => {
+    if (isActive) return cardBgActive;
+    if (isSelected) return cardBgSelected;
+    return cardBgOrder;
+  };
 
-    const handleSubmit = () => {
-        const orderData = {
-            event_addressId: selectedAddressId,
-            event_date: eventDate,
-            services: selectedServices,
-        };
-        console.log("✅ Order submitted:", orderData);
-        alert("Order Booked!");
-    };
+  return (
+    <div className={`min-h-screen overflow-y-auto p-4 ${pageBg}`}>
+      <div className="max-w-4xl mx-auto">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 text-center">
+          Book Order
+        </h2>
 
-    const totalAmount = selectedServices.reduce((sum, s) => {
-        const service = cartServices.find((x) => x._id === s.vendorserviceid);
-        return sum + (service?.final_price || 0) * (s.quantity || 1);
-    }, 0);
-
-
-    const { pageBg, panelBg, inputBg, cardBgActive, cardBgSelected, cardBgOrder, buttonBlue, isDark } = useThemeClasses();
-
-    const cardBg = (isSelected, isActive) => {
-        if (isActive) return cardBgActive;
-        if (isSelected) return cardBgSelected;
-        return cardBgOrder;
-    };
-
-    return (
-        <div className={`h-screen overflow-y-auto p-4 ${pageBg}`}>
-            <div className="max-w-4xl mx-auto">
-                <h2 className="text-2xl font-bold mb-4">Book Order</h2>
-
-                {/* Event Date */}
-                <div className="mb-4">
-                    <label className="block mb-1">Event Date:</label>
-                    <input
-                        type="date"
-                        className={`border p-2 w-full rounded ${inputBg}`}
-                        value={eventDate}
-                        onChange={(e) => setEventDate(e.target.value)}
-                    />
-                </div>
-
-                {/* Address Selection */}
-                <h3 className="text-xl font-semibold mb-2">Select Address</h3>
-                <div className="flex space-x-4 overflow-x-auto mb-4">
-                    {addresses.map((addr) => (
-                        <div
-                            key={addr._id}
-                            className={`p-3 rounded-lg min-w-[250px] flex-shrink-0 cursor-pointer transition border ${selectedAddressId === addr._id
-                                ? isDark ? "border-blue-400 bg-blue-800" : "border-blue-600 bg-blue-200"
-                                : isDark ? "border-gray-700 bg-gray-800" : "border-gray-300 bg-white"
-                                }`}
-                            onClick={() => setSelectedAddressId(addr._id)}
-                        >
-                            <p className="font-semibold">{addr.label}</p>
-                            <p>{addr.address_line1}, {addr.address_line2}</p>
-                            <p>{addr.city}, {addr.state} - {addr.postal_code}</p>
-                            <p>{addr.country}</p>
-                            <p>Phone: {addr.alternate_phone}</p>
-                        </div>
-                    ))}
-                </div>
-
-                {/* Services */}
-                <h3 className="text-xl font-semibold mb-2">Select Services</h3>
-                <div className="flex space-x-4 overflow-x-auto mb-4">
-                    {cartServices.length === 0 && <div>Your cart is Empty please add It</div>}
-                    {cartServices.map((service) => {
-                        const isSelected = selectedServices.find(s => s.vendorserviceid === service._id);
-                        const isActive = activeService?._id === service._id;
-                        return (
-                            <div
-                                key={service._id}
-                                className={`p-3 border rounded-lg min-w-[200px] flex-shrink-0 cursor-pointer transition ${cardBg(isSelected, isActive)}`}
-                                onClick={() => toggleServiceSelection(service)}
-                            >
-                                <h4 className="font-semibold">{service.service_name}</h4>
-                                <p className="text-sm">Vendor: {service.vendor.full_name}</p>
-                                <p className="text-sm">Price: ₹{service.final_price}</p>
-                            </div>
-                        );
-                    })}
-                </div>
-
-                {/* Active Service Form */}
-                {activeService && (
-                    <div className={`p-3 rounded-lg mb-4 border ${panelBg}`}>
-                        <h4 className="font-semibold mb-2">Fill details for: {activeService.service_name}</h4>
-
-                        <div className="mb-2">
-                            <label className="block mb-1">Scheduled From:</label>
-                            <input
-                                type="datetime-local"
-                                className={`border p-2 w-full rounded ${inputBg}`}
-                                value={formData.scheduled_from}
-                                onChange={(e) => setFormData({ ...formData, scheduled_from: e.target.value })}
-                            />
-                        </div>
-
-                        <div className="mb-2">
-                            <label className="block mb-1">Scheduled To:</label>
-                            <input
-                                type="datetime-local"
-                                className={`border p-2 w-full rounded ${inputBg}`}
-                                value={formData.scheduled_to}
-                                onChange={(e) => setFormData({ ...formData, scheduled_to: e.target.value })}
-                            />
-                        </div>
-
-                        <div className="mb-2">
-                            <label className="block mb-1">Quantity:</label>
-                            <input
-                                type="number"
-                                min="1"
-                                className={`border p-2 w-full rounded ${inputBg}`}
-                                value={formData.quantity}
-                                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
-                            />
-                        </div>
-
-                        <button
-                            className={isDark ? "bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded" : "bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"}
-                            onClick={handleSaveForm}
-                        >
-                            Save Service
-                        </button>
-                    </div>
-                )}
-
-                {/* Summary */}
-                {selectedServices.length > 0 && (
-                    <div className={`mb-4 p-3 rounded-lg border ${panelBg}`}>
-                        <h4 className="font-semibold mb-2">Selected Services Summary</h4>
-                        {selectedServices.map((s) => {
-                            const srv = cartServices.find((x) => x._id === s.vendorserviceid);
-                            return (
-                                <p key={s.vendorserviceid}>
-                                    {srv?.service_name} × {s.quantity} = ₹{(srv?.final_price || 0) * s.quantity}
-                                </p>
-                            );
-                        })}
-                        <p className="mt-2 font-bold">Total: ₹{totalAmount}</p>
-                    </div>
-                )}
-
-                <button
-                    className={`px-4 py-2 rounded transition ${cartServices.length === 0
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-green-500 hover:opacity-90 text-white"
-                        }`}
-                    onClick={handleSubmit}
-                    disabled={cartServices.length === 0}
-                >
-                    Submit Order
-                </button>
-            </div>
+        {/* Event Date */}
+        <div className="mb-4">
+          <label className="block mb-1 text-sm sm:text-base">Event Date:</label>
+          <input
+            type="date"
+            className={`border p-2 w-full rounded text-sm sm:text-base ${inputBg}`}
+            value={eventDate}
+            onChange={(e) => setEventDate(e.target.value)}
+          />
         </div>
-    );
+
+        {/* Address Selection */}
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">
+          Select Address
+        </h3>
+        <div className="flex space-x-3 overflow-x-auto mb-4 pb-2 scrollbar-hide">
+          {addresses.map((addr) => (
+            <div
+              key={addr._id}
+              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${
+                selectedAddressId === addr._id
+                  ? isDark
+                    ? "border-blue-400 bg-blue-800"
+                    : "border-blue-600 bg-blue-200"
+                  : isDark
+                  ? "border-gray-700 bg-gray-800"
+                  : "border-gray-300 bg-white"
+              }`}
+              onClick={() => setSelectedAddressId(addr._id)}
+            >
+              <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
+              <p className="text-xs sm:text-sm">
+                {addr.address_line1}, {addr.address_line2}
+              </p>
+              <p className="text-xs sm:text-sm">
+                {addr.city}, {addr.state} - {addr.postal_code}
+              </p>
+              <p className="text-xs sm:text-sm">{addr.country}</p>
+              <p className="text-xs sm:text-sm">
+                Phone: {addr.alternate_phone}
+              </p>
+            </div>
+          ))}
+        </div>
+
+        {/* Services */}
+        <h3 className="text-lg sm:text-xl font-semibold mb-2">
+          Select Services
+        </h3>
+        <div className="flex space-x-3 overflow-x-auto mb-4 pb-2 scrollbar-hide">
+          {cartServices.length === 0 && (
+            <div className="text-sm sm:text-base">
+              Your cart is empty, please add items.
+            </div>
+          )}
+          {cartServices.map((service) => {
+            const isSelected = selectedServices.find(
+              (s) => s.vendorserviceid === service._id
+            );
+            const isActive = activeService?._id === service._id;
+            return (
+              <div
+                key={service._id}
+                className={`p-3 border rounded-lg min-w-[180px] sm:min-w-[200px] flex-shrink-0 cursor-pointer transition ${cardBg(
+                  isSelected,
+                  isActive
+                )}`}
+                onClick={() => toggleServiceSelection(service)}
+              >
+                <h4 className="font-semibold text-sm sm:text-base">
+                  {service.service_name}
+                </h4>
+                <p className="text-xs sm:text-sm">
+                  Vendor: {service.vendor.full_name}
+                </p>
+                <p className="text-xs sm:text-sm">
+                  Price: ₹{service.final_price}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        {/* Active Service Form */}
+        {activeService && (
+          <div className={`p-3 rounded-lg mb-4 border ${panelBg}`}>
+            <h4 className="font-semibold mb-2 text-sm sm:text-base">
+              Fill details for: {activeService.service_name}
+            </h4>
+
+            <div className="mb-2">
+              <label className="block mb-1 text-xs sm:text-sm">
+                Scheduled From:
+              </label>
+              <input
+                type="datetime-local"
+                className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
+                value={formData.scheduled_from}
+                onChange={(e) =>
+                  setFormData({ ...formData, scheduled_from: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="mb-2">
+              <label className="block mb-1 text-xs sm:text-sm">
+                Scheduled To:
+              </label>
+              <input
+                type="datetime-local"
+                className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
+                value={formData.scheduled_to}
+                onChange={(e) =>
+                  setFormData({ ...formData, scheduled_to: e.target.value })
+                }
+              />
+            </div>
+
+            <div className="mb-2">
+              <label className="block mb-1 text-xs sm:text-sm">Quantity:</label>
+              <input
+                type="number"
+                min="1"
+                className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
+                value={formData.quantity}
+                onChange={(e) =>
+                  setFormData({ ...formData, quantity: e.target.value })
+                }
+              />
+            </div>
+
+            <button
+              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${
+                isDark
+                  ? "bg-blue-700 hover:bg-blue-800"
+                  : "bg-blue-600 hover:bg-blue-700"
+              }`}
+              onClick={handleSaveForm}
+            >
+              Save Service
+            </button>
+          </div>
+        )}
+
+        {/* Summary */}
+        {selectedServices.length > 0 && (
+          <div className={`mb-4 p-3 rounded-lg border ${panelBg}`}>
+            <h4 className="font-semibold mb-2 text-sm sm:text-base">
+              Selected Services Summary
+            </h4>
+            {selectedServices.map((s) => {
+              const srv = cartServices.find((x) => x._id === s.vendorserviceid);
+              return (
+                <p
+                  key={s.vendorserviceid}
+                  className="text-xs sm:text-sm"
+                >{`${srv?.service_name} × ${s.quantity} = ₹${
+                  (srv?.final_price || 0) * s.quantity
+                }`}</p>
+              );
+            })}
+            <p className="mt-2 font-bold text-sm sm:text-base">
+              Total: ₹{totalAmount}
+            </p>
+          </div>
+        )}
+
+        <button
+          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${
+            cartServices.length === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-green-500 hover:opacity-90 text-white"
+          }`}
+          onClick={handleSubmit}
+          disabled={cartServices.length === 0}
+        >
+          Submit Order
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default BookOrder;

@@ -7,7 +7,7 @@ const VendorPendingOrders = ({ onAction }) => {
 
   const orders = pendingOrders.orders;
 
-  const { bgCard, bgService, textPrimary, textSecondary, borderColor } = useThemeClasses();
+  const { bgCard, bgService, textPrimary, textSecondary, borderColor, containerBg } = useThemeClasses();
 
   if (!orders || orders.length === 0) {
     return (
@@ -18,19 +18,19 @@ const VendorPendingOrders = ({ onAction }) => {
   }
 
   return (
-    <motion.div layout className="p-4 space-y-6 overflow-y-auto">
+    <motion.div layout className="p-4 sm:p-6 space-y-6 overflow-y-auto">
       {orders.map((order) => (
         <motion.div
           key={order.order_id}
           layout
           whileHover={{ scale: 1.01 }}
-          className={`${bgCard} rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between`}
+          className={`${containerBg} rounded-xl shadow hover:shadow-lg transition-all cursor-pointer flex flex-col md:flex-row justify-between`}
         >
           {/* LEFT: Order Info */}
           <div
-            className={`p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r ${borderColor}`}
+            className={`p-3 sm:p-4 w-full md:w-1/3 border-b md:border-b-0 md:border-r ${borderColor}`}
           >
-            <h3 className={`font-semibold text-lg ${textPrimary} mb-1`}>
+            <h3 className={`font-semibold text-lg sm:text-lg ${textPrimary} mb-1`}>
               Order ID: {order.order_id.slice(-6)}
             </h3>
             <p className={`text-sm ${textSecondary}`}>

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
-import { section } from "framer-motion/client";
 
 const cartData = [
   {
@@ -38,7 +37,6 @@ const cartData = [
 
 const Cart = () => {
   const navigate = useNavigate();
-
   const [cartItems, setCartItems] = useState(
     JSON.parse(localStorage.getItem("cart")) || cartData
   );
@@ -73,107 +71,110 @@ const Cart = () => {
     0
   );
 
-  const { bgPage, cardBg, textPrimary, textSecondary, buttonHover, imgBg, cartButton, sectionBg } = useThemeClasses();
+  const {
+    cardBg,
+    textPrimary,
+    textSecondary,
+    buttonHover,
+    imgBg,
+    cartButton,
+    sectionBg,
+  } = useThemeClasses();
 
   return (
-    <motion.div
-      layout
-      className={`p-4 md:p-8 ${sectionBg} min-h-screen flex flex-col`}
-    >
-      <h2
-        className={`text-3xl font-semibold mb-6 ${textPrimary} text-center`}
+    <div className={`relative flex flex-col h-full ${sectionBg} overflow-hidden`}>
+      {/* Fixed Header */}
+      <div
+        className={`p-3 sm:p-4 border-b ${cardBg} ${textPrimary} text-center sticky top-0 z-10`}
       >
-        🛒 Your Cart
-      </h2>
+        <h2 className="text-xl sm:text-2xl font-semibold">🛒 Your Cart</h2>
+      </div>
 
-      {cartItems.length === 0 ? (
-        <div
-          className={`flex flex-col items-center justify-center h-64 ${textSecondary}`}
-        >
-          <p className="text-lg">Your cart is empty</p>
-        </div>
-      ) : (
-        <>
-          {/* Scrollable cart items */}
-          <div className="flex-1 overflow-y-auto max-h-[60vh] pr-2 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200 dark:scrollbar-thumb-gray-600 dark:scrollbar-track-gray-800">
-            <div className="grid gap-4">
-              {cartItems.map((item) => (
-                <motion.div
-                  key={item._id}
-                  layout
-                  whileHover={{ scale: 1.01 }}
-                  className={`${cardBg} p-5 rounded-2xl shadow-md hover:shadow-lg transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-5`}
-                >
-                  <div className="flex flex-col">
-                    <h3 className={`font-semibold text-lg ${textPrimary}`}>
-                      {item.service_name}
-                    </h3>
-                    <p className={`text-sm ${textSecondary} mt-1`}>
-                      Vendor: {item.vendor.full_name}
-                    </p>
-                    <p className={`text-sm font-medium ${textPrimary} mt-1`}>
-                      Price: ₹{item.final_price}
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-4">
-                    {/* Quantity Controls */}
-                    <div
-                      className={`flex items-center rounded-lg px-2 py-1 ${imgBg}`}
-                    >
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(item._id, "decrease")
-                        }
-                        className={`p-2 rounded-lg transition ${buttonHover}`}
-                      >
-                        <Minus size={18} className={textPrimary} />
-                      </button>
-                      <span className={`px-3 font-medium ${textPrimary}`}>
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleQuantityChange(item._id, "increase")
-                        }
-                        className={`p-2 rounded-lg transition ${buttonHover}`}
-                      >
-                        <Plus size={18} className={textPrimary} />
-                      </button>
-                    </div>
-
-                    {/* Remove Button */}
-                    <button
-                      onClick={() => handleRemove(item._id)}
-                      className={`p-2 text-red-500 ${cartButton} rounded-lg transition`}
-                      title="Remove item"
-                    >
-                      <Trash2 size={20} />
-                    </button>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-
-          {/* Total & Checkout */}
+      {/* Scrollable Cart Items */}
+      <div className="flex-1 overflow-y-auto px-3 sm:px-4 py-2 space-y-2 sm:space-y-3">
+        {cartItems.length === 0 ? (
           <div
-            className={`${cardBg} mt-8 mb-10 p-5 rounded-2xl shadow-md flex flex-col sm:flex-row items-center justify-between gap-4`}
+            className={`flex flex-col items-center justify-center h-full ${textSecondary}`}
           >
-            <h3 className={`text-xl font-semibold ${textPrimary}`}>
-              Total: ₹{totalPrice}
-            </h3>
-            <button
-              className="w-full sm:w-auto bg-green-500 text-white px-6 py-2.5 rounded-xl hover:bg-green-600 transition font-medium"
-              onClick={handleCheckout}
-            >
-              Proceed to Checkout
-            </button>
+            <p className="text-lg">Your cart is empty</p>
           </div>
-        </>
-      )}
-    </motion.div>
+        ) : (
+          cartItems.map((item) => (
+            <motion.div
+              key={item._id}
+              layout
+              whileHover={{ scale: 1.01 }}
+              className={`${cardBg} p-3 sm:p-4 rounded-xl shadow-md hover:shadow-lg transition-all flex flex-col sm:flex-row sm:items-center justify-between`}
+            >
+              <div className="flex flex-col">
+                <h3
+                  className={`font-semibold text-base sm:text-lg ${textPrimary}`}
+                >
+                  {item.service_name}
+                </h3>
+                <p className={`text-xs sm:text-sm ${textSecondary}`}>
+                  Vendor: {item.vendor.full_name}
+                </p>
+                <p
+                  className={`text-sm sm:text-base font-medium ${textPrimary}`}
+                >
+                  Price: ₹{item.final_price}
+                </p>
+              </div>
+
+              <div className="flex items-center justify-between sm:justify-center gap-3 sm:gap-4">
+                <div
+                  className={`flex items-center rounded-lg px-2 sm:px-3 py-1 ${imgBg}`}
+                >
+                  <button
+                    onClick={() => handleQuantityChange(item._id, "decrease")}
+                    className={`p-1 sm:p-2 rounded-lg transition ${buttonHover}`}
+                  >
+                    <Minus size={16} className={textPrimary} />
+                  </button>
+                  <span
+                    className={`px-2 sm:px-3 font-medium text-sm sm:text-base ${textPrimary}`}
+                  >
+                    {item.quantity}
+                  </span>
+                  <button
+                    onClick={() => handleQuantityChange(item._id, "increase")}
+                    className={`p-1 sm:p-2 rounded-lg transition ${buttonHover}`}
+                  >
+                    <Plus size={16} className={textPrimary} />
+                  </button>
+                </div>
+
+                <button
+                  onClick={() => handleRemove(item._id)}
+                  className={`p-1.5 sm:p-2 text-red-500 ${cartButton} rounded-lg transition`}
+                >
+                  <Trash2 size={18} />
+                </button>
+              </div>
+            </motion.div>
+          ))
+        )}
+      </div>
+
+      {/* Fixed Total */}
+      <div
+        className={`${cardBg} border-t p-3 sm:p-4 flex items-center justify-between sticky bottom-0 z-10`}
+      >
+        <h3 className={`text-lg sm:text-xl font-semibold ${textPrimary}`}>
+          Total: ₹{totalPrice}
+        </h3>
+        <button
+          className="bg-green-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-green-600 transition font-medium text-sm sm:text-base"
+          onClick={handleCheckout}
+        >
+          Proceed to Checkout
+        </button>
+      </div>
+    </div>
   );
+
+
 };
 
 export default Cart;

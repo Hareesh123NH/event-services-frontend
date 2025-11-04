@@ -4,9 +4,18 @@ import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const VendorServiceBlock = ({ serviceItem, index }) => {
-
-
-  const { bgCard, bgPage, textPrimary, textSecondary, borderColor, inputBg, inputText, buttonText, greenButton, redButton } = useThemeClasses();
+  const {
+    bgCard,
+    bgPage,
+    textPrimary,
+    textSecondary,
+    borderColor,
+    inputBg,
+    inputText,
+    buttonText,
+    greenButton,
+    redButton,
+  } = useThemeClasses();
 
   const [data, setData] = useState({
     price: serviceItem.price || "",
@@ -62,14 +71,14 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className={`shadow-md rounded-2xl border ${borderColor} p-6 ${bgCard} ${textPrimary}`}
+      className={`shadow-md rounded-2xl border ${borderColor} p-4 sm:p-6 ${bgCard} ${textPrimary}`}
     >
       {/* Header Section */}
-      <h2 className={`text-xl font-semibold mb-2 ${textPrimary}`}>
+      <h2 className={`text-lg sm:text-xl font-semibold mb-2 ${textPrimary}`}>
         {serviceItem.service.service_name}
       </h2>
 
-      <div className={`text-sm mb-2 flex flex-col gap-1 ${textSecondary}`}>
+      <div className={`text-xs sm:text-sm mb-3 flex flex-col gap-1 ${textSecondary}`}>
         <span>
           <strong>Base Price:</strong> ₹{data.base_price || 0}
         </span>
@@ -81,9 +90,9 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
         </span>
       </div>
 
-      <div className={`flex flex-wrap items-center gap-3 text-sm mb-3 ${textSecondary}`}>
+      <div className={`flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm mb-4 ${textSecondary}`}>
         <span className="flex items-center">
-          <Tag className="w-4 h-4 mr-1 text-gray-500" /> {serviceItem.discount}% off
+          <Tag className="w-4 h-4 mr-1 text-gray-500" /> {data.discount}% off
         </span>
         <span className="flex items-center">
           <Star className="w-4 h-4 mr-1 text-yellow-500" /> {serviceItem.average_rating} / 5
@@ -93,7 +102,11 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
           {serviceItem.total_bookings} bookings
         </span>
         <span
-          className={`px-3 py-1 rounded-full text-xs font-medium ${serviceItem.status === "active" ? { greenButton } : { redButton }}`}
+          className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
+            serviceItem.status === "active"
+              ? `bg-green-100 text-green-700`
+              : `bg-red-100 text-red-700`
+          }`}
         >
           {serviceItem.status}
         </span>
@@ -108,7 +121,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
             type="number"
             value={data.price}
             onChange={(e) => handleChange("price", parseFloat(e.target.value) || 0)}
-            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText}`}
+            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           />
         </div>
 
@@ -119,7 +132,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
             type="number"
             value={data.discount}
             onChange={(e) => handleChange("discount", parseFloat(e.target.value) || 0)}
-            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText}`}
+            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           />
         </div>
 
@@ -130,17 +143,17 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
             type="number"
             value={finalPrice}
             disabled
-            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${bgPage} ${textSecondary}`}
+            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${bgPage} ${textSecondary} text-sm sm:text-base`}
           />
         </div>
 
         {/* Add-ons Section */}
         <div className="mb-4">
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-2 gap-2">
             <label className="text-sm font-semibold">Add-ons</label>
             <button
               onClick={handleAddAddon}
-              className={`text-sm flex items-center gap-1 hover:underline ${buttonText}`}
+              className={`text-sm flex items-center gap-1 self-start sm:self-auto hover:underline ${buttonText}`}
             >
               <Plus className="w-4 h-4" /> Add New
             </button>
@@ -218,7 +231,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
           <textarea
             value={data.notes}
             onChange={(e) => handleChange("notes", e.target.value)}
-            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText}`}
+            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           />
         </div>
 
@@ -228,7 +241,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
           <select
             value={data.status}
             onChange={(e) => handleChange("status", e.target.value)}
-            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText}`}
+            className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           >
             <option value="active">Active</option>
             <option value="inactive">Inactive</option>
@@ -239,7 +252,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
         <div className="flex justify-end">
           <button
             onClick={handleSave}
-            className="flex items-center gap-1 px-3 py-1 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm sm:text-base rounded-lg hover:bg-green-700 transition"
           >
             <Save className="w-4 h-4" /> Save
           </button>

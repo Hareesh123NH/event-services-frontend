@@ -299,7 +299,7 @@ export const vendorServiceDetails = {
 
 export const sidebarOptions = {
     vendor: [
-      { label: "Dashboard", path: "overview", icon: LayoutDashboard },
+    //   { label: "Dashboard", path: "overview", icon: LayoutDashboard },
       { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
       { label: "My Services", path: "services", icon: Wrench },
       { label: "Add Service", path: "add-service", icon: PlusCircle },

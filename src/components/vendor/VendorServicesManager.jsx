@@ -10,7 +10,7 @@ const VendorServicesManager = () => {
   return (
     <motion.div
       layout
-      className={`p-6 flex flex-col gap-8 overflow-y-auto h-[calc(100vh-4rem)] transition-colors duration-300 ${containerBg}`}
+      className={`p-4 sm:p-4 flex flex-col gap-8 overflow-y-auto h-[calc(100vh-4rem)] transition-colors duration-300 ${containerBg}`}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}

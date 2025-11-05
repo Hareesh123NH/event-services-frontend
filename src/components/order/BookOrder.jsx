@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { addresses as storedAddresses } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
 
 const BookOrder = () => {
+
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [selectedAddressId, setSelectedAddressId] = useState(localStorage.getItem("addressId"));
   const [eventDate, setEventDate] = useState("");
   const [cartServices, setCartServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
@@ -15,12 +17,22 @@ const BookOrder = () => {
     quantity: 1,
   });
 
+
+  const fetchAddresses = async () => {
+    try {
+      const res = await api.get("/user/address");
+      setAddresses(res.data.addresses);
+      if (!selectedAddressId && simplified.length > 0) {
+        localStorage.setItem("addressId", simplified[0]._id);
+      }
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+    }
+  };
+
   useEffect(() => {
-    setAddresses(storedAddresses);
-    const defaultAddressId = localStorage.getItem("defaultAddressId");
-    setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartServices(cart);
+    fetchAddresses();
+    setCartServices(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
 
   const isFormComplete = () =>
@@ -33,7 +45,7 @@ const BookOrder = () => {
           prev.filter((s) => s.vendorserviceid !== activeService._id)
         );
       }
-      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: service.quantity });
       setActiveService(service);
       return;
     }
@@ -47,11 +59,13 @@ const BookOrder = () => {
         prev.filter((s) => s.vendorserviceid !== service._id)
       );
       setActiveService(null);
-      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: service.quantity });
     } else {
       setActiveService(service);
     }
   };
+
+
 
   const handleSaveForm = () => {
     if (!isFormComplete()) {
@@ -86,10 +100,14 @@ const BookOrder = () => {
     alert("Order Booked!");
   };
 
+
+
   const totalAmount = selectedServices.reduce((sum, s) => {
     const service = cartServices.find((x) => x._id === s.vendorserviceid);
     return sum + (service?.final_price || 0) * (s.quantity || 1);
   }, 0);
+
+
 
   const {
     pageBg,
@@ -133,15 +151,14 @@ const BookOrder = () => {
           {addresses.map((addr) => (
             <div
               key={addr._id}
-              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${
-                selectedAddressId === addr._id
-                  ? isDark
-                    ? "border-blue-400 bg-blue-800"
-                    : "border-blue-600 bg-blue-200"
-                  : isDark
+              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${selectedAddressId === addr._id
+                ? isDark
+                  ? "border-blue-400 bg-blue-800"
+                  : "border-blue-600 bg-blue-200"
+                : isDark
                   ? "border-gray-700 bg-gray-800"
                   : "border-gray-300 bg-white"
-              }`}
+                }`}
               onClick={() => setSelectedAddressId(addr._id)}
             >
               <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
@@ -238,7 +255,7 @@ const BookOrder = () => {
                 type="number"
                 min="1"
                 className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
-                value={formData.quantity}
+                value={activeService.quantity}
                 onChange={(e) =>
                   setFormData({ ...formData, quantity: e.target.value })
                 }
@@ -246,11 +263,10 @@ const BookOrder = () => {
             </div>
 
             <button
-              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${
-                isDark
-                  ? "bg-blue-700 hover:bg-blue-800"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
+              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${isDark
+                ? "bg-blue-700 hover:bg-blue-800"
+                : "bg-blue-600 hover:bg-blue-700"
+                }`}
               onClick={handleSaveForm}
             >
               Save Service
@@ -270,9 +286,8 @@ const BookOrder = () => {
                 <p
                   key={s.vendorserviceid}
                   className="text-xs sm:text-sm"
-                >{`${srv?.service_name} × ${s.quantity} = ₹${
-                  (srv?.final_price || 0) * s.quantity
-                }`}</p>
+                >{`${srv?.service_name} × ${s.quantity} = ₹${(srv?.final_price || 0) * s.quantity
+                  }`}</p>
               );
             })}
             <p className="mt-2 font-bold text-sm sm:text-base">
@@ -282,11 +297,10 @@ const BookOrder = () => {
         )}
 
         <button
-          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${
-            cartServices.length === 0
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-500 hover:opacity-90 text-white"
-          }`}
+          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${cartServices.length === 0
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-green-500 hover:opacity-90 text-white"
+            }`}
           onClick={handleSubmit}
           disabled={cartServices.length === 0}
         >

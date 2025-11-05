@@ -1,15 +1,29 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { vendorServiceDetails } from "../data/duplicatedata";
 import { useNavigate, useParams } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
+import { handleCart } from "./VendorGrid";
 
 const VendorDetail = () => {
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const vendorItem = vendorServiceDetails.data;
-  if (!vendorItem) return <p>Loading vendor details...</p>;
+  const [vendorItem, setVendorItem] = useState(null);
+
+  useEffect(() => {
+    const fetchVendor = async () => {
+      try {
+        const res = await api.get(`/user/vendor-service/${id}`); // remove colon
+        setVendorItem(res.data.data);
+      } catch (err) {
+        console.error("Error fetching vendor:", err);
+      }
+    };
+
+    fetchVendor();
+  }, []);
+
 
   const {
     pageBg,
@@ -21,6 +35,14 @@ const VendorDetail = () => {
     buttonGreen,
     backBtn,
   } = useThemeClasses();
+
+  if (!vendorItem)
+    return (
+      <div
+        className={`rounded-xl shadow border ${cardBg} p-3 animate-pulse`}
+      >
+        <div className="h-4 bg-gray-400/30 rounded w-2/3 mb-2"></div>
+      </div>)
 
   return (
     <div className={`flex-1 overflow-y-auto p-3 sm:p-4 ${pageBg}`}>
@@ -45,16 +67,16 @@ const VendorDetail = () => {
 
           <div className="flex flex-wrap gap-2 sm:gap-3 mt-3 md:mt-0">
             <button
-              onClick={() => navigate("/dashboard/cart")}
+              onClick={() => handleCart(vendorItem)}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${buttonBlue}`}
             >
-              Add to Cart
+              Add Service
             </button>
             <button
               onClick={() => navigate("/dashboard/book-order")}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${buttonGreen}`}
             >
-              Book Now
+              Order Now
             </button>
             {/* Back Button */}
             <button

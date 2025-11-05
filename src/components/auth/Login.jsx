@@ -4,6 +4,7 @@ import LeftSideImage from "./LeftSideImage";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../security/AuthContext";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
 
 const Login = () => {
   const { login } = useAuth();
@@ -19,18 +20,39 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    const userData = {
-      email: formData.email,
-      name: "John Doe",
-      role: formData.role,
-      token: "fake-jwt-token",
-    };
+    try {
+      // 👇 send credentials to backend
+      const res = await api.post("/auth/login", formData);
 
-    login(userData);
-    navigate("/dashboard");
+      const { token, user } = res.data;
+
+      // Save token for future requests
+      localStorage.setItem("token", token);
+
+      // Save user using context
+      login(user);
+
+      navigate("/dashboard");
+
+    } catch (err) {
+      console.error("Login error:", err);
+      if (err.response) {
+        setError(err.response.data.message || "Login failed");
+      } else {
+        setError("Server unreachable");
+      }
+    } finally {
+      setLoading(false);
+    }
   };
 
   const {
@@ -68,6 +90,7 @@ const Login = () => {
             Welcome Back
           </h2>
 
+          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
@@ -120,12 +143,13 @@ const Login = () => {
               <Link to="/register" className={`${linkText}`}>Register Now</Link>
             </div>
 
+
             {/* Login Button */}
             <button
               type="submit"
               className={`w-full py-3 rounded-lg font-semibold transition ${btnBg} text-white`}
             >
-              Login
+              {loading ? "Logging in..." : "Login"}
             </button>
           </form>
         </motion.div>

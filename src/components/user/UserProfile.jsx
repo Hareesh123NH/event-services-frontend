@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
+import { updateLocation } from "./location";
 
 const addressLabels = {
   label: "Label",
@@ -31,15 +32,12 @@ const CollapsibleSection = ({ title, children }) => {
 };
 
 const UserProfile = () => {
-  
-  const savedProfile = JSON.parse(localStorage.getItem("user")) || {
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+91-9876543210",
-  };
 
-
-  const [profile, setProfile] = useState(savedProfile);
+  const [profile, setProfile] = useState({
+    full_name: ".....",
+    email: ".....",
+    phone_number: "....."
+  });
   const [addresses, setAddresses] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
   const [defaultAddressId, setDefaultAddressId] = useState(localStorage.getItem("addressId"));
@@ -70,15 +68,29 @@ const UserProfile = () => {
     }
   };
 
+  const fetchProfile = async () => {
+    try {
+      const res = await api.get("/user/get-profile");
+      setProfile(res.data.user);
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+    }
+  };
+
 
   useEffect(() => {
-    // fetchProfile();
+    fetchProfile();
     fetchAddresses();
   }, []);
 
-  const saveProfile = () => {
-    localStorage.setItem("user", JSON.stringify(profile));
-    alert("Profile updated successfully!");
+  const saveProfile = async () => {
+    try {
+      await api.put("/user/update-profile", profile);
+    } catch (err) {
+      fetchProfile();
+      console.error("Error updating profile:", err);
+    }
+
   };
 
   const handleAddressChange = (id, field, value) => {
@@ -87,10 +99,22 @@ const UserProfile = () => {
     );
   };
 
-  const updateAddress = (addr) => {
-    const updated = addresses.map((a) => (a._id === addr._id ? addr : a));
-    setAddresses(updated);
-    alert("Address updated successfully!");
+  const updateAddress = async (updatedAddress) => {
+    try {
+      const coords = await updateLocation(updatedAddress);
+      if (coords) {
+        updatedAddress.location = { type: "Point", coordinates: coords };
+        console.log(updateAddress);
+        await api.put(`/user/address/${updatedAddress._id}`, updatedAddress);
+      }
+      else {
+        alert("please after some time");
+      }
+    }
+    catch (err) {
+      console.error("Error updating address:", err);
+      fetchAddresses();
+    }
   };
 
   const handleAddAddress = () => {
@@ -150,13 +174,14 @@ const UserProfile = () => {
           <input
             type="text"
             placeholder="Name"
-            value={profile.name}
+            value={profile.full_name}
             onChange={(e) =>
-              setProfile({ ...profile, name: e.target.value })
+              setProfile({ ...profile, full_name: e.target.value })
             }
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />
           <input
+            disabled
             type="email"
             placeholder="Email"
             value={profile.email}
@@ -168,9 +193,9 @@ const UserProfile = () => {
           <input
             type="text"
             placeholder="Phone"
-            value={profile.phone}
+            value={profile.phone_number}
             onChange={(e) =>
-              setProfile({ ...profile, phone: e.target.value })
+              setProfile({ ...profile, phone_number: e.target.value })
             }
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />

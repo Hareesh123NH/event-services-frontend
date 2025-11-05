@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { addresses as storedAddresses } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 
@@ -17,6 +16,8 @@ const BookOrder = () => {
     quantity: 1,
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const fetchAddresses = async () => {
     try {
@@ -90,16 +91,45 @@ const BookOrder = () => {
     setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+
+    if (!selectedAddressId || !eventDate) {
+      setError("Please select an address and date before booking.");
+      return;
+    }
+
+    setLoading(true);
+    setError(""); // clear previous error
+
+    console.log("book add id",selectedAddressId);
     const orderData = {
       event_addressId: selectedAddressId,
       event_date: eventDate,
       services: selectedServices,
     };
-    console.log("✅ Order submitted:", orderData);
-    alert("Order Booked!");
-  };
 
+    try {
+      const response = await api.post("/order/create", orderData);
+      console.log("✅ Order submitted:", response.data);
+      localStorage.removeItem("cart");
+      sessionStorage.removeItem("user-history");
+      alert("Order Booked Successfully!");
+      setCartServices([]);
+      setSelectedServices([]);
+    } catch (error) {
+      console.error("❌ Error submitting order:", error);
+
+      // Backend 400 validation errors usually come in error.response
+      if (error.response && error.response.status === 400) {
+        setError(error.response.data.message || "Invalid input data");
+      } else {
+        setError("Failed to book order. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+
+  };
 
 
   const totalAmount = selectedServices.reduce((sum, s) => {
@@ -134,13 +164,20 @@ const BookOrder = () => {
 
         {/* Event Date */}
         <div className="mb-4">
+
+          {error && (
+            <p className="text-sm sm:text-base text-red-600 mt-2 px-2 sm:px-0">
+              {error}
+            </p>
+          )}
+
           <label className="block mb-1 text-sm sm:text-base">Event Date:</label>
           <input
             type="date"
             className={`border p-2 w-full rounded text-sm sm:text-base ${inputBg}`}
             value={eventDate}
             onChange={(e) => setEventDate(e.target.value)}
-          />
+            required />
         </div>
 
         {/* Address Selection */}
@@ -159,7 +196,10 @@ const BookOrder = () => {
                   ? "border-gray-700 bg-gray-800"
                   : "border-gray-300 bg-white"
                 }`}
-              onClick={() => setSelectedAddressId(addr._id)}
+              onClick={() => {
+                console.log("lasr seleced addId",addr._id);
+                setSelectedAddressId(addr._id)
+              }}
             >
               <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
               <p className="text-xs sm:text-sm">
@@ -302,9 +342,9 @@ const BookOrder = () => {
             : "bg-green-500 hover:opacity-90 text-white"
             }`}
           onClick={handleSubmit}
-          disabled={cartServices.length === 0}
+          disabled={cartServices.length === 0 || loading}
         >
-          Submit Order
+          {loading ? "Submitting" : "Submit Order"}
         </button>
       </div>
     </div>

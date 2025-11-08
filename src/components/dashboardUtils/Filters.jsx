@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { filtersList } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
 import { useNavigate } from "react-router-dom";
-import { MapPin, RefreshCcw } from "lucide-react";
+import { LocateFixed, RefreshCcwDot } from "lucide-react";
 import { getAccuratePosition } from "../user/location";
 
 const Filters = ({
@@ -18,7 +18,7 @@ const Filters = ({
   const navigate = useNavigate();
   const filters = filtersList;
 
-  const distanceOptions = [10, 20, 30, 50, 100, 200, 300, 500, 1000];
+  const distanceOptions = [100, 200, 300, 500, 1000];
 
   const [loadingLocation, setLoadingLocation] = useState(false);
 
@@ -137,9 +137,9 @@ const Filters = ({
             title="Reload location"
           >
             {loadingLocation ? (
-              <RefreshCcw className="w-5 h-5 text-blue-600 animate-spin" />
+              <RefreshCcwDot className="w-5 h-5 text-blue-600 animate-spin" />
             ) : (
-              <MapPin className="w-5 h-5 text-blue-600" />
+              <LocateFixed className="w-10 h-6 text-blue-600" />
             )}
           </button>
         </div>

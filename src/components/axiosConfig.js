@@ -1,7 +1,7 @@
 import axios from "axios";
 import { logoutUser } from "./security/AuthContext"
 
-const backendUrl = "http://localhost:5000"
+const backendUrl =import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
     baseURL: backendUrl,

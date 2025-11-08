@@ -1,13 +1,147 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, FileText, Briefcase } from "lucide-react";
-import { token, vendorRegistrations } from "../data/duplicatedata";
+import { Mail, Phone, MapPin, FileText, Briefcase, Check, X, Loader2 } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
-
+import api from "../axiosConfig";
 
 const VendorRegistrationView = () => {
+  const [vendors, setVendors] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [loadingId, setLoadingId] = useState(null);
 
-  const vendors = vendorRegistrations;
+  const fetchVendorRegistrations = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/admin/vendor-registrations");
+      setVendors(res.data);
+    } catch (err) {
+      console.error("Error fetching vendor registrations:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchVendorRegistrations();
+  }, []);
+
+  // Handle media file click
+  const handleFileClick = async (fileId, fileName) => {
+    setLoadingId(fileId);
+    try {
+      const response = await api.get(`/admin/media/${fileId}`, {
+        responseType: "blob",
+      });
+
+      if (!response || !response.data) throw new Error("Failed to fetch file");
+
+      const blob = response.data;
+      const url = window.URL.createObjectURL(blob);
+
+      // 🟢 Open all files (images, PDFs, etc.) in a new tab
+      const newTab = window.open(url, "_blank");
+
+      // If popup blocked, fallback to manual download
+      if (!newTab) {
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Failed to fetch file. Check console for details.");
+    }
+    setLoadingId(null);
+  };
+
+
+  const onAccept = async (id) => {
+
+    if(!confirm("Are sure to Accept?")){
+      return ;
+    }
+    console.log("Accepted vendor:", id);
+
+    try {
+
+      setLoadingId(id + 1)
+
+      await api.post(`/admin/accept/${id}`);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      fetchVendorRegistrations();
+
+    } catch (err) {
+      console.error("Error accepting vendor:", err);
+    } finally {
+      setLoadingId(null);
+    }
+
+  };
+
+  const onReject = async (id) => {
+
+    if(!confirm("Are sure to Reject?")){
+      return ;
+    }
+
+    console.log("Rejected vendor:", id);
+    try {
+
+      setLoadingId(id + 2);
+
+      await api.delete(`/admin/reject/${id}`);
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+
+      fetchVendorRegistrations();
+
+    } catch (err) {
+      console.error("Error rejecting vendor:", err);
+    } finally {
+      setLoadingId(null);
+    }
+  };
+
+  // Theme classes
+  const {
+    pageBg,
+    textPrimary,
+    textSecondary,
+    cardBg,
+    fileText,
+    cardBorder,
+    textClass,
+    modalBg,
+  } = useThemeClasses();
+
+
+  if (loading) {
+
+    return (
+      <div
+        className={`p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ${pageBg}`}
+      >
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            className={`${cardBg} border ${cardBorder} rounded-2xl p-5 overflow-hidden relative`}
+          >
+            <div className="relative space-y-3">
+              <div className="h-5 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-3/4"></div>
+              <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-2/3"></div>
+              <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-1/2"></div>
+              <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-xl"></div>
+            </div>
+          </motion.div>
+        ))}
+      </div>
+    );
+  }
+
 
   if (!vendors || vendors.length === 0) {
     return (
@@ -16,35 +150,6 @@ const VendorRegistrationView = () => {
       </div>
     );
   }
-
-  // Fetch and open/download media securely
-  const handleFileClick = async (fileId, fileName) => {
-    try {
-      const response = await fetch(
-        `http://localhost:5000/admin/media/${fileId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      if (!response.ok) throw new Error("Failed to fetch file");
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-
-      const newTab = window.open(url, "_blank");
-      if (!newTab) {
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        a.click();
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Failed to fetch file. Check console for details.");
-    }
-  };
-
-  // Theme-based classes
-  const { pageBg, textPrimary, textSecondary, cardBg, fileText, cardBorder, textClass, modalBg } = useThemeClasses();
 
   return (
     <motion.div
@@ -117,16 +222,58 @@ const VendorRegistrationView = () => {
                   <motion.li
                     key={file.id}
                     whileHover={{ x: 5 }}
-                    className={`flex items-center text-sm cursor-pointer ${fileText}`}
+                    className={`flex items-center text-sm cursor-pointer truncate max-w-full ${fileText}`}
                     onClick={() => handleFileClick(file.id, file.name)}
+                    title={file.name} // tooltip for long names
                   >
-                    <FileText className={`w-4 h-4 mr-2 ${textSecondary}`} />
-                    {file.name}
+                    {loadingId === file.id ? (
+                      <Loader2 className="w-4 h-4 mr-2 text-blue-500 animate-spin flex-shrink-0" />
+                    ) : (
+                      <FileText className={`w-4 h-4 mr-2 ${textSecondary} flex-shrink-0`} />
+                    )}
+                    <span className="truncate">{file.name}</span>
                   </motion.li>
                 ))}
               </ul>
             </div>
           )}
+
+          {/* Action Buttons */}
+          <div className="flex justify-between mt-5">
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onAccept(vendor._id)}
+              disabled={loadingId === vendor._id + 2}
+              className="flex items-center justify-center px-4 py-2 bg-green-200 hover:bg-green-300 text-green-800 rounded-xl shadow-sm transition-all"
+            >
+              {loadingId === vendor._id + 1 ? (
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+              ) : (
+                <>
+                  <Check className="w-4 h-4 mr-1" />
+                  Accept
+                </>
+              )}
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => onReject(vendor._id)}
+              disabled={loadingId === vendor._id + 1}
+              className="flex items-center justify-center px-4 py-2 bg-red-200 hover:bg-red-300 text-red-800 rounded-xl shadow-sm transition-all"
+            >
+              {loadingId === vendor._id + 2 ? (
+                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+              ) : (
+                <>
+                  <X className="w-4 h-4 mr-1" />
+                  Reject
+                </>
+              )}
+            </motion.button>
+          </div>
         </motion.div>
       ))}
     </motion.div>

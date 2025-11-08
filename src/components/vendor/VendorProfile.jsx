@@ -10,25 +10,32 @@ const profileImage = "https://img.favpng.com/14/4/9/smiling-business-man-smiling
 const VendorProfile = () => {
 
   const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState({
+    full_name: "",
+    email: "",
+    phone_number: "",
+    address: "",
+    description: "",
+    // profileImage: "",
+  });
 
-  const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
 
   // ✅ Fetch vendor profile
   const fetchProfile = async () => {
     try {
-      setLoading(true);
       const res = await api.get("/auth/get-profile");
       setFormData(res.data.user);
     } catch (err) {
       console.error("Error fetching vendor profile:", err);
-    } finally {
-      setLoading(false);
     }
   };
 
   // ✅ Update vendor profile
   const handleSave = async () => {
+
+    setSaving(true);
+
     try {
       const updateData = {
         full_name: formData.full_name,
@@ -36,7 +43,6 @@ const VendorProfile = () => {
         address: formData.address,
         description: formData.description,
       };
-
 
       const coords = await getCoordsFromAddressHelper(updateData.address);
 
@@ -57,6 +63,7 @@ const VendorProfile = () => {
       console.error("Error updating vendor profile:", err);
       alert("Failed to update profile");
     }
+    setSaving(false);
   };
 
   useEffect(() => {
@@ -126,7 +133,7 @@ const VendorProfile = () => {
             )}
           </div>
           <div className="text-center sm:text-left">
-            <h1 className="text-xl sm:text-2xl font-semibold">{formData.name}</h1>
+            <h1 className="text-xl sm:text-2xl font-semibold">{formData.full_name}</h1>
             <p className={`${textSecondary} text-sm sm:text-base`}>{formData.email}</p>
           </div>
         </div>
@@ -138,7 +145,7 @@ const VendorProfile = () => {
             <label className={`block text-sm mb-1 ${textSecondary}`}>Name</label>
             <input
               type="text"
-              name="name"
+              name="full_name"
               value={formData.full_name}
               onChange={handleChange}
               disabled={!editing}
@@ -216,9 +223,10 @@ const VendorProfile = () => {
               </button>
               <button
                 onClick={handleSave}
+                disabled={saving}
                 className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 transition text-sm sm:text-base"
               >
-                <Save size={16} /> Save
+                {saving ? <>Saving...</> : <><Save size={16} /> Save</>}
               </button>
             </>
           ) : (

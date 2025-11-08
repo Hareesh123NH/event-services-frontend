@@ -1,13 +1,19 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import LeftSideImage from "./LeftSideImage";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
+import { getCoordsFromAddressHelper } from "../user/location";
 
 const VendorRegister = () => {
+
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    otp: "",
     password: "",
     phone_number: "",
     description: "",
@@ -15,21 +21,31 @@ const VendorRegister = () => {
     aadhar_card: null,
     pan_card: null,
     business_document: null,
-    otp: "",
+    location: null,
   });
 
   const [otpSent, setOtpSent] = useState(false);
   const [otpTimer, setOtpTimer] = useState(0);
   const [selectedServiceId, setSelectedServiceId] = useState(null);
+  const [services, setServices] = useState([]);
 
-  const services = [
-    { _id: "1", name: "Catering", base_price: "2000", pricing_type: "per day" },
-    { _id: "2", name: "Decoration", base_price: "1500", pricing_type: "per day" },
-    { _id: "3", name: "Photography", base_price: "1000", pricing_type: "per hour" },
-    { _id: "4", name: "Music Band", base_price: "5000", pricing_type: "fixed" },
-    { _id: "5", name: "Lighting", base_price: "800", pricing_type: "per hour" },
-  ];
+  // 🎯 Fetch available services
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const res = await api.get("/service/");
+        setServices(res.data);
+      } catch (err) {
+        console.error("Error fetching services:", err);
+      }
+    };
+    fetchServices();
 
+  }, []);
+
+
+
+  // 🔄 Handle input/file changes
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     setFormData({
@@ -38,6 +54,7 @@ const VendorRegister = () => {
     });
   };
 
+  // 📤 Send OTP
   const handleSendOtp = () => {
     if (!formData.email) {
       alert("Please enter email first to send OTP.");
@@ -45,10 +62,11 @@ const VendorRegister = () => {
     }
     setOtpSent(true);
     setOtpTimer(30);
-    setFormData((prev) => ({ ...prev, otp: "" })); // clear text only
+    setFormData((prev) => ({ ...prev, otp: "" }));
     alert(`OTP sent to ${formData.email}`);
   };
 
+  // ⏱️ Countdown for OTP resend
   useEffect(() => {
     let timer;
     if (otpSent && otpTimer > 0) {
@@ -59,24 +77,78 @@ const VendorRegister = () => {
     return () => clearTimeout(timer);
   }, [otpTimer, otpSent]);
 
-  const handleSubmit = (e) => {
+  // 🧾 Submit form
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const submitData = { ...formData, selectedServiceId };
-    console.log("Vendor Registration Data:", submitData);
-    alert("Vendor Registered Successfully!");
+
+    if (!selectedServiceId) {
+      alert("Please select a service.");
+      return;
+    }
+
+    if (!formData.aadhar_card && !formData.pan_card) {
+      alert("Please provide necesaary documents!");
+      return;
+    }
+
+    // ✅ Get coordinates from address using helper
+    const coords = await getCoordsFromAddressHelper(formData.address);
+
+    if (coords) {
+      formData.location = {
+        type: "Point",
+        coordinates: coords, // [lon, lat]
+      };
+    } else {
+      alert("Could not find location for this address. Please check it.");
+      return;
+    }
+
+
+    const formDataToSend = new FormData();
+    formDataToSend.append("vendor_name", formData.name);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("otp", formData.otp);
+    formDataToSend.append("password", formData.password);
+    formDataToSend.append("phonenumber", formData.phone_number);
+    formDataToSend.append("desc", formData.description);
+    formDataToSend.append("address", formData.address);
+    formDataToSend.append("service_id", selectedServiceId);
+    formDataToSend.append("location", JSON.stringify(formData.location));
+
+    if (formData.aadhar_card)
+      formDataToSend.append("aadhar", formData.aadhar_card);
+    if (formData.pan_card)
+      formDataToSend.append("pancard", formData.pan_card);
+    if (formData.business_document)
+      formDataToSend.append("business_doc", formData.business_document);
+
+    try {
+      const res = await api.post("/auth/vendor-register", formDataToSend, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      alert("Vendor Registered Successfully!");
+      console.log("Response:", res.data);
+      navigate("/login");
+    } catch (err) {
+      console.error("Error during registration:", err);
+      alert(err.response?.data?.error || "Registration failed!");
+    }
   };
 
+  // 🎨 Theme classes
   const { bgGradient, formBg, labelColor, inputBg, btnBg, cardSelected, cardBg, isDark } =
     useThemeClasses();
 
   return (
     <div className={`min-h-screen flex flex-col md:flex-row ${bgGradient}`}>
-
+      {/* Left Side Image */}
       <div className="hidden md:flex md:w-1/2">
-        <LeftSideImage
-          url="https://irentmo.com/wp-content/uploads/2023/04/Screen-Shot-2023-05-01-at-7.14.07-AM-min-1-300x200.png"
-        />
+        <LeftSideImage url="https://irentmo.com/wp-content/uploads/2023/04/Screen-Shot-2023-05-01-at-7.14.07-AM-min-1-300x200.png" />
       </div>
+
+      {/* Right Side Form */}
       <div
         className={`md:w-1/2 w-full ${formBg} flex justify-center items-center px-5 py-10 md:p-16 overflow-y-auto`}
       >
@@ -91,7 +163,7 @@ const VendorRegister = () => {
           </h2>
 
           <form onSubmit={handleSubmit} className="space-y-5 pb-6">
-            {/* Name */}
+            {/* Vendor Name */}
             <div>
               <label className={`block font-medium mb-2 ${labelColor}`}>
                 Vendor Name
@@ -126,16 +198,13 @@ const VendorRegister = () => {
                   type="button"
                   onClick={handleSendOtp}
                   disabled={otpSent}
-                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : btnBg
+                  className={`px-4 py-2 rounded-lg font-semibold transition ${otpSent ? "bg-gray-400 cursor-not-allowed" : btnBg
                     }`}
                 >
                   {otpSent ? `Resend in ${otpTimer}s` : "Send OTP"}
                 </button>
               </div>
 
-              {/* OTP field (visible after sending or if filled) */}
               {(otpSent || formData.otp) && (
                 <div className="mt-3">
                   <label className={`block font-medium mb-2 ${labelColor}`}>
@@ -217,11 +286,13 @@ const VendorRegister = () => {
             </div>
 
             {/* File Uploads */}
-            {["aadhar_card", "pan_card", "business_document"].map((field) => (
+            {[
+              ["aadhar_card", "Aadhar Card"],
+              ["pan_card", "PAN Card"],
+              ["business_document", "Business Document"],
+            ].map(([field, label]) => (
               <div key={field} className="flex flex-col space-y-2">
-                <label className={`${labelColor} font-medium capitalize`}>
-                  {field.replace("_", " ")}
-                </label>
+                <label className={`${labelColor} font-medium`}>{label}</label>
                 <div className="flex items-center space-x-3">
                   <label
                     htmlFor={field}
@@ -247,7 +318,9 @@ const VendorRegister = () => {
                       }`}
                   >
                     <span>
-                      {formData[field] ? formData[field].name : "No file chosen"}
+                      {formData[field]
+                        ? formData[field].name
+                        : "No file chosen"}
                     </span>
                     {formData[field] && (
                       <button
@@ -273,12 +346,17 @@ const VendorRegister = () => {
               <div className="flex space-x-4 overflow-x-auto pb-2">
                 {services.map((service) => (
                   <div
-                    key={service._id}
-                    onClick={() => setSelectedServiceId(service._id)}
-                    className={`p-3 border rounded-lg min-w-[160px] cursor-pointer text-center transition ${selectedServiceId === service._id ? cardSelected : cardBg
+                    key={service.service_id || service._id}
+                    onClick={() =>
+                      setSelectedServiceId(service.service_id || service._id)
+                    }
+                    className={`p-3 border rounded-lg min-w-[160px] cursor-pointer text-center transition ${selectedServiceId ===
+                      (service.service_id || service._id)
+                      ? cardSelected
+                      : cardBg
                       }`}
                   >
-                    <p className="font-semibold">{service.name}</p>
+                    <p className="font-semibold">{service.service_name}</p>
                     <p className="text-sm opacity-80">
                       ₹{service.base_price} ({service.pricing_type})
                     </p>
@@ -287,7 +365,7 @@ const VendorRegister = () => {
               </div>
             </div>
 
-            {/* Submit */}
+            {/* Submit Button */}
             <button
               type="submit"
               className={`w-full py-3 mt-2 rounded-lg font-semibold transition ${btnBg}`}

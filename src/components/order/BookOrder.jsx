@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
+import { Check, Loader2, Save } from "lucide-react";
 
 const BookOrder = () => {
 
@@ -18,8 +20,10 @@ const BookOrder = () => {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
 
   const fetchAddresses = async () => {
+    setLoadingAddresses(true);
     try {
       const res = await api.get("/user/address");
       setAddresses(res.data.addresses);
@@ -29,6 +33,7 @@ const BookOrder = () => {
     } catch (err) {
       console.error("Error fetching addresses:", err);
     }
+    setLoadingAddresses(false);
   };
 
   useEffect(() => {
@@ -136,7 +141,14 @@ const BookOrder = () => {
     return sum + (service?.final_price || 0) * (s.quantity || 1);
   }, 0);
 
-
+  const savedCoords = JSON.parse(localStorage.getItem("coords") || "[]");
+  const isSameLocation = (addrCoords) => {
+    if (!addrCoords || addrCoords.length !== 2 || savedCoords.length !== 2) return false;
+    const [lon1, lat1] = addrCoords;
+    const [lon2, lat2] = savedCoords;
+    const threshold = 0.0001; // ~10m
+    return Math.abs(lon1 - lon2) < threshold && Math.abs(lat1 - lat2) < threshold;
+  };
 
   const {
     pageBg,
@@ -183,36 +195,64 @@ const BookOrder = () => {
         <h3 className="text-lg sm:text-xl font-semibold mb-2">
           Select Address
         </h3>
+
         <div className="flex space-x-3 overflow-x-auto mb-4 pb-2 scrollbar-hide">
-          {addresses.map((addr) => (
-            <div
-              key={addr._id}
-              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${selectedAddressId === addr._id
-                ? isDark
-                  ? "border-blue-400 bg-blue-800"
-                  : "border-blue-600 bg-blue-200"
-                : isDark
+          {loadingAddresses
+            ? // 🟢 Shimmer placeholders
+            [...Array(3)].map((_, i) => (
+              <div
+                key={i}
+                className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 border animate-pulse ${isDark
                   ? "border-gray-700 bg-gray-800"
-                  : "border-gray-300 bg-white"
-                }`}
-              onClick={() => {
-                setSelectedAddressId(addr._id)
-              }}
-            >
-              <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
-              <p className="text-xs sm:text-sm">
-                {addr.address_line1}, {addr.address_line2}
-              </p>
-              <p className="text-xs sm:text-sm">
-                {addr.city}, {addr.state} - {addr.postal_code}
-              </p>
-              <p className="text-xs sm:text-sm">{addr.country}</p>
-              <p className="text-xs sm:text-sm">
-                Phone: {addr.alternate_phone}
-              </p>
-            </div>
-          ))}
+                  : "border-gray-300 bg-gray-100"
+                  }`}
+              >
+                <div className="h-4 w-24 bg-gray-400/50 rounded mb-2"></div>
+                <div className="h-3 w-40 bg-gray-300/50 rounded mb-1"></div>
+                <div className="h-3 w-36 bg-gray-300/50 rounded mb-1"></div>
+                <div className="h-3 w-32 bg-gray-300/50 rounded mb-1"></div>
+                <div className="h-3 w-28 bg-gray-300/50 rounded"></div>
+              </div>
+            ))
+            : // 🟢 Real address cards
+            addresses.map((addr) => (
+              <div
+                key={addr._id}
+                className={`relative p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200
+                ${selectedAddressId === addr._id
+                    ? isDark
+                      ? "border-blue-400 bg-blue-800"
+                      : "border-blue-600 bg-blue-200"
+                    : isDark
+                      ? "border-gray-700 bg-gray-800"
+                      : "border-gray-300 bg-white"
+                  }`}
+                onClick={() => setSelectedAddressId(addr._id)}
+              >
+                {isSameLocation(addr.location?.coordinates) && (
+                  <div className="absolute top-2 right-2 flex items-center space-x-1">
+                    {/* Red dot */}
+                    <span className="h-2 w-2 rounded-full bg-red-500 animate-ping"></span>
+                    {/* LIVE text */}
+                    <span className="text-xs font-semibold text-red-500">LIVE</span>
+                  </div>
+                )}
+
+                <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
+                <p className="text-xs sm:text-sm">
+                  {addr.address_line1}, {addr.address_line2}
+                </p>
+                <p className="text-xs sm:text-sm">
+                  {addr.city}, {addr.state} - {addr.postal_code}
+                </p>
+                <p className="text-xs sm:text-sm">{addr.country}</p>
+                <p className="text-xs sm:text-sm">
+                  Phone: {addr.alternate_phone}
+                </p>
+              </div>
+            ))}
         </div>
+
 
         {/* Services */}
         <h3 className="text-lg sm:text-xl font-semibold mb-2">
@@ -300,15 +340,28 @@ const BookOrder = () => {
               />
             </div>
 
-            <button
-              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${isDark
-                ? "bg-blue-700 hover:bg-blue-800"
-                : "bg-blue-600 hover:bg-blue-700"
-                }`}
+            <motion.button
+              whileHover={{ scale: loading ? 1 : 1.05 }}
+              whileTap={{ scale: loading ? 1 : 0.95 }}
               onClick={handleSaveForm}
+              disabled={loading}
+              className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 mt-1 rounded-xl text-xs sm:text-sm transition-all shadow-sm border backdrop-blur-sm
+    ${loading
+                  ? isDark
+                    ? "bg-gray-700/80 text-gray-200 border-gray-600/70 cursor-not-allowed opacity-90"
+                    : "bg-gray-200/80 text-gray-600 border-gray-300/70 cursor-not-allowed opacity-90"
+                  : isDark
+                    ? "bg-blue-900/70 hover:bg-blue-800/80 text-blue-200 border-blue-700/60"
+                    : "bg-blue-100/90 hover:bg-blue-200/95 text-blue-800 border-blue-300/60"
+                }`}
             >
+
+              <Save className="w-4 h-4" />
               Save Service
-            </button>
+
+            </motion.button>
+
+
           </div>
         )}
 
@@ -334,16 +387,32 @@ const BookOrder = () => {
           </div>
         )}
 
-        <button
-          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${cartServices.length === 0
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-green-500 hover:opacity-90 text-white"
-            }`}
-          onClick={handleSubmit}
-          disabled={cartServices.length === 0 || loading}
-        >
-          {loading ? "Submitting" : "Submit Order"}
-        </button>
+        {cartServices.length > 0 && (
+          <motion.button
+            whileHover={{ scale: loading ? 1 : 1.05 }}
+            whileTap={{ scale: loading ? 1 : 0.95 }}
+            onClick={handleSubmit}
+            disabled={loading}
+            className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border backdrop-blur-sm
+      ${loading
+                ? "bg-gray-200/60 text-gray-500 border-gray-300/50 cursor-not-allowed opacity-80"
+                : "bg-green-100/70 hover:bg-green-200/80 text-green-800 border-green-300/40"
+              }`}
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Check className="w-5 h-5" />
+                Submit Order
+              </>
+            )}
+          </motion.button>
+        )}
+
       </div>
     </div>
   );

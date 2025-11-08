@@ -1,3 +1,4 @@
+import { address, label } from "framer-motion/client";
 
 
 export async function getAccuratePosition({ timeout = 10000, samples = 5, maxAcceptableAccuracy = 30 } = {}) {
@@ -90,12 +91,14 @@ export async function getAddressFromCoords(lat, lon) {
     if (data && data.address) {
         const a = data.address;
         return {
+            label: "live",
             address_line1: a.road || "",
+            address_line2: a.suburb || "",
             city: a.city || a.town || a.village || "",
             state: a.state || "",
             postal_code: a.postcode || "",
             country: a.country || "",
-            formatted_address: data.display_name,
+            // formatted_address: data.display_name,
         };
     } else {
         console.warn("No address found for:", lat, lon);

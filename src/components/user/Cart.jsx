@@ -4,36 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
 
-// const cartData = [
-//   {
-//     _id: "1",
-//     vendor: { full_name: "Vendor1" },
-//     service_name: "Decoration",
-//     final_price: 1800,
-//     quantity: 1,
-//   },
-//   {
-//     _id: "2",
-//     vendor: { full_name: "Vendor2" },
-//     service_name: "Photography",
-//     final_price: 2500,
-//     quantity: 1,
-//   },
-//   {
-//     _id: "3",
-//     vendor: { full_name: "Vendor3" },
-//     service_name: "Catering",
-//     final_price: 4000,
-//     quantity: 1,
-//   },
-//   {
-//     _id: "4",
-//     vendor: { full_name: "Vendor4" },
-//     service_name: "Lighting",
-//     final_price: 1500,
-//     quantity: 2,
-//   },
-// ];
 
 const Cart = () => {
   const navigate = useNavigate();
@@ -80,6 +50,10 @@ const Cart = () => {
     cartButton,
     sectionBg,
   } = useThemeClasses();
+
+
+
+  
 
   return (
     <div className={`relative flex flex-col h-full ${sectionBg} overflow-hidden`}>
@@ -164,12 +138,15 @@ const Cart = () => {
         <h3 className={`text-lg sm:text-xl font-semibold ${textPrimary}`}>
           Total: ₹{totalPrice}
         </h3>
-        <button
-          className="bg-green-500 text-white px-4 sm:px-6 py-2 rounded-lg hover:bg-green-600 transition font-medium text-sm sm:text-base"
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
           onClick={handleCheckout}
+          className="bg-green-500/50 hover:bg-green-500/70 text-white px-4 sm:px-6 py-2 rounded-xl shadow-sm transition-all font-medium text-sm sm:text-base backdrop-blur-sm"
         >
           Proceed to Checkout
-        </button>
+        </motion.button>
+
       </div>
     </div>
   );

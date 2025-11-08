@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import { handleCart } from "./VendorGrid";
+import { CheckCircle, PlusCircle } from "lucide-react";
 
 const VendorDetail = () => {
   const navigate = useNavigate();
@@ -65,30 +66,50 @@ const VendorDetail = () => {
             </p>
           </div>
 
+
           <div className="flex flex-wrap gap-2 sm:gap-3 mt-3 md:mt-0">
-            <button
-              onClick={() => handleCart(vendorItem)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${buttonBlue}`}
-            >
-              Add Service
-            </button>
-            <button
-              onClick={() => {
-                handleCart(vendorItem)
-                navigate("/dashboard/book-order")
+            {/* Add Service Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCart(vendorItem);
               }}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${buttonGreen}`}
+              className="flex-1 flex items-center justify-center px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm bg-blue-200 hover:bg-blue-300 text-blue-800 shadow-sm transition-all"
             >
-              Order Now
-            </button>
-            {/* Back Button */}
-            <button
+              <PlusCircle className="w-4 h-4 mr-1" />
+              AddService
+            </motion.button>
+
+            {/* Order Button */}
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleCart(vendorItem);
+                navigate("/dashboard/book-order");
+              }}
+              className="flex-1 flex items-center justify-center px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm bg-green-200 hover:bg-green-300 text-green-800 shadow-sm transition-all"
+            >
+              <CheckCircle className="w-4 h-4 mr-1" />
+              Order
+            </motion.button>
+
+            {/* Optional Back Button */}
+
+            {/* <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               onClick={() => navigate(-1)}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${backBtn}`}
+              className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition-all shadow-sm ${backBtn}`}
             >
               ← Back
-            </button>
+            </motion.button> */}
+
           </div>
+
         </div>
 
         {/* Vendor Info */}

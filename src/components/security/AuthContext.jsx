@@ -12,21 +12,9 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
-        const coords = localStorage.getItem("coords");
-        const theme = localStorage.getItem("app-theme");
-        // Clear all local and session data
-        localStorage.clear();
         sessionStorage.clear();
-
-        // Restore coords
-        if (coords) {
-            localStorage.setItem("coords", coords);
-        }
-        if (theme) {
-            localStorage.setItem("app-theme", theme);
-        }
-
-        // Clear user context / state
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setUser(null);
     };
 
@@ -41,10 +29,7 @@ export const useAuth = () => useContext(AuthContext);
 
 
 export const logoutUser = () => {
-    const coords = localStorage.getItem("coords");
-    const theme = localStorage.getItem("app-theme");
-    localStorage.clear();
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     sessionStorage.clear();
-    if (coords) localStorage.setItem("coords", coords);
-    if (theme) localStorage.setItem("app-theme", theme);
 };

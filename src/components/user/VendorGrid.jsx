@@ -4,7 +4,7 @@ import Filters from "../dashboardUtils/Filters";
 import { useNavigate } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
-import { ChevronLeft, ChevronRight } from "lucide-react"; // 👈 Add this at the top
+import { CheckCircle, ChevronLeft, ChevronRight, PlusCircle } from "lucide-react"; // 👈 Add this at the top
 
 
 export const handleCart = (vendorItem) => {
@@ -159,17 +159,14 @@ const VendorGrid = () => {
 
     // 🔹 Clear cache on reload/close
     const clearCache = async () => {
+      storePageState();
       console.log("🧹 Clearing vendor cache (reload/close)");
       if (typeof window !== "undefined" && "caches" in window) {
         await caches.delete(cacheName);
       }
     };
 
-    window.addEventListener("beforeunload", clearCache);
-    window.addEventListener("unload", clearCache);
-
-    // 🧹 Cleanup
-    return () => {
+    const storePageState = () => {
       sessionStorage.setItem(
         "pageState",
         JSON.stringify({
@@ -179,6 +176,14 @@ const VendorGrid = () => {
           maxDistance,
         })
       );
+    }
+
+    window.addEventListener("beforeunload", clearCache);
+    window.addEventListener("unload", clearCache);
+
+    // 🧹 Cleanup
+    return () => {
+      storePageState();
       clearInterval(refreshInterval);
       window.removeEventListener("beforeunload", clearCache);
       window.removeEventListener("unload", clearCache);
@@ -277,25 +282,35 @@ const VendorGrid = () => {
 
               {/* Buttons */}
               <div className={`p-2 sm:p-3 border-t flex gap-2 ${borderColor}`}>
-                <button
-                  className={`flex-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm transition ${buttonBlue}`}
+                {/* Add Service Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCart(vendorItem);
                   }}
+                  className="flex-1 flex items-center justify-center px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm bg-blue-200 hover:bg-blue-300 text-blue-800 shadow-sm transition-all"
                 >
-                  Add Service
-                </button>
-                <button
-                  className={`flex-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm transition ${buttonGreen}`}
+                  <PlusCircle className="w-4 h-4 mr-1" />
+                  AddService
+                </motion.button>
+
+                {/* Order Button */}
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={(e) => {
                     e.stopPropagation();
                     handleCart(vendorItem);
                     navigate("/dashboard/book-order");
                   }}
+                  className="flex-1 flex items-center justify-center px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm bg-green-200 hover:bg-green-300 text-green-800 shadow-sm transition-all"
                 >
+                  <CheckCircle className="w-4 h-4 mr-1" />
                   Order
-                </button>
+                </motion.button>
+
               </div>
             </motion.div>
 

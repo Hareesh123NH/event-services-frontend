@@ -1,21 +1,69 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Camera, Mail, Phone, MapPin, Save, Edit2, X } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
+import { getCoordsFromAddressHelper } from "../user/location";
+
+const profileImage = "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg"
 
 const VendorProfile = () => {
-  const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john@example.com",
-    phone_number: "+91 9876543210",
-    address: "Hyderabad, Telangana",
-    description: "We provide catering and decoration services for all events.",
-    profileImage:
-      "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg",
-  });
 
   const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState(profile);
+  const [formData, setFormData] = useState([]);
+
+  const [loading, setLoading] = useState(false);
+
+  // ✅ Fetch vendor profile
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const res = await api.get("/auth/get-profile");
+      setFormData(res.data.user);
+    } catch (err) {
+      console.error("Error fetching vendor profile:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ Update vendor profile
+  const handleSave = async () => {
+    try {
+      const updateData = {
+        full_name: formData.full_name,
+        phone_number: formData.phone_number,
+        address: formData.address,
+        description: formData.description,
+      };
+
+
+      const coords = await getCoordsFromAddressHelper(updateData.address);
+
+      if (coords) {
+        updateData.location = { type: "Point", coordinates: coords };
+
+        console.log("after", updateData);
+
+        await api.put("/auth/update-profile", updateData);
+        fetchProfile();
+        alert("Profile updated successfully!");
+      }
+      else {
+        alert("please try after some time");
+      }
+
+    } catch (err) {
+      console.error("Error updating vendor profile:", err);
+      alert("Failed to update profile");
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  }, []);
+
+
 
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
@@ -27,13 +75,9 @@ const VendorProfile = () => {
     }
   };
 
-  const handleSave = () => {
-    setProfile(formData);
-    setEditing(false);
-  };
 
   const handleCancel = () => {
-    setFormData(profile);
+    fetchProfile();
     setEditing(false);
   };
 
@@ -70,7 +114,7 @@ const VendorProfile = () => {
         <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6 mb-6">
           <div className="relative">
             <img
-              src={formData.profileImage}
+              src={profileImage}
               alt="Profile"
               className={`w-24 h-24 sm:w-28 sm:h-28 rounded-full object-cover border-4 ${imgBg}`}
             />
@@ -95,7 +139,7 @@ const VendorProfile = () => {
             <input
               type="text"
               name="name"
-              value={formData.name}
+              value={formData.full_name}
               onChange={handleChange}
               disabled={!editing}
               className={`w-full p-2 sm:p-2.5 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}

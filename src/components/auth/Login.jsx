@@ -16,39 +16,34 @@ const Login = () => {
     role: "user",
   });
 
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); // ✅ Prevent full page reload
     setError("");
     setLoading(true);
 
     try {
-      // 👇 send credentials to backend
       const res = await api.post("/auth/login", formData);
-
       const { token, user } = res.data;
 
-      // Save token for future requests
+      // ✅ Save token and user info
       localStorage.setItem("token", token);
-
-      // Save user using context
       login(user);
 
+      // ✅ Navigate after successful login
       navigate("/dashboard");
-
     } catch (err) {
       console.error("Login error:", err);
       if (err.response) {
-        setError(err.response.data.message || "Login failed");
+        setError(err.response.data.message || "Invalid credentials");
       } else {
-        setError("Server unreachable");
+        setError("Unable to connect to the server");
       }
     } finally {
       setLoading(false);
@@ -62,7 +57,6 @@ const Login = () => {
     labelColor,
     linkText,
     btnBg,
-    authButton,
   } = useThemeClasses();
 
   return (
@@ -90,12 +84,18 @@ const Login = () => {
             Welcome Back
           </h2>
 
-          {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 text-sm text-center mb-3">{error}</p>
+          )}
+
           {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>Email</label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
+                Email
+              </label>
               <input
                 type="email"
                 name="email"
@@ -109,7 +109,9 @@ const Login = () => {
 
             {/* Password Field */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>Password</label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
+                Password
+              </label>
               <input
                 type="password"
                 name="password"
@@ -123,7 +125,9 @@ const Login = () => {
 
             {/* Role Dropdown */}
             <div>
-              <label className={`block font-medium mb-2 ${labelColor}`}>Role</label>
+              <label className={`block font-medium mb-2 ${labelColor}`}>
+                Role
+              </label>
               <select
                 name="role"
                 value={formData.role}
@@ -143,11 +147,13 @@ const Login = () => {
               <Link to="/register" className={`${linkText}`}>Register Now</Link>
             </div>
 
-
             {/* Login Button */}
             <button
               type="submit"
-              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg} text-white`}
+              disabled={loading}
+              className={`w-full py-3 rounded-lg font-semibold transition ${btnBg} text-white ${
+                loading ? "opacity-75 cursor-not-allowed" : ""
+              }`}
             >
               {loading ? "Logging in..." : "Login"}
             </button>
@@ -155,7 +161,6 @@ const Login = () => {
         </motion.div>
       </div>
     </div>
-
   );
 };
 

@@ -2,32 +2,34 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
 
-const availableServices = [
-  {
-    service_id: "68d7a008bdc024c7b9cdce0d",
-    service_name: "Photography",
-    description: "Provide the photoshoots, wedding albums",
-    base_price: 800,
-    pricing_type: "per_day",
-  },
-  {
-    service_id: "68d7a09ebdc024c7b9cdce10",
-    service_name: "Catering",
-    description: "Delicious food for weddings, parties, and events",
-    base_price: 1500,
-    pricing_type: "per_day",
-  },
-  {
-    service_id: "68d7a0adbdc024c7b9cdce13",
-    service_name: "Decoration",
-    description: "Beautiful event decoration including flowers, lighting, and stage setup",
-    base_price: 2000,
-    pricing_type: "per_day",
-  },
-];
 
-const AddNewVendorService = ({ onSave }) => {
+
+const ServiceSkeleton = ({ cardDefault }) => {
+  return (
+    <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+      {Array.from({ length: 4 }).map((_, i) => (
+        <div
+          key={i}
+          className={`p-3 border rounded-xl min-w-[200px] sm:min-w-[250px] flex-shrink-0 relative overflow-hidden ${cardDefault}`}
+        >
+          {/* Shimmer Layer */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent dark:via-gray-600/20 animate-[shimmer_1.8s_infinite]" />
+          <div className="h-4 w-32 bg-gray-300/40 dark:bg-gray-600/40 rounded mb-2" />
+          <div className="h-3 w-24 bg-gray-300/40 dark:bg-gray-600/40 rounded" />
+        </div>
+      ))}
+    </div>
+  );
+};
+
+
+
+const AddNewVendorService = () => {
+
+  const [availableServices, setAvailableServices] = useState([]);
+
   const [selectedServiceId, setSelectedServiceId] = useState("");
   const [price, setPrice] = useState(0);
   const [discount, setDiscount] = useState(0);
@@ -35,6 +37,29 @@ const AddNewVendorService = ({ onSave }) => {
   const [notes, setNotes] = useState("");
   const [addons, setAddons] = useState([]);
   const [description, setDescription] = useState("");
+
+
+  const [loading, setLoading] = useState(false);
+
+  const fetchAvailableServicers = async () => {
+    setLoading(true);
+    try {
+      const res = await api.get("/service/");
+      setAvailableServices(res.data);
+    } catch (err) {
+      console.error("Error fetching available services:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchAvailableServicers();
+  }, [])
+
+
+
 
   const selectedService = availableServices.find(
     (s) => s.service_id === selectedServiceId
@@ -60,8 +85,11 @@ const AddNewVendorService = ({ onSave }) => {
   const handleRemoveAddon = (index) =>
     setAddons(addons.filter((_, i) => i !== index));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!selectedServiceId) return alert("Select a service!");
+
+    setLoading(true);
+
     const payload = {
       service: selectedService,
       price,
@@ -70,11 +98,27 @@ const AddNewVendorService = ({ onSave }) => {
       notes,
       addons,
     };
-    console.log("New Vendor Service:", payload);
-    onSave && onSave(payload);
+
+
+    try {
+      await api.post(`/service/vendor/${selectedServiceId}`, payload);
+
+      fetchAvailableServicers();
+
+      alert("Service added successfully!");
+    } catch (err) {
+      console.error("❌ Error adding service:", err);
+      alert("Failed to add new  service. Please try again.");
+    }
+
+    setLoading(false);
+
   };
 
-  const { bgClass, inputBg, cardDefault, cardSelected, pageBg, textClass } =
+
+
+
+  const { bgClass, inputBg, cardDefault, cardSelected, pageBg, textClass, cardBgActive } =
     useThemeClasses();
 
   return (
@@ -94,32 +138,37 @@ const AddNewVendorService = ({ onSave }) => {
           Select Service
         </h3>
 
-        {/* Scrollable Services */}
-        <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-          {availableServices.map((service) => {
-            const selected = selectedServiceId === service.service_id;
-            return (
-              <div
-                key={service.service_id}
-                className={`p-3 border rounded-xl min-w-[200px] sm:min-w-[250px] flex-shrink-0 cursor-pointer transition 
-                ${selected ? cardSelected : cardDefault}`}
-                onClick={() => {
-                  setSelectedServiceId(service.service_id);
-                  setPrice(service.base_price);
-                  setDiscount(0);
-                  setNotes("");
-                  setAddons([]);
-                  setDescription(service.description);
-                }}
-              >
-                <p className="font-semibold text-sm sm:text-base">{service.service_name}</p>
-                <p className="text-xs sm:text-sm">
-                  Base Price: ₹{service.base_price}/{service.pricing_type}
-                </p>
-              </div>
-            );
-          })}
-        </div>
+
+        {loading ? (
+          <ServiceSkeleton cardDefault={cardDefault} />
+        ) : (
+          <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
+            {availableServices.map((service) => {
+              const selected = selectedServiceId === service.service_id;
+              return (
+                <div
+                  key={service.service_id}
+                  className={`p-3 border rounded-xl w-[80%] xs:w-[70%] sm:w-[250px] flex-shrink-0 snap-start cursor-pointer transition 
+                    ${selected ? cardBgActive : cardDefault}`}
+                  onClick={() => {
+                    setSelectedServiceId(service.service_id);
+                    setPrice(service.base_price);
+                    setDiscount(0);
+                    setNotes("");
+                    setAddons([]);
+                    setDescription(service.description);
+                  }}
+                >
+                  <p className="font-semibold text-sm sm:text-base">{service.service_name}</p>
+                  <p className="text-xs sm:text-sm">
+                    Base Price: ₹{service.base_price}/{service.pricing_type}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        )}
+
 
         {selectedService && (
           <>
@@ -254,7 +303,7 @@ const AddNewVendorService = ({ onSave }) => {
                 onClick={handleSave}
                 className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
               >
-                <Save className="w-4 h-4" /> Save
+                {loading ? "Saving..." : (<><Save className="w-4 h-4" /> Save</>)}
               </button>
             </div>
           </>

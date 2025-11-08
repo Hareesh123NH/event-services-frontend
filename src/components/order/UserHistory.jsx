@@ -14,11 +14,6 @@ const UserHistory = () => {
   useEffect(() => {
 
     const fetchOrders = async () => {
-
-      if (orders) {
-        return;
-      }
-
       setLoading(true);
       try {
         const res = await api.get("/order/user");
@@ -31,7 +26,16 @@ const UserHistory = () => {
       setLoading(false);
     };
 
-    fetchOrders();
+
+    if (!orders) {
+      fetchOrders();
+    }
+
+    window.addEventListener("load", fetchOrders);
+
+    return () => {
+      window.removeEventListener("load", fetchOrders);
+    };
 
   }, [])
 
@@ -80,6 +84,9 @@ const UserHistory = () => {
                   </p>
 
                   <div className={`mt-3 border-t pt-2 ${borderColor}`}>
+                    <p className={`text-xs sm:text-sm font-medium ${textClass}`}>
+                      Actual Amount: ₹{order.actual_amount}
+                    </p>
                     <p className={`text-xs sm:text-sm font-medium ${textClass}`}>
                       Total Amount: ₹{order.total_amount}
                     </p>
@@ -130,7 +137,7 @@ const UserHistory = () => {
                             Vendor: {service.vendor_service.vendor.email}
                           </p>
                           <p className={`text-xs sm:text-sm ${secondaryText}`}>
-                            Price: ₹{service.price}
+                            Price: ₹{service.price} × Qty({service.quantity}) = ₹{service.price * service.quantity}
                           </p>
                           <p className={`text-xs sm:text-sm ${secondaryText}`}>
                             Provider: {service.provider_status}

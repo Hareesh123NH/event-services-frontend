@@ -12,9 +12,22 @@ export const AuthProvider = ({ children }) => {
     };
 
     const logout = () => {
+        const coords = localStorage.getItem("coords");
+        const theme = localStorage.getItem("app-theme");
+        // Clear all local and session data
+        localStorage.clear();
+        sessionStorage.clear();
+
+        // Restore coords
+        if (coords) {
+            localStorage.setItem("coords", coords);
+        }
+        if (theme) {
+            localStorage.setItem("app-theme", theme);
+        }
+
+        // Clear user context / state
         setUser(null);
-        localStorage.removeItem("user");
-        localStorage.removeItem("token");
     };
 
     return (
@@ -25,3 +38,13 @@ export const AuthProvider = ({ children }) => {
 };
 
 export const useAuth = () => useContext(AuthContext);
+
+
+export const logoutUser = () => {
+    const coords = localStorage.getItem("coords");
+    const theme = localStorage.getItem("app-theme");
+    localStorage.clear();
+    sessionStorage.clear();
+    if (coords) localStorage.setItem("coords", coords);
+    if (theme) localStorage.setItem("app-theme", theme);
+};

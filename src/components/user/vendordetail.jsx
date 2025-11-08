@@ -73,7 +73,10 @@ const VendorDetail = () => {
               Add Service
             </button>
             <button
-              onClick={() => navigate("/dashboard/book-order")}
+              onClick={() => {
+                handleCart(vendorItem)
+                navigate("/dashboard/book-order")
+              }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm transition ${buttonGreen}`}
             >
               Order Now

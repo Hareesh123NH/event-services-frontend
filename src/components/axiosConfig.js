@@ -1,6 +1,8 @@
 import axios from "axios";
+import { logoutUser } from "./security/AuthContext"
 
 const backendUrl = "http://localhost:5000"
+
 const api = axios.create({
     baseURL: backendUrl,
     headers: {
@@ -19,11 +21,17 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
+
     (response) => response,
     (error) => {
-        if (error.response && error.response.status === 401) {
+        const status = error.response?.status;
+        const currentPath = window.location.pathname;
+
+        if ((status == 401 || status == 403) && currentPath !== "/login") {
+            logoutUser()
             window.location.href = "/login";
         }
+
         return Promise.reject(error);
     }
 );

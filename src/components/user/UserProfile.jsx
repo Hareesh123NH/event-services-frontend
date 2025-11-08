@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
-import { updateLocation } from "./location";
+import { getCoordsFromAddress } from "./location";
 
 const addressLabels = {
   label: "Label",
@@ -70,7 +70,7 @@ const UserProfile = () => {
 
   const fetchProfile = async () => {
     try {
-      const res = await api.get("/user/get-profile");
+      const res = await api.get("/auth/get-profile");
       setProfile(res.data.user);
     } catch (err) {
       console.error("Error fetching addresses:", err);
@@ -85,7 +85,7 @@ const UserProfile = () => {
 
   const saveProfile = async () => {
     try {
-      await api.put("/user/update-profile", profile);
+      await api.put("/auth/update-profile", profile);
     } catch (err) {
       fetchProfile();
       console.error("Error updating profile:", err);
@@ -101,10 +101,16 @@ const UserProfile = () => {
 
   const updateAddress = async (updatedAddress) => {
     try {
-      const coords = await updateLocation(updatedAddress);
+
+      const coords = await getCoordsFromAddress(updatedAddress);
+
+      console.log("Before", updatedAddress);
+
       if (coords) {
         updatedAddress.location = { type: "Point", coordinates: coords };
-        console.log(updateAddress);
+
+        console.log("after", updatedAddress);
+
         await api.put(`/user/address/${updatedAddress._id}`, updatedAddress);
       }
       else {
@@ -117,16 +123,38 @@ const UserProfile = () => {
     }
   };
 
-  const handleAddAddress = () => {
+  const handleAddAddress = async () => {
     if (!newAddress.label || !newAddress.address_line1 || !newAddress.city) {
       alert("Please fill all required fields (Label, Address Line 1, City)");
       return;
     }
 
-    const id = Date.now().toString();
-    const updated = [...addresses, { ...newAddress, _id: id }];
-    setAddresses(updated);
-    localStorage.setItem("addresses", JSON.stringify(updated));
+    // const id = Date.now().toString();
+    // const updated = [...addresses, { ...newAddress, _id: id }];
+    // setAddresses(updated);
+    console.log("Before", newAddress);
+
+    try {
+
+      const coords = await getCoordsFromAddress(newAddress); 
+
+      if (coords) {
+        newAddress.location = { type: "Point", coordinates: coords };
+
+        console.log("after", newAddress);
+
+        await api.post(`/user/address`, newAddress);
+      }
+      else {
+        alert("please after some time");
+      }
+    }
+    catch (err) {
+      console.error("Error adding address:", err);
+    }
+
+    fetchAddresses();
+
     setNewAddress({
       label: "",
       address_line1: "",

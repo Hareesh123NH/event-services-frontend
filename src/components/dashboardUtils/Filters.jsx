@@ -12,7 +12,8 @@ const Filters = ({
   setMaxDistance,
   useLocation,
   setUseLocation,
-  setCoords
+  setCoords,
+  setPage
 }) => {
   const navigate = useNavigate();
   const filters = filtersList;
@@ -57,7 +58,10 @@ const Filters = ({
           {filters.map((filter) => (
             <button
               key={filter}
-              onClick={() => setActiveFilter(filter)}
+              onClick={() => {
+                setPage(1);
+                setActiveFilter(filter);
+              }}
               className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm md:text-base flex-shrink-0 transition-all duration-200 ${activeFilter === filter ? buttonActiveBg : buttonInactiveBg
                 }`}
             >
@@ -84,7 +88,7 @@ const Filters = ({
             value={maxDistance}
             onChange={(e) => {
               const maxD = Number(e.target.value);
-              sessionStorage.setItem("maxDistance", maxD);
+              setPage(1)
               setMaxDistance(maxD);
             }}
             className={`text-xs sm:text-sm px-2 py-1 rounded border w-full sm:w-auto ${bgClass} ${textPrimary}`}

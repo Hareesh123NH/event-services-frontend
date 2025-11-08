@@ -44,24 +44,36 @@ export const handleCart = (vendorItem) => {
 const VendorGrid = () => {
   const navigate = useNavigate();
 
+
+  const savedState = JSON.parse(sessionStorage.getItem("pageState") || "{}");
+
+  const {
+    pageNo = 1,
+    activeFilter: savedFilter = "All",
+    useLocation: savedLocation = true,
+    maxDistance: savedMaxDistance = 10,
+  } = savedState;
+
+
   const [vendors, setVendors] = useState([]);
-  const [activeFilter, setActiveFilter] = useState("All");
-  const [page, setPage] = useState(1);
+  const [activeFilter, setActiveFilter] = useState(savedFilter);
+  const [page, setPage] = useState(pageNo);
   const [limit, setLimit] = useState(10);
   const [isLastPage, setIsLastPage] = useState(false);
-  const [maxDistance, setMaxDistance] = useState(sessionStorage.getItem("maxDistance")|| 10);
+  const [maxDistance, setMaxDistance] = useState(savedMaxDistance);
   const [coords, setCoords] = useState(JSON.parse(localStorage.getItem("coords")));
   const [loading, setLoading] = useState(false); // ✅ shimmer control
   const addressId = localStorage.getItem("addressId");
-  const [useLocation, setUseLocation] = useState(true);
+  const [useLocation, setUseLocation] = useState(savedLocation);
 
 
   useEffect(() => {
-
     if (useLocation && !coords) {
       setLoading(true);
       return;
     }
+
+    console.log("location", useLocation);
 
     const query = activeFilter === "All" ? "" : activeFilter;
     const cacheName = "vendor-cache-v1";
@@ -71,11 +83,21 @@ const VendorGrid = () => {
 
     const fetchServices = async (forceRefresh = false) => {
       setLoading(true);
+
       try {
-        const cache = await caches.open(cacheName);
+        // ✅ Ensure caches API is supported
+        const canUseCache =
+          typeof window !== "undefined" &&
+          "caches" in window &&
+          window.caches;
+
+        let cache;
+        if (canUseCache) {
+          cache = await caches.open(cacheName);
+        }
 
         // 1️⃣ Try to read from cache first
-        if (!forceRefresh) {
+        if (canUseCache && !forceRefresh) {
           const cachedResponse = await cache.match(cacheKey);
           if (cachedResponse) {
             console.log("⚡ Loaded vendors from cache");
@@ -83,41 +105,41 @@ const VendorGrid = () => {
             setVendors(cachedData.data);
             setIsLastPage(cachedData.pagination.isLastPage);
             setLoading(false);
-            // setMaxDistance(cachedData.maxDistance);
-            // setUseLocation(cachedData.useLocation);
             return;
           }
         }
 
-        // 2️⃣ Always fetch new data to refresh cache
+        // 2️⃣ Always fetch new data from backend
         const response = await api.post(
           "/user/services",
-          useLocation ? { coords } : {}, // 👈 only include coords if using location
+          useLocation ? { coords } : {},
           {
             params: {
               query,
               page,
               limit,
               maxDistance,
-              ...(useLocation ? {} : { addressId }), // 👈 include addressId only if NOT using location
+              ...(useLocation ? {} : { addressId }),
             },
           }
         );
 
-
         const data = response.data.data || [];
-        const pagenation = response.data.pagination;
-        setPage(pagenation.page);
-        setIsLastPage(pagenation.isLastPage);
+        const pagination = response.data.pagination;
+
+        setPage(pagination.page);
+        setIsLastPage(pagination.isLastPage);
         setVendors(data);
 
-        // 3️⃣ Store in cache
-        const cacheBody = new Response(JSON.stringify({ ...response.data, maxDistance, useLocation }), {
-          headers: { "Content-Type": "application/json" },
-        });
-        await cache.put(cacheKey, cacheBody);
-
-        console.log(forceRefresh ? "♻️ Cache refreshed" : "🧠 Cached vendors");
+        // 3️⃣ Save to cache (if supported)
+        if (canUseCache) {
+          const cacheBody = new Response(
+            JSON.stringify({ ...response.data, maxDistance, useLocation }),
+            { headers: { "Content-Type": "application/json" } }
+          );
+          await cache.put(cacheKey, cacheBody);
+          console.log(forceRefresh ? "♻️ Cache refreshed" : "🧠 Cached vendors");
+        }
       } catch (err) {
         console.error("Error fetching services:", err);
         if (forceRefresh) setVendors([]);
@@ -135,23 +157,33 @@ const VendorGrid = () => {
       fetchServices(true);
     }, 10 * 60 * 1000);
 
-
-    // 🔹 Clear cache when window reloads or closes
+    // 🔹 Clear cache on reload/close
     const clearCache = async () => {
       console.log("🧹 Clearing vendor cache (reload/close)");
-      await caches.delete(cacheName);
+      if (typeof window !== "undefined" && "caches" in window) {
+        await caches.delete(cacheName);
+      }
     };
+
     window.addEventListener("beforeunload", clearCache);
     window.addEventListener("unload", clearCache);
 
     // 🧹 Cleanup
     return () => {
+      sessionStorage.setItem(
+        "pageState",
+        JSON.stringify({
+          pageNo: page,
+          activeFilter,
+          useLocation,
+          maxDistance,
+        })
+      );
       clearInterval(refreshInterval);
       window.removeEventListener("beforeunload", clearCache);
       window.removeEventListener("unload", clearCache);
     };
   }, [coords, activeFilter, page, limit, maxDistance, addressId, useLocation]);
-
 
   const {
     pageBg,
@@ -185,6 +217,7 @@ const VendorGrid = () => {
         useLocation={useLocation}
         setUseLocation={setUseLocation}
         setCoords={setCoords}
+        setPage={setPage}
       />
 
       <motion.div
@@ -257,10 +290,11 @@ const VendorGrid = () => {
                   className={`flex-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded text-[10px] sm:text-sm transition ${buttonGreen}`}
                   onClick={(e) => {
                     e.stopPropagation();
+                    handleCart(vendorItem);
                     navigate("/dashboard/book-order");
                   }}
                 >
-                  Order 
+                  Order
                 </button>
               </div>
             </motion.div>

@@ -13,7 +13,7 @@ const BookOrder = () => {
   const [formData, setFormData] = useState({
     scheduled_from: "",
     scheduled_to: "",
-    quantity: 1,
+    quantity: activeService?.quantity,
   });
 
   const [loading, setLoading] = useState(false);
@@ -101,7 +101,6 @@ const BookOrder = () => {
     setLoading(true);
     setError(""); // clear previous error
 
-    console.log("book add id",selectedAddressId);
     const orderData = {
       event_addressId: selectedAddressId,
       event_date: eventDate,
@@ -197,7 +196,6 @@ const BookOrder = () => {
                   : "border-gray-300 bg-white"
                 }`}
               onClick={() => {
-                console.log("lasr seleced addId",addr._id);
                 setSelectedAddressId(addr._id)
               }}
             >
@@ -295,7 +293,7 @@ const BookOrder = () => {
                 type="number"
                 min="1"
                 className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
-                value={activeService.quantity}
+                value={activeService.quantity || 1}
                 onChange={(e) =>
                   setFormData({ ...formData, quantity: e.target.value })
                 }

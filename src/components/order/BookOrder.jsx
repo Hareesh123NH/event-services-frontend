@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { addresses as storedAddresses } from "../data/duplicatedata";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
 
 const BookOrder = () => {
+
   const [addresses, setAddresses] = useState([]);
-  const [selectedAddressId, setSelectedAddressId] = useState("");
+  const [selectedAddressId, setSelectedAddressId] = useState(localStorage.getItem("addressId"));
   const [eventDate, setEventDate] = useState("");
   const [cartServices, setCartServices] = useState([]);
   const [selectedServices, setSelectedServices] = useState([]);
@@ -12,15 +13,27 @@ const BookOrder = () => {
   const [formData, setFormData] = useState({
     scheduled_from: "",
     scheduled_to: "",
-    quantity: 1,
+    quantity: activeService?.quantity,
   });
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const fetchAddresses = async () => {
+    try {
+      const res = await api.get("/user/address");
+      setAddresses(res.data.addresses);
+      if (!selectedAddressId && simplified.length > 0) {
+        localStorage.setItem("addressId", simplified[0]._id);
+      }
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+    }
+  };
+
   useEffect(() => {
-    setAddresses(storedAddresses);
-    const defaultAddressId = localStorage.getItem("defaultAddressId");
-    setSelectedAddressId(defaultAddressId || (storedAddresses[0]?._id || ""));
-    const cart = JSON.parse(localStorage.getItem("cart")) || [];
-    setCartServices(cart);
+    fetchAddresses();
+    setCartServices(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
 
   const isFormComplete = () =>
@@ -33,7 +46,7 @@ const BookOrder = () => {
           prev.filter((s) => s.vendorserviceid !== activeService._id)
         );
       }
-      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: service.quantity });
       setActiveService(service);
       return;
     }
@@ -47,11 +60,13 @@ const BookOrder = () => {
         prev.filter((s) => s.vendorserviceid !== service._id)
       );
       setActiveService(null);
-      setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
+      setFormData({ scheduled_from: "", scheduled_to: "", quantity: service.quantity });
     } else {
       setActiveService(service);
     }
   };
+
+
 
   const handleSaveForm = () => {
     if (!isFormComplete()) {
@@ -76,20 +91,52 @@ const BookOrder = () => {
     setFormData({ scheduled_from: "", scheduled_to: "", quantity: 1 });
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+
+    if (!selectedAddressId || !eventDate) {
+      setError("Please select an address and date before booking.");
+      return;
+    }
+
+    setLoading(true);
+    setError(""); // clear previous error
+
     const orderData = {
       event_addressId: selectedAddressId,
       event_date: eventDate,
       services: selectedServices,
     };
-    console.log("✅ Order submitted:", orderData);
-    alert("Order Booked!");
+
+    try {
+      const response = await api.post("/order/create", orderData);
+      console.log("✅ Order submitted:", response.data);
+      localStorage.removeItem("cart");
+      sessionStorage.removeItem("user-history");
+      alert("Order Booked Successfully!");
+      setCartServices([]);
+      setSelectedServices([]);
+    } catch (error) {
+      console.error("❌ Error submitting order:", error);
+
+      // Backend 400 validation errors usually come in error.response
+      if (error.response && error.response.status === 400) {
+        setError(error.response.data.message || "Invalid input data");
+      } else {
+        setError("Failed to book order. Please try again.");
+      }
+    } finally {
+      setLoading(false);
+    }
+
   };
+
 
   const totalAmount = selectedServices.reduce((sum, s) => {
     const service = cartServices.find((x) => x._id === s.vendorserviceid);
     return sum + (service?.final_price || 0) * (s.quantity || 1);
   }, 0);
+
+
 
   const {
     pageBg,
@@ -116,13 +163,20 @@ const BookOrder = () => {
 
         {/* Event Date */}
         <div className="mb-4">
+
+          {error && (
+            <p className="text-sm sm:text-base text-red-600 mt-2 px-2 sm:px-0">
+              {error}
+            </p>
+          )}
+
           <label className="block mb-1 text-sm sm:text-base">Event Date:</label>
           <input
             type="date"
             className={`border p-2 w-full rounded text-sm sm:text-base ${inputBg}`}
             value={eventDate}
             onChange={(e) => setEventDate(e.target.value)}
-          />
+            required />
         </div>
 
         {/* Address Selection */}
@@ -133,16 +187,17 @@ const BookOrder = () => {
           {addresses.map((addr) => (
             <div
               key={addr._id}
-              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${
-                selectedAddressId === addr._id
-                  ? isDark
-                    ? "border-blue-400 bg-blue-800"
-                    : "border-blue-600 bg-blue-200"
-                  : isDark
+              className={`p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200 ${selectedAddressId === addr._id
+                ? isDark
+                  ? "border-blue-400 bg-blue-800"
+                  : "border-blue-600 bg-blue-200"
+                : isDark
                   ? "border-gray-700 bg-gray-800"
                   : "border-gray-300 bg-white"
-              }`}
-              onClick={() => setSelectedAddressId(addr._id)}
+                }`}
+              onClick={() => {
+                setSelectedAddressId(addr._id)
+              }}
             >
               <p className="font-semibold text-sm sm:text-base">{addr.label}</p>
               <p className="text-xs sm:text-sm">
@@ -238,7 +293,7 @@ const BookOrder = () => {
                 type="number"
                 min="1"
                 className={`border p-2 w-full rounded text-xs sm:text-sm ${inputBg}`}
-                value={formData.quantity}
+                value={activeService.quantity || 1}
                 onChange={(e) =>
                   setFormData({ ...formData, quantity: e.target.value })
                 }
@@ -246,11 +301,10 @@ const BookOrder = () => {
             </div>
 
             <button
-              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${
-                isDark
-                  ? "bg-blue-700 hover:bg-blue-800"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
+              className={`w-full sm:w-auto px-4 py-2 mt-1 rounded text-xs sm:text-sm text-white ${isDark
+                ? "bg-blue-700 hover:bg-blue-800"
+                : "bg-blue-600 hover:bg-blue-700"
+                }`}
               onClick={handleSaveForm}
             >
               Save Service
@@ -270,9 +324,8 @@ const BookOrder = () => {
                 <p
                   key={s.vendorserviceid}
                   className="text-xs sm:text-sm"
-                >{`${srv?.service_name} × ${s.quantity} = ₹${
-                  (srv?.final_price || 0) * s.quantity
-                }`}</p>
+                >{`${srv?.service_name} × ${s.quantity} = ₹${(srv?.final_price || 0) * s.quantity
+                  }`}</p>
               );
             })}
             <p className="mt-2 font-bold text-sm sm:text-base">
@@ -282,15 +335,14 @@ const BookOrder = () => {
         )}
 
         <button
-          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${
-            cartServices.length === 0
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-green-500 hover:opacity-90 text-white"
-          }`}
+          className={`w-full sm:w-auto px-4 py-2 rounded text-sm sm:text-base transition ${cartServices.length === 0
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-green-500 hover:opacity-90 text-white"
+            }`}
           onClick={handleSubmit}
-          disabled={cartServices.length === 0}
+          disabled={cartServices.length === 0 || loading}
         >
-          Submit Order
+          {loading ? "Submitting" : "Submit Order"}
         </button>
       </div>
     </div>

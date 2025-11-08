@@ -4,41 +4,41 @@ import { useNavigate } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
 
-const cartData = [
-  {
-    _id: "1",
-    vendor: { full_name: "Vendor1" },
-    service_name: "Decoration",
-    final_price: 1800,
-    quantity: 1,
-  },
-  {
-    _id: "2",
-    vendor: { full_name: "Vendor2" },
-    service_name: "Photography",
-    final_price: 2500,
-    quantity: 1,
-  },
-  {
-    _id: "3",
-    vendor: { full_name: "Vendor3" },
-    service_name: "Catering",
-    final_price: 4000,
-    quantity: 1,
-  },
-  {
-    _id: "4",
-    vendor: { full_name: "Vendor4" },
-    service_name: "Lighting",
-    final_price: 1500,
-    quantity: 2,
-  },
-];
+// const cartData = [
+//   {
+//     _id: "1",
+//     vendor: { full_name: "Vendor1" },
+//     service_name: "Decoration",
+//     final_price: 1800,
+//     quantity: 1,
+//   },
+//   {
+//     _id: "2",
+//     vendor: { full_name: "Vendor2" },
+//     service_name: "Photography",
+//     final_price: 2500,
+//     quantity: 1,
+//   },
+//   {
+//     _id: "3",
+//     vendor: { full_name: "Vendor3" },
+//     service_name: "Catering",
+//     final_price: 4000,
+//     quantity: 1,
+//   },
+//   {
+//     _id: "4",
+//     vendor: { full_name: "Vendor4" },
+//     service_name: "Lighting",
+//     final_price: 1500,
+//     quantity: 2,
+//   },
+// ];
 
 const Cart = () => {
   const navigate = useNavigate();
   const [cartItems, setCartItems] = useState(
-    JSON.parse(localStorage.getItem("cart")) || cartData
+    JSON.parse(localStorage.getItem("cart")) || []
   );
 
   useEffect(() => {

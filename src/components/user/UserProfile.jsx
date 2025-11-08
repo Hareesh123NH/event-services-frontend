@@ -1,30 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
+import { getCoordsFromAddress } from "./location";
 
-const initialAddresses = [
-  {
-    _id: "68eddb778149a6a4f702e6f0",
-    label: "Home",
-    address_line1: "123 MG Road",
-    address_line2: "Near City Mall",
-    city: "Hyderabad",
-    state: "Telangana",
-    postal_code: "560001",
-    country: "India",
-    alternate_phone: "+91-9876543210",
-  },
-  {
-    _id: "68d7a24ebdc024c7b9cdce1a",
-    label: "Work",
-    address_line1: "123 MG Road",
-    address_line2: "Near City Mall",
-    city: "Bengaluru",
-    state: "Karnataka",
-    postal_code: "560001",
-    country: "India",
-    alternate_phone: "+91-9876543210",
-  },
-];
+const addressLabels = {
+  label: "Label",
+  address_line1: "Address Line 1",
+  address_line2: "Address Line 2",
+  city: "City",
+  state: "State",
+  postal_code: "Postal Code",
+  country: "Country",
+  alternate_phone: "Alternate Phone",
+};
 
 const CollapsibleSection = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(true);
@@ -44,20 +32,15 @@ const CollapsibleSection = ({ title, children }) => {
 };
 
 const UserProfile = () => {
-  const savedProfile = JSON.parse(localStorage.getItem("profile")) || {
-    name: "John Doe",
-    email: "john@example.com",
-    phone: "+91-9876543210",
-  };
-  const savedAddresses =
-    JSON.parse(localStorage.getItem("addresses")) || initialAddresses;
-  const savedDefaultId =
-    localStorage.getItem("defaultAddressId") || savedAddresses[0]._id;
 
-  const [profile, setProfile] = useState(savedProfile);
-  const [addresses, setAddresses] = useState(savedAddresses);
-  const [defaultAddressId, setDefaultAddressId] = useState(savedDefaultId);
+  const [profile, setProfile] = useState({
+    full_name: ".....",
+    email: ".....",
+    phone_number: "....."
+  });
+  const [addresses, setAddresses] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [defaultAddressId, setDefaultAddressId] = useState(localStorage.getItem("addressId"));
   const [newAddress, setNewAddress] = useState({
     label: "",
     address_line1: "",
@@ -69,31 +52,109 @@ const UserProfile = () => {
     alternate_phone: "",
   });
 
-  const saveProfile = () => {
-    localStorage.setItem("profile", JSON.stringify(profile));
-    alert("Profile updated successfully!");
+
+  // ---------- Fetch addresses from backend ----------
+  const fetchAddresses = async () => {
+    try {
+      const res = await api.get("/user/address");
+      setAddresses(res.data.addresses);
+
+      if (!defaultAddressId && simplified.length > 0) {
+        setDefaultAddressId(simplified[0]._id);
+        localStorage.setItem("addressId", simplified[0]._id);
+      }
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+    }
+  };
+
+  const fetchProfile = async () => {
+    try {
+      const res = await api.get("/auth/get-profile");
+      setProfile(res.data.user);
+    } catch (err) {
+      console.error("Error fetching addresses:", err);
+    }
+  };
+
+
+  useEffect(() => {
+    fetchProfile();
+    fetchAddresses();
+  }, []);
+
+  const saveProfile = async () => {
+    try {
+      await api.put("/auth/update-profile", profile);
+    } catch (err) {
+      fetchProfile();
+      console.error("Error updating profile:", err);
+    }
+
   };
 
   const handleAddressChange = (id, field, value) => {
-    setAddresses(addresses.map((a) => (a._id === id ? { ...a, [field]: value } : a)));
+    setAddresses(
+      addresses.map((a) => (a._id === id ? { ...a, [field]: value } : a))
+    );
   };
 
-  const updateAddress = (addr) => {
-    setAddresses(addresses.map((a) => (a._id === addr._id ? addr : a)));
-    localStorage.setItem("addresses", JSON.stringify(addresses));
-    alert("Address updated successfully!");
+  const updateAddress = async (updatedAddress) => {
+    try {
+
+      const coords = await getCoordsFromAddress(updatedAddress);
+
+      console.log("Before", updatedAddress);
+
+      if (coords) {
+        updatedAddress.location = { type: "Point", coordinates: coords };
+
+        console.log("after", updatedAddress);
+
+        await api.put(`/user/address/${updatedAddress._id}`, updatedAddress);
+      }
+      else {
+        alert("please after some time");
+      }
+    }
+    catch (err) {
+      console.error("Error updating address:", err);
+      fetchAddresses();
+    }
   };
 
-  const handleAddAddress = () => {
+  const handleAddAddress = async () => {
     if (!newAddress.label || !newAddress.address_line1 || !newAddress.city) {
       alert("Please fill all required fields (Label, Address Line 1, City)");
       return;
     }
 
-    const id = Date.now().toString();
-    const updated = [...addresses, { ...newAddress, _id: id }];
-    setAddresses(updated);
-    localStorage.setItem("addresses", JSON.stringify(updated));
+    // const id = Date.now().toString();
+    // const updated = [...addresses, { ...newAddress, _id: id }];
+    // setAddresses(updated);
+    console.log("Before", newAddress);
+
+    try {
+
+      const coords = await getCoordsFromAddress(newAddress); 
+
+      if (coords) {
+        newAddress.location = { type: "Point", coordinates: coords };
+
+        console.log("after", newAddress);
+
+        await api.post(`/user/address`, newAddress);
+      }
+      else {
+        alert("please after some time");
+      }
+    }
+    catch (err) {
+      console.error("Error adding address:", err);
+    }
+
+    fetchAddresses();
+
     setNewAddress({
       label: "",
       address_line1: "",
@@ -108,10 +169,13 @@ const UserProfile = () => {
     alert("New address added!");
   };
 
+
   const handleSetDefault = (id) => {
     setDefaultAddressId(id);
-    localStorage.setItem("defaultAddressId", id);
+    localStorage.setItem("addressId", id);
+    // Optionally: send PUT request to backend
   };
+
 
   const {
     pageBg,
@@ -138,22 +202,29 @@ const UserProfile = () => {
           <input
             type="text"
             placeholder="Name"
-            value={profile.name}
-            onChange={(e) => setProfile({ ...profile, name: e.target.value })}
+            value={profile.full_name}
+            onChange={(e) =>
+              setProfile({ ...profile, full_name: e.target.value })
+            }
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />
           <input
+            disabled
             type="email"
             placeholder="Email"
             value={profile.email}
-            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
+            onChange={(e) =>
+              setProfile({ ...profile, email: e.target.value })
+            }
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />
           <input
             type="text"
             placeholder="Phone"
-            value={profile.phone}
-            onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
+            value={profile.phone_number}
+            onChange={(e) =>
+              setProfile({ ...profile, phone_number: e.target.value })
+            }
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />
         </div>
@@ -170,9 +241,8 @@ const UserProfile = () => {
         {addresses.map((addr) => (
           <div
             key={addr._id}
-            className={`p-4 sm:p-5 mb-4 rounded border text-sm sm:text-base transition-all ${
-              defaultAddressId === addr._id ? borderActive : borderDefault
-            }`}
+            className={`p-4 sm:p-5 mb-4 rounded border text-sm sm:text-base transition-all ${defaultAddressId === addr._id ? borderActive : borderDefault
+              }`}
           >
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-semibold text-base sm:text-lg">{addr.label}</h3>
@@ -183,19 +253,32 @@ const UserProfile = () => {
                 {defaultAddressId === addr._id ? "Default" : "Set Default"}
               </button>
             </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {Object.keys(addr)
-                .filter((k) => k !== "_id")
+                .filter(
+                  (k) =>
+                    !["_id", "user", "location", "__v", "createdAt", "updatedAt"].includes(
+                      k
+                    )
+                )
                 .map((key) => (
-                  <input
-                    key={key}
-                    type="text"
-                    value={addr[key]}
-                    onChange={(e) => handleAddressChange(addr._id, key, e.target.value)}
-                    className={`p-2 text-sm sm:text-base rounded border w-full ${inputBg}`}
-                  />
+                  <div key={key} className="flex flex-col">
+                    <label className="text-xs sm:text-sm font-medium mb-1">
+                      {addressLabels[key]}
+                    </label>
+                    <input
+                      type="text"
+                      value={addr[key]}
+                      onChange={(e) =>
+                        handleAddressChange(addr._id, key, e.target.value)
+                      }
+                      className={`p-2 text-sm sm:text-base rounded border w-full ${inputBg}`}
+                    />
+                  </div>
                 ))}
             </div>
+
             <button
               className={`mt-3 px-4 py-2 w-full sm:w-auto text-sm sm:text-base rounded ${buttonSecondary}`}
               onClick={() => updateAddress(addr)}
@@ -215,7 +298,7 @@ const UserProfile = () => {
           </button>
         )}
 
-        {/* Add New Address Form (visible only when clicked) */}
+        {/* Add New Address Form */}
         {showAddForm && (
           <div
             className={`mt-6 p-4 sm:p-6 rounded-lg border ${borderDefault} ${sectionBg} shadow-inner transition-all`}
@@ -232,14 +315,20 @@ const UserProfile = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
               {Object.keys(newAddress).map((key) => (
-                <input
-                  key={key}
-                  type="text"
-                  placeholder={key.replace("_", " ").toUpperCase()}
-                  value={newAddress[key]}
-                  onChange={(e) => setNewAddress({ ...newAddress, [key]: e.target.value })}
-                  className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
-                />
+                <div key={key} className="flex flex-col">
+                  <label className="text-xs sm:text-sm font-medium mb-1">
+                    {addressLabels[key]}
+                  </label>
+                  <input
+                    type="text"
+                    placeholder={addressLabels[key]}
+                    value={newAddress[key]}
+                    onChange={(e) =>
+                      setNewAddress({ ...newAddress, [key]: e.target.value })
+                    }
+                    className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
+                  />
+                </div>
               ))}
             </div>
 

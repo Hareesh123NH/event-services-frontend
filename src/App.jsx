@@ -23,6 +23,7 @@ import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
 import VendorProfile from "./components/vendor/VendorProfile";
 import { ThemeProvider } from "./components/theme/ThemeContext";
 import VendorRegister from "./components/auth/VendorRegister";
+import LocationFetcher from "./components/auth/LocationFetcher";
 
 function App() {
   return (
@@ -47,6 +48,15 @@ function App() {
                 </MainLayout>
               }
             />
+            <Route
+              path="/location"
+              element={
+                <>
+                  <LocationFetcher />
+                </>
+              }
+            />
+
             <Route
               path="/register"
               element={

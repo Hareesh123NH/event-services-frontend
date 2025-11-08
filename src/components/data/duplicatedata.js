@@ -246,16 +246,13 @@ export const filtersList = [
     "Transportation",
     "Tent House",
     "Costume Rental",
-    "Cake & Bakery",
     "Security Services",
     "Cleaning & Maintenance",
     "Guest Management",
     "Entertainment",
     "Anchoring",
-    "Photography Add-ons",
     "Traditional Performers",
     "Drone Shoot",
-    "Custom Backdrops"
 ];
 
 

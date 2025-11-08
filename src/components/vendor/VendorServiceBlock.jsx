@@ -2,20 +2,9 @@ import { Star, CalendarCheck, Tag, Save, Plus } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
+import api from "../axiosConfig";
 
-const VendorServiceBlock = ({ serviceItem, index }) => {
-  const {
-    bgCard,
-    bgPage,
-    textPrimary,
-    textSecondary,
-    borderColor,
-    inputBg,
-    inputText,
-    buttonText,
-    greenButton,
-    redButton,
-  } = useThemeClasses();
+const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
 
   const [data, setData] = useState({
     price: serviceItem.price || "",
@@ -27,6 +16,7 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
   });
 
   const [finalPrice, setFinalPrice] = useState(0);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (data.price && data.discount >= 0) {
@@ -59,11 +49,45 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
     }));
   };
 
-  const handleSave = () => {
-    const payload = { ...data, final_price: finalPrice };
-    console.log("Updated Service:", payload);
-    alert("Updated Service success!");
+
+  const handleSave = async () => {
+    const payload = {
+      price: data.price,
+      discount: data.discount,
+      final_price: finalPrice,
+      status: data.status,
+      notes: data.notes,
+      addons: data.addons,
+    };
+
+    setSaving(true);
+
+    try {
+      const res = await api.patch(`/service/vendor-service/${serviceItem.service._id}`, payload);
+      onUpdate && onUpdate();
+      alert("Service updated successfully!");
+    } catch (err) {
+      console.error("❌ Error updating service:", err);
+      alert("Failed to update service. Please try again.");
+    }
+
+    setSaving(false);
   };
+
+
+
+  const {
+    bgCard,
+    bgPage,
+    textPrimary,
+    textSecondary,
+    borderColor,
+    inputBg,
+    inputText,
+    buttonText,
+    greenButton,
+    redButton,
+  } = useThemeClasses();
 
   return (
     <motion.div
@@ -102,11 +126,10 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
           {serviceItem.total_bookings} bookings
         </span>
         <span
-          className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
-            serviceItem.status === "active"
-              ? `bg-green-100 text-green-700`
-              : `bg-red-100 text-red-700`
-          }`}
+          className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${serviceItem.status === "active"
+            ? `bg-green-100 text-green-700`
+            : `bg-red-100 text-red-700`
+            }`}
         >
           {serviceItem.status}
         </span>
@@ -252,9 +275,10 @@ const VendorServiceBlock = ({ serviceItem, index }) => {
         <div className="flex justify-end">
           <button
             onClick={handleSave}
+            disabled={saving}
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm sm:text-base rounded-lg hover:bg-green-700 transition"
           >
-            <Save className="w-4 h-4" /> Save
+            {saving ? "Saving..." : (<><Save className="w-4 h-4" /> Save</>)}
           </button>
         </div>
       </div>

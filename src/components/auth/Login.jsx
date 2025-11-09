@@ -5,17 +5,17 @@ import api from "../axiosConfig";
 import { useAuth } from "../security/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 
-import happy1 from "../../../public/happy1.png";
-import happy2 from "../../../public/happy2.png";
-import happy3 from "../../../public/happy1.png";
+import happy1 from "/happy1.png";
+import happy2 from "/happy2.png";
+import happy3 from "/happy1.png";
 
-import sad1 from "../../../public/sad.webp";
-import sad2 from "../../../public/sad.webp";
-import sad3 from "../../../public/sad.webp";
+import sad1 from "/sad.webp";
+import sad2 from "/sad.webp";
+import sad3 from "/sad.webp";
 
-import angry1 from "../../../public/angry1.png";
-import angry2 from "../../../public/angry2.png";
-import angry3 from "../../../public/angry1.png";
+import angry1 from "/angry1.png";
+import angry2 from "/angry2.png";
+import angry3 from "/angry1.png";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");

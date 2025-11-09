@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { LocateFixed, RefreshCcwDot } from "lucide-react";
 import { getAccuratePosition } from "../user/location";
 
-import logo from "../../../public/ES_logo.png";
+import logo from "/ES_logo.png";
 
 const Filters = ({
   activeFilter,

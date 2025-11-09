@@ -4,17 +4,17 @@ import api from "../axiosConfig";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 
-import happy1 from "/happy1.png";
-import happy2 from "/happy2.png";
-import happy3 from "/happy1.png";
+import happy1 from "../../assets/happy1.png";
+import happy2 from "../../assets/happy2.png";
+import happy3 from "../../assets/happy1.png";
 
-import sad1 from "/sad.webp";
-import sad2 from "/sad.webp";
-import sad3 from "/sad.webp";
+import sad1 from "../../assets/sad.webp";
+import sad2 from "../../assets/sad.webp";
+import sad3 from "../../assets/sad.webp";
 
-import angry1 from "/angry1.png";
-import angry2 from "/angry2.png";
-import angry3 from "/angry1.png";
+import angry1 from "../../assets/angry1.png";
+import angry2 from "../../assets/angry2.png";
+import angry3 from "../../assets/angry1.png";
 
 export default function UserRegister() {
   const navigate = useNavigate();

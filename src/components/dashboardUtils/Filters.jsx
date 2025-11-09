@@ -5,6 +5,8 @@ import { useNavigate } from "react-router-dom";
 import { LocateFixed, RefreshCcwDot } from "lucide-react";
 import { getAccuratePosition } from "../user/location";
 
+import logo from "../../../public/ES_logo.png";
+
 const Filters = ({
   activeFilter,
   setActiveFilter,
@@ -55,26 +57,37 @@ const Filters = ({
           id="filterScroll"
           className="flex overflow-x-auto scrollbar-hide space-x-3 p-2 items-center"
         >
-          {filters.map((filter) => (
+          {filters.map(({ title, image }) => (
             <button
-              key={filter}
+              key={title}
               onClick={() => {
                 setPage(1);
-                setActiveFilter(filter);
+                setActiveFilter(title);
               }}
-              className={`px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm md:text-base flex-shrink-0 transition-all duration-200 ${activeFilter === filter ? buttonActiveBg : buttonInactiveBg
+              className={`flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap sm:text-sm md:text-base flex-shrink-0 transition-all duration-200 justify-center ${activeFilter === title ? buttonActiveBg : buttonInactiveBg
                 }`}
+              style={{ minHeight: "3rem" }} // ensures equal height
             >
-              {filter}
+              {/* 🖼️ Larger Image */}
+              {title !== "All" && (
+                <img
+                  src={image}
+                  alt={title}
+                  onError={(e) => {
+                    e.currentTarget.src = logo;
+                  }}
+                  className="w-12 h-12 sm:w-12 sm:h-12 object-cover rounded-full border border-white/20 shadow-sm"
+                />
+              )}
+              <span className="flex items-center">{title}</span>
             </button>
           ))}
 
 
         </div>
       </div>
-      <div
-        className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto px-2"
-      >
+
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-3 sm:gap-4 mt-2 sm:mt-0 w-full sm:w-auto px-2">
         {/* 🔹 Max Distance Dropdown */}
         <div className="flex items-center gap-2 w-full sm:w-auto">
           <label
@@ -88,11 +101,10 @@ const Filters = ({
             value={maxDistance}
             onChange={(e) => {
               const maxD = Number(e.target.value);
-              setPage(1)
+              setPage(1);
               setMaxDistance(maxD);
             }}
             className={`text-xs sm:text-sm px-2 py-1 rounded border w-full sm:w-auto ${bgClass} ${textPrimary}`}
-
           >
             {distanceOptions.map((d) => (
               <option key={d} value={d}>
@@ -122,14 +134,14 @@ const Filters = ({
                 setUseLocation(value === "location");
               }
             }}
-            className={`text-xs sm:text-sm px-2 py-1 rounded border w-full sm:w-auto ${bgClass} ${textPrimary}`}          >
+            className={`text-xs sm:text-sm px-2 py-1 rounded border w-full sm:w-auto ${bgClass} ${textPrimary}`}
+          >
             <option value="location">Live Location</option>
             {localStorage.getItem("addressId") && (
               <option value="address">Default Address</option>
             )}
             <option value="change">Address Settings</option>
           </select>
-
 
           <button
             onClick={handleLocationClick}
@@ -144,9 +156,9 @@ const Filters = ({
           </button>
         </div>
       </div>
-
     </>
   );
+
 };
 
 export default Filters;

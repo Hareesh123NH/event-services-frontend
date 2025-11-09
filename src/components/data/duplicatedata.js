@@ -11,248 +11,78 @@ import {
     Users,
     Layers,
 } from "lucide-react";
-export const mockVendors = [
-    {
-        _id: "10",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70c",
-            full_name: "Vendor1",
-            email: "vendor1@example.com",
-            phone_number: "9876543210",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Decoration",
-            description: "Beautiful event decoration including flowers, lighting, and stage setup",
 
-        },
-        final_price: 1800,
-        average_rating: 2.5,
-        total_bookings: 0,
-        distance: 0,
-    },
-    {
-        _id: "9",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70d",
-            full_name: "Vendor2",
-            email: "vendor2@example.com",
-            phone_number: "9876543211",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Catering",
-            description: "Delicious food catering for events and parties",
-        },
-        final_price: 2500,
-        average_rating: 4.2,
-        total_bookings: 5,
-        distance: 1.2,
-    },
-    {
-        _id: "8",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70e",
-            full_name: "Vendor3",
-            email: "vendor3@example.com",
-            phone_number: "9876543212",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Photography",
-            description: "Professional photography and videography services",
-        },
-        final_price: 4000,
-        average_rating: 4.8,
-        total_bookings: 10,
-        distance: 0.5,
-    },
-    {
-        _id: "7",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70f",
-            full_name: "Vendor4",
-            email: "vendor4@example.com",
-            phone_number: "9876543213",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Music DJ",
-            description: "DJ and live music services for events",
-        },
-        final_price: 3000,
-        average_rating: 3.9,
-        total_bookings: 3,
-        distance: 2.0,
-    },
-    {
-        _id: "6",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df710",
-            full_name: "Vendor5",
-            email: "vendor5@example.com",
-            phone_number: "9876543214",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Lighting",
-            description: "Event lighting setup including stage and ambient lights",
-        },
-        final_price: 2200,
-        average_rating: 4.0,
-        total_bookings: 2,
-        distance: 1.8,
-    },
-    {
-        _id: "5",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70c",
-            full_name: "Vendor1",
-            email: "vendor1@example.com",
-            phone_number: "9876543210",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Decoration",
-            description: "Beautiful event decoration including flowers, lighting, and stage setup Beautiful event decoration including flowers, lighting, and stage setup Beautiful event decoration including flowers, lighting, and stage setup",
-
-        },
-        final_price: 1800,
-        average_rating: 2.5,
-        total_bookings: 0,
-        distance: 0,
-    },
-    {
-        _id: "4",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70d",
-            full_name: "Vendor2",
-            email: "vendor2@example.com",
-            phone_number: "9876543211",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Catering",
-            description: "Delicious food catering for events and parties",
-        },
-        final_price: 2500,
-        average_rating: 4.2,
-        total_bookings: 5,
-        distance: 1.2,
-    },
-    {
-        _id: "3",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70e",
-            full_name: "Vendor3",
-            email: "vendor3@example.com",
-            phone_number: "9876543212",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Photography",
-            description: "Professional photography and videography services",
-        },
-        final_price: 4000,
-        average_rating: 4.8,
-        total_bookings: 10,
-        distance: 0.5,
-    },
-    {
-        _id: "2",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df70f",
-            full_name: "Vendor4",
-            email: "vendor4@example.com",
-            phone_number: "9876543213",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Music DJ",
-            description: "DJ and live music services for events",
-        },
-        final_price: 3000,
-        average_rating: 3.9,
-        total_bookings: 3,
-        distance: 2.0,
-    },
-    {
-        _id: "1",
-        vendor: {
-            _id: "68d7a2ff5512a8fa806df710",
-            full_name: "Vendor5",
-            email: "vendor5@example.com",
-            phone_number: "9876543214",
-            location: {
-                type: "Point",
-                coordinates: [77.5946, 12.9716],
-            },
-        },
-        service: {
-            service_name: "Lighting",
-            description: "Event lighting setup including stage and ambient lights",
-        },
-        final_price: 2200,
-        average_rating: 4.0,
-        total_bookings: 2,
-        distance: 1.8,
-    },
+export const filtersList = [
+    { title: "All", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200" },
+    { title: "Photography", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
+    { title: "Videography", image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=200" },
+    { title: "Stage Decoration", image: "https://images.unsplash.com/photo-1529634898660-06b72c3a5b1d?w=200" },
+    { title: "Catering", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200" },
+    { title: "Makeup & Styling", image: "https://images.unsplash.com/photo-1519415943484-9fa9d3a61a1c?w=200" },
+    { title: "Lighting", image: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?w=200" },
+    { title: "Sound System", image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=200" },
+    { title: "Venue Decoration", image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=200" },
+    { title: "Flower Arrangement", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
+    { title: "Event Management", image: "https://images.unsplash.com/photo-1485217988980-11786ced9454?w=200" },
+    { title: "Mehendi", image: "https://images.unsplash.com/photo-1591608516481-3b8a4e91a3c1?w=200" },
+    { title: "DJ & Music", image: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=200" },
+    { title: "Live Band", image: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=200" },
+    { title: "Invitation Design", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=200" },
+    { title: "Transportation", image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=200" },
+    { title: "Tent House", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200" },
+    { title: "Costume Rental", image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=200" },
+    { title: "Security Services", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
+    { title: "Cleaning & Maintenance", image: "https://images.unsplash.com/photo-1581579186989-7e1d2a57c836?w=200" },
+    { title: "Guest Management", image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=200" },
+    { title: "Entertainment", image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200" },
+    { title: "Anchoring", image: "https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=200" },
+    { title: "Traditional Performers", image: "https://images.unsplash.com/photo-1571513722193-2821a0a7e9a0?w=200" },
+    { title: "Drone Shoot", image: "https://images.unsplash.com/photo-1508612761958-e9319d4e1ebf?w=200" },
 ];
 
 
-export const filtersList = [
-    "All",
-    "Photography",
-    "Videography",
-    "Stage Decoration",
-    "Catering",
-    "Makeup & Styling",
-    "Lighting",
-    "Sound System",
-    "Venue Decoration",
-    "Flower Arrangement",
-    "Event Management",
-    "Mehendi",
-    "DJ & Music",
-    "Live Band",
-    "Invitation Design",
-    "Transportation",
-    "Tent House",
-    "Costume Rental",
-    "Security Services",
-    "Cleaning & Maintenance",
-    "Guest Management",
-    "Entertainment",
-    "Anchoring",
-    "Traditional Performers",
-    "Drone Shoot",
+export const bgImages = [
+    "https://images.unsplash.com/photo-1521334884684-d80222895322",
+    "https://media.istockphoto.com/id/1186214696/photo/hindu-wedding-ritual-wherein-bride-and-groom-hand.jpg?s=612x612&w=0&k=20&c=fTlNejRdY7dkvk742auNgI3j6Ve9UqqWSnb3QJ-D2gw=",
+    "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR66Sg0W73efIQ5MjJfjYF5-vces_wQyUp0iw&s",
+];
+
+export const categories = [
+    {
+        title: "Photography",
+        video: "https://youtu.be/6IButVnBcfs?si=1pqM0Rq3Qh4Jpxy4",
+        image: "https://www.adorama.com/alc/wp-content/uploads/2021/04/photography-camera-learning-feature.jpg",
+    },
+    {
+        title: "Catering",
+        video: "https://www.youtube.com/watch?v=2noiRae9h54&pp=ygUIY2F0ZXJpbmc%3D",
+        image: "https://www.shutterstock.com/image-photo/catering-staff-serves-food-buffet-600nw-2630302985.jpg",
+    },
+    {
+        title: "Stage Decoration",
+        video: "https://www.youtube.com/watch?v=377K-aV_1ZU&pp=ygUac3RhZ2UgZGVjb3JhdGlvbiBpbiBldmVudHM%3D",
+        image: "https://www.udvahadecors.com/wp-content/uploads/2017/09/Event-Stage-001-min.jpg",
+    },
+    {
+        title: "Makeup & Styling",
+        video: "https://www.youtube.com/watch?v=tKM1_B4Ez7k&pp=ygUsbWFrZXVwICYgc3R5bGluZyB0b29scyBmb3IgcHJvbW90aW9uYWwgdmlkZW8%3D",
+        image: "https://cdn.prod.website-files.com/653ae1c54dbd39d682d7871a/68ed5c7d0a9310c1297410db_Bride%20getting%20makeup%20applied%20by%20bridal%20makeup%20artist%20for%20wedding%20trial%20copy.webp",
+    },
+    {
+        title: "Lighting & Sound",
+        video: "https://www.youtube.com/watch?v=gAjRmAZWgZ8&pp=ygUbTGlnaHRpbmcgJiBTb3VuZCBmb3IgZXZlbnRz",
+        image: "https://lirp.cdn-website.com/3b4682ef/dms3rep/multi/opt/111605519_m-1920w.jpg",
+    },
+    {
+        title: "Entertainment",
+        video: "https://youtu.be/u_wB6byrl5k?si=YpSLMu5VSgGN8ti",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRQ0r9qKNNqxbiTVigFUvoUDXCQWWV3sxuzOg&s",
+    }
+];
+
+export const testimonials = [
+    { text: "We found all vendors for our wedding in one place!", author: "Sneha & Arjun" },
+    { text: "Our catering and photography teams were top-notch!", author: "Rahul Events Pvt. Ltd." },
 ];
 
 
@@ -296,18 +126,18 @@ export const vendorServiceDetails = {
 
 export const sidebarOptions = {
     vendor: [
-    //   { label: "Dashboard", path: "overview", icon: LayoutDashboard },
-      { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
-      { label: "My Services", path: "services", icon: Wrench },
-      { label: "Add Service", path: "add-service", icon: PlusCircle },
-      { label: "Profile", path: "vendor-profile", icon: User },
+        //   { label: "Dashboard", path: "overview", icon: LayoutDashboard },
+        { label: "Pending Orders", path: "pending-orders", icon: ClipboardList },
+        { label: "My Services", path: "services", icon: Wrench },
+        { label: "Add Service", path: "add-service", icon: PlusCircle },
+        { label: "Profile", path: "vendor-profile", icon: User },
     ],
 
     admin: [
-      { label: "Vendor Registrations", path: "vendor-registrations", icon: Users },
-      { label: "All Services", path: "all-services", icon: Layers },
-//       { label: "Profile", path: "profile", icon: User },
-     { label: "Add Admin", path: "add-admin", icon: User },
+        { label: "Vendor Registrations", path: "vendor-registrations", icon: Users },
+        { label: "All Services", path: "all-services", icon: Layers },
+        //       { label: "Profile", path: "profile", icon: User },
+        { label: "Add Admin", path: "add-admin", icon: User },
     ],
 
     user: [

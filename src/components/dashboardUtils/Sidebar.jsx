@@ -1,8 +1,9 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { Menu } from "lucide-react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
+import logo from "/ES_logo.png";
 
 const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();
@@ -25,12 +26,22 @@ const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           className={`${textClass} focus:outline-none`}
         >
-          <Menu size={20} className="sm:size-[22px]" />
         </button>
+
         {isSidebarOpen && (
-          <h1 className={`font-bold text-sm sm:text-lg ml-2 ${textClass}`}>
-            EventServices
-          </h1>
+          <Link
+            to="/dashboard/home"
+            className="flex items-center gap-2 ml-2 hover:opacity-90 transition-all"
+          >
+            <img
+              src={logo}
+              alt="EventServices Logo"
+              className="w-6 h-6 sm:w-8 sm:h-8 object-contain rounded"
+            />
+            <h1 className={`font-bold text-sm sm:text-lg ${textClass}`}>
+              EventServices
+            </h1>
+          </Link>
         )}
       </div>
 
@@ -45,8 +56,8 @@ const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
               <button
                 onClick={() => navigate(item.path)}
                 className={`w-full flex items-center gap-2 sm:gap-3 px-3 py-2 rounded-lg transition-all duration-200 ${isActive
-                    ? "bg-blue-500 text-white"
-                    : `${textClass} ${hoverClass}`
+                  ? "bg-blue-200 text-blue-700"
+                  : `${textClass} ${hoverClass}`
                   }`}
               >
                 <Icon size={18} className="sm:size-[20px]" />

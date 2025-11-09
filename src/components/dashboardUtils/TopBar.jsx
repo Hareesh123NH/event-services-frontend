@@ -3,6 +3,7 @@ import { Search, User, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../security/AuthContext";
 import DarkMode from "./DarkMode";
+import logo from "/ES_logo.png";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const TopBar = ({
@@ -28,52 +29,55 @@ const TopBar = ({
 
   return (
     <div
-      className={`flex items-center justify-between p-4 sm:p-4 shadow-md sticky top-0 z-30 ${bgClass}`}
+      className={`flex items-center justify-between p-1 sm:p-1 shadow-lg sticky top-0 z-30 ${bgClass}`}
     >
       {/* Left section (Menu + Search) */}
-      <div className="flex items-center gap-2 flex-1">
+      <div className="flex items-center gap-3 flex-1">
         {/* Mobile Menu Button */}
         <button
           onClick={toggleSidebar}
-          className="md:hidden p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700"
+          className="md:hidden p-3 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-700 transition"
           title="Open Sidebar"
         >
-          <Menu size={22} className={iconColor} />
+          <img
+            src={logo}
+            alt="EventServices Logo"
+            className="w-10 h-10 sm:w-12 sm:h-12 object-contain rounded"
+          />
         </button>
 
         {/* Search Bar */}
         <div
           className="flex items-center bg-transparent border border-gray-300 dark:border-gray-700 
-             rounded-lg px-3 sm:px-4 sm:py-2 w-full max-w-[95%] sm:max-w-md md:max-w-lg lg:max-w-xl mx-auto"
+           rounded-xl px-4 sm:px-6 py-2 sm:py-3 w-full max-w-[95%] sm:max-w-lg md:max-w-xl lg:max-w-2xl mx-auto"
         >
           <Search
-            size={18}
-            className={`${iconColor} mr-2 sm:mr-3 flex-shrink-0`}
+            size={22}
+            className={`${iconColor} mr-3 sm:mr-4 flex-shrink-0`}
           />
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Search vendors, services..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className={`w-full bg-transparent border-none outline-none text-sm sm:text-base md:text-lg 
-                ${inputTextClass} ${inputPlaceholderClass}`}
+            className={`w-full bg-transparent border-none outline-none text-base sm:text-lg md:text-xl 
+              ${inputTextClass} ${inputPlaceholderClass}`}
           />
         </div>
-
       </div>
 
       {/* Right section (Dark mode + Profile) */}
-      <div className="flex items-center gap-3 sm:gap-4 ml-3 sm:ml-6">
+      <div className="flex items-center gap-4 sm:gap-6 ml-3 sm:ml-8">
         <DarkMode />
 
         {/* Profile */}
         <div className="relative">
           <button
             onClick={() => setShowProfile(!showProfile)}
-            className={`w-8 h-8 sm:w-9 sm:h-9 rounded-full ${profileBgClass} flex items-center justify-center`}
+            className={`w-10 h-10 sm:w-12 sm:h-12 rounded-full ${profileBgClass} flex items-center justify-center`}
             title="Profile"
           >
-            <User size={18} className={dropdownTextClass} />
+            <User size={22} className={dropdownTextClass} />
           </button>
 
           <AnimatePresence>
@@ -82,10 +86,10 @@ const TopBar = ({
                 initial={{ opacity: 0, y: -8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
-                className={`absolute right-0 mt-2 w-36 sm:w-40 rounded-lg shadow-lg p-2 ${dropdownBgClass}`}
+                className={`absolute right-0 mt-3 w-40 sm:w-48 rounded-xl shadow-xl p-3 ${dropdownBgClass}`}
               >
                 <button
-                  className={`block w-full text-left px-4 py-2 rounded ${dropdownHoverClass} ${dropdownTextClass}`}
+                  className={`block w-full text-left px-4 py-2 rounded-lg text-base ${dropdownHoverClass} ${dropdownTextClass}`}
                   onClick={logout}
                 >
                   Logout
@@ -96,7 +100,7 @@ const TopBar = ({
         </div>
       </div>
     </div>
-  );
+  )  
 };
 
 export default TopBar;

@@ -58,7 +58,7 @@ const VendorGrid = () => {
   const [vendors, setVendors] = useState([]);
   const [activeFilter, setActiveFilter] = useState(savedFilter);
   const [page, setPage] = useState(pageNo);
-  const [limit, setLimit] = useState(10);
+  const [limit, setLimit] = useState(12);
   const [isLastPage, setIsLastPage] = useState(false);
   const [maxDistance, setMaxDistance] = useState(savedMaxDistance);
   const [coords, setCoords] = useState(JSON.parse(localStorage.getItem("coords")));

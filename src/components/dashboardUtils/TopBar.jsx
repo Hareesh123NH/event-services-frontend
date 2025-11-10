@@ -3,7 +3,7 @@ import { Search, User, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "../security/AuthContext";
 import DarkMode from "./DarkMode";
-import logo from "/ES_logo.png";
+import logo from "../../assets/ES_logo.png";
 import { useThemeClasses } from "../theme/themeClasses";
 
 const TopBar = ({

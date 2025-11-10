@@ -1,24 +1,39 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import api from "../axiosConfig";
 
 const AddNewAdmin = () => {
   const [formData, setFormData] = useState({
-    name: "",
+    full_name: "",
     email: "",
-    phone: "",
+    password: "",
+    phone_number: "",
   });
+
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("New Admin Data:", formData);
-    alert("Admin added successfully!");
-    setFormData({ name: "", email: "", phone: "" });
+    setLoading(true);
+    try {
+
+      await api.post("/admin/create", formData);
+      alert("Admin added successfully!");
+
+      setFormData({ full_name: "", email: "", phone_number: "", password: "" });
+    } catch (error) {
+      console.error("Error adding admin:", error);
+      alert(error.response?.data?.message || "Failed to add admin!");
+    }
+    setLoading(false);
   };
 
   const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg } = useThemeClasses();
@@ -47,7 +62,7 @@ const AddNewAdmin = () => {
             </label>
             <input
               type="text"
-              name="name"
+              name="full_name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter name"
@@ -72,6 +87,36 @@ const AddNewAdmin = () => {
             />
           </div>
 
+          {/* Password */}
+          <div className="relative">
+            <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
+              Password
+            </label>
+
+            <input
+              type={showPassword ? "text" : "password"}
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              placeholder="Password"
+              className={`w-full px-3 sm:px-4 py-2 sm:py-3 text-sm sm:text-base rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10 ${inputBg}`}
+              required
+            />
+
+            {/* 👁 Eye Icon */}
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-[65%] -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"
+            >
+              {showPassword ? (
+                <EyeOffIcon className="w-5 h-5" />
+              ) : (
+                <EyeIcon className="w-5 h-5" />
+              )}
+            </button>
+          </div>
+
           {/* Phone */}
           <div>
             <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
@@ -79,7 +124,7 @@ const AddNewAdmin = () => {
             </label>
             <input
               type="text"
-              name="phone"
+              name="phone_number"
               value={formData.phone}
               onChange={handleChange}
               placeholder="Enter phone number"
@@ -88,14 +133,16 @@ const AddNewAdmin = () => {
             />
           </div>
 
+
           {/* Submit Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            disabled={loading}
             type="submit"
-            className={`w-full py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg transition-all ${buttonBg}`}
+            className={`w-full py-2.5 sm:py-3 text-sm sm:text-base font-semibold rounded-lg transition-all bg-blue-200 hover:bg-blue-300 text-blue-800`}
           >
-            Add Admin
+            {loading ? "Adding" : "Add Admin"}
           </motion.button>
         </form>
       </motion.div>

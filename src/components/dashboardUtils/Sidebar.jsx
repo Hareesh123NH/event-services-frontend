@@ -1,9 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Menu } from "lucide-react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
-import logo from "/ES_logo.png";
+import logo from "../../assets/ES_logo.png";
 
 const Sidebar = ({ sidebarOptions, isSidebarOpen, setIsSidebarOpen }) => {
   const navigate = useNavigate();

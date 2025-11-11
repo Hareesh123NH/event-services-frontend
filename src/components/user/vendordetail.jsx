@@ -32,7 +32,7 @@ const VendorDetail = () => {
     (f) => f.title.toLowerCase() === vendorItem?.service.service_name.toLowerCase()
   );
 
-  const serviceImage = matchedFilter?.image || logo;
+  const serviceImage = matchedFilter?.detailImg || logo;
 
   const {
     pageBg,

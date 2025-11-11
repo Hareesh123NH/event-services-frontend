@@ -13,31 +13,134 @@ import {
 } from "lucide-react";
 
 export const filtersList = [
-    { title: "All", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200" },
-    { title: "Photography", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
-    { title: "Videography", image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=200" },
-    { title: "Stage Decoration", image: "https://images.unsplash.com/photo-1529634898660-06b72c3a5b1d?w=200" },
-    { title: "Catering", image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200" },
-    { title: "Makeup & Styling", image: "https://images.unsplash.com/photo-1519415943484-9fa9d3a61a1c?w=200" },
-    { title: "Lighting", image: "https://images.unsplash.com/photo-1504805572947-34fad45aed93?w=200" },
-    { title: "Sound System", image: "https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=200" },
-    { title: "Venue Decoration", image: "https://images.unsplash.com/photo-1519741497674-611481863552?w=200" },
-    { title: "Flower Arrangement", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
-    { title: "Event Management", image: "https://images.unsplash.com/photo-1485217988980-11786ced9454?w=200" },
-    { title: "Mehendi", image: "https://images.unsplash.com/photo-1591608516481-3b8a4e91a3c1?w=200" },
-    { title: "DJ & Music", image: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=200" },
-    { title: "Live Band", image: "https://images.unsplash.com/photo-1507874457470-272b3c8d8ee2?w=200" },
-    { title: "Invitation Design", image: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=200" },
-    { title: "Transportation", image: "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=200" },
-    { title: "Tent House", image: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=200" },
-    { title: "Costume Rental", image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=200" },
-    { title: "Security Services", image: "https://images.unsplash.com/photo-1504208434309-cb69f4fe52b0?w=200" },
-    { title: "Cleaning & Maintenance", image: "https://images.unsplash.com/photo-1581579186989-7e1d2a57c836?w=200" },
-    { title: "Guest Management", image: "https://images.unsplash.com/photo-1531058020387-3be344556be6?w=200" },
-    { title: "Entertainment", image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?w=200" },
-    { title: "Anchoring", image: "https://images.unsplash.com/photo-1519750783826-e2420f4d687f?w=200" },
-    { title: "Traditional Performers", image: "https://images.unsplash.com/photo-1571513722193-2821a0a7e9a0?w=200" },
-    { title: "Drone Shoot", image: "https://images.unsplash.com/photo-1508612761958-e9319d4e1ebf?w=200" },
+    {
+        title: "All",
+        image: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=200"
+    },
+    {
+        title: "Photography",
+        image: "https://academy-cdn.wedio.com/2021/08/christian-wiediger-gVbOF8mdE3U-unsplash.jpg",
+        detailImg: "https://aaft.com/blog/wp-content/uploads/2025/05/AdobeStock_150026021.jpeg"
+    },
+    {
+        title: "Videography",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRqnYhXoV1s19Y4_eAEb29Ks_gJRiCljeoDrw&s",
+        detailImg: "https://www.iconmedia.co.in/wp-content/uploads/2024/09/videography-slider.jpg"
+
+    },
+    {
+        title: "Stage Decoration",
+        image: "https://coohom-biz-sg-s3.coohom.com/ins/static/article/freshers-stage-overview-1758604737062147600.jpg?x-oss-process=image/format,webp",
+        detailImg: "https://5.imimg.com/data5/SELLER/Default/2022/12/WZ/UK/PQ/163516196/stage-decoration-for-school-annual-day.jpeg"
+
+    },
+    {
+        title: "Catering",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3SQe2xrgfSQh2_VMnOhZSZ59uN53vjkcXbQ&s",
+        detailImg: "https://www.richentertainmentgroup.com/wp-content/uploads/09-2024-catering.jpg"
+    },
+    {
+        title: "Makeup & Styling",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxVXf2jcp4cRORwXYX8O2pdhJO8x2U7iIDDg&s",
+        detailImg: "https://filmfare.wwmindia.com/content/2020/nov/lakme21605275021.jpg"
+    },
+    {
+        title: "Lighting",
+        image: "https://cdn-akipm.nitrocdn.com/KGegQqircKVmJsaAVnvRwxAneyEMEXGQ/assets/mobile/optimized/rev-35b2b84/lh7-rt.googleusercontent.com/docsz/8706221ea03ef4bc2774f1adfb6feda0.AD_4nXe8h6azSeFrTJ8k-Sj3ThvpJgG4U-vY01vsetpp6evMRA73_Vw-txjT_D219v3WNGUmiX_oPIElrbHZ_SwA3DOl0I0huqv3O9m6Rlabl9hcNttZJT929vM-DhinWK7tRJ7ZucOnRw",
+        detailImg: "https://www.mr-resistor.co.uk/img/photo/springgarden2000.jpg"
+
+    },
+    {
+        title: "Sound System",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBj5A7cVmwc7Q4qNkDuGXO-En7ldR3z_HOQ&s",
+        detailImg: "https://www.shutterstock.com/image-photo/playing-song-on-bluetooth-speaker-260nw-1526103098.jpg"
+    },
+    {
+        title: "Venue Decoration",
+        image: "https://cdn0.weddingwire.in/vendor/4250/3_2/960/jpg/1k0a6407_15_224250-1560250858.jpeg",
+        detailImg: "https://i.pinimg.com/736x/ec/a2/90/eca2908b8bd291aa827b2f008b36ab1d.jpg"
+    },
+    {
+        title: "Flower Arrangement",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTigf3jE-SAXBKPTXiR7EJSPrwGY9uogqVggQ&s",
+        detailImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRysMrf5DZWvVwICyH_WZBEfGV-T6AXgrF0XQ&s"
+    },
+    {
+        title: "Event Management",
+        image: "https://img.freepik.com/premium-vector/event-management-wedding-planner-manager-planning-event-conference-party_501813-2157.jpg?semt=ais_hybrid&w=740&q=80",
+        detailImg: "https://add24.in/assets/img/1WAYAVBestPracticesEventManagment.jpeg"
+    },
+    {
+        title: "Mehendi",
+        image: "https://content.jdmagicbox.com/v2/comp/hyderabad/b3/040pxx40.xx40.231108122243.g8b3/catalogue/rk-mehandi-artist-hyderabad-mehendi-artists-svsdm9dpbi.jpg",
+        detailImg: "https://teetumehandiart.com/wp-content/uploads/2025/10/teetu-mehandi-art-greater-noida-bridal-wedding-henna.webp"
+    },
+    {
+        title: "DJ & Music",
+        image: "https://play-lh.googleusercontent.com/bnfB1bUJKtmgqXZsFWwUJi4o7iMaw7lyUaQF8XfHtJ6JTDLvtI5qtYUeQ75swxw_ovA=w240-h480-rw",
+        detailImg: "https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/blogs/10496/images/a67164-f1f1-82e5-e8c-afffdbd7a060_AdobeStock_110110063.jpeg"
+    },
+    {
+        title: "Live Band",
+        image: "https://cdn.mos.cms.futurecdn.net/84a1666bb2f03d5b0ac27212f0993fed.jpg",
+        detailImg: "https://media.gettyimages.com/id/1579958721/video/close-up-asian-chinese-drummer-jamming-session-with-multiracial-group-live-band-performance.jpg?s=640x640&k=20&c=rr1UuJIHp6uUVWg-6U1W7-r6atman-wdd0siVWoGa34="
+    },
+    {
+        title: "Invitation Design",
+        image: "https://play-lh.googleusercontent.com/HqBleqg_2TUm6jnL_jnT_twqBWQnvrUndpfgnkGr7GvG5rsfWfjQfX4HrQT6CwXFYwfY=w526-h296-rw",
+        detailImg: "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1695649100/catalog/1679387390252171264/kga9bcyascyex2kr5ufv.jpg"
+    },
+    {
+        title: "Transportation",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4wHlHTRQgtrR0XM5mygOzkYkqznTlYxwXcw&s",
+        detailImg: "https://www.teletrans.com/wp-content/uploads/2021/03/group-and-event-transportation.png"
+    },
+    {
+        title: "Tent House",
+        image: "https://4.imimg.com/data4/SF/GR/MY-11050156/pavilion-tent-500x500.jpg",
+        detailImg: "https://www.shaadidukaan.com/user_images/innerSlider_images/default/m/4-m.jpg"
+    },
+    {
+        title: "Costume Rental",
+        image: "https://content.jdmagicbox.com/v2/comp/hyderabad/m7/040pxx40.xx40.140427122619.m3m7/catalogue/sree-sampradaya-cultural-creation-tara-nagar-chanda-nagar-hyderabad-kuchipudi-dance-costume-manufacturers-y93r9n8rmd.jpg",
+        detailImg: "https://content.jdmagicbox.com/comp/kottayam/z4/9999px481.x481.230428161100.t2z4/catalogue/candid-suit-gallery-pala-town-kottayam-kurta-pyjama-on-rent-z8seiaxn3b.jpg"
+    },
+    {
+        title: "Security Services",
+        image: "https://federalsecurity.in/wp-content/uploads/2024/08/Security-guards.jpg",
+        detailImg: "https://silentprofessionals.org/wp-content/uploads/2018/05/Security-Service.jpg"
+
+    },
+    {
+        title: "Cleaning & Maintenance",
+        image: "https://cmmonline.com/wp-content/uploads/CMMOnline-3.jpg",
+        detailImg: "https://cleanhousemelbourne.com.au/wp-content/uploads/2024/01/Event-Cleaning-Service-2.png"
+    },
+    {
+        title: "Guest Management",
+        image: "https://thumbs.dreamstime.com/b/flat-style-illustration-depicting-happy-holidays-celebration-celebrate-every-arrival-unique-welcome-illustration-art-set-412455303.jpg",
+        detailImg: "https://www.msrchm.edu/wp-content/themes/msrchm-new/img/banner1.jpg"
+    },
+    {
+        title: "Entertainment",
+        image: "https://brassanimals.com/wp-content/uploads/2025/02/Luxury-Event-Entertainment-25-Unique-Ideas-for-an-Upscale-Experience.webp",
+        detailImg: "https://socio.events/wp-content/uploads/2022/06/AdobeStock_339206331-1312x875.jpeg"
+    },
+    {
+        title: "Anchoring",
+        image: "https://images.hindi.news18.com/ibnkhabar/uploads/2021/10/Career-In-Stage-Anchoring-Jobs-16353339134x3.jpg",
+        detailImg: "https://5.imimg.com/data5/NW/DN/GLADMIN-33431652/anchoring-courses-500x500.jpg"
+    },
+    {
+        title: "Traditional Performers",
+        image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVBVJoypOtypxZVt_vNGdICUXY-DpEb-B885pVIn0W3nZUWW5foJOBKe7VcYuAjYPKSc&usqp=CAU",
+        detailImg: "https://images.indianexpress.com/2018/11/dance-fest-759.jpg?w=414"
+    },
+    {
+        title: "Drone Shoot",
+        image: "https://flyandtech.com/wp-content/uploads/2025/02/smart-photographer-drone.jpg",
+        detailImg: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTta6QpCPL1yVdvV1u02CvyXohCjEh6L3VC9A&s"
+    },
 ];
 
 

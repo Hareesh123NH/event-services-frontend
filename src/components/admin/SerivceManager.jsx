@@ -6,10 +6,12 @@ import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import logo from "../../assets/ES_logo.png";
 import { PenSquareIcon } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
 
 
 const ServiceManager = () => {
 
+  const { search } = useOutletContext();
 
   const [allServices, setAllServices] = useState([]);
   const [editingService, setEditingService] = useState(null);
@@ -28,6 +30,23 @@ const ServiceManager = () => {
   useEffect(() => {
     fetchServices();
   }, []);
+
+
+  const filteredAllServices = allServices?.filter(service => {
+    const searchTerm = search.toLowerCase();
+
+    return (
+      service._id?.toLowerCase().includes(searchTerm) ||
+      service.service_name?.toLowerCase().includes(searchTerm) ||
+      service.description?.toLowerCase().includes(searchTerm) ||
+      service.created_by?.toLowerCase().includes(searchTerm) ||
+      service.pricing_type?.toLowerCase().includes(searchTerm) ||
+      service.base_price?.toString().includes(searchTerm) ||
+      service.createdAt?.toLowerCase().includes(searchTerm) ||
+      service.updatedAt?.toLowerCase().includes(searchTerm)
+    );
+  });
+
 
   const handleSave = async (serviceData) => {
     try {
@@ -86,7 +105,7 @@ const ServiceManager = () => {
           className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
         >
           {/* ✅ Shimmer while loading */}
-          {!allServices || allServices.length === 0 ? (
+          {!filteredAllServices || filteredAllServices.length === 0 ? (
             Array.from({ length: 6 }).map((_, i) => (
               <motion.div
                 key={i}
@@ -103,7 +122,7 @@ const ServiceManager = () => {
               </motion.div>
             ))
           ) : (
-            allServices.map((service) => (
+            filteredAllServices.map((service) => (
               <motion.div
                 key={service._id}
                 layout

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Filters from "../dashboardUtils/Filters";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import { CheckCircle, ChevronLeft, ChevronRight, PlusCircle } from "lucide-react"; // 👈 Add this at the top
@@ -47,6 +47,8 @@ const VendorGrid = () => {
 
   const savedState = JSON.parse(sessionStorage.getItem("pageState") || "{}");
 
+  const { search } = useOutletContext();
+
   const {
     pageNo = 1,
     activeFilter: savedFilter = "All",
@@ -73,11 +75,13 @@ const VendorGrid = () => {
       return;
     }
 
-    console.log("location", useLocation);
+    // console.log("location", useLocation);
+
+    // console.log("search--", search);
 
     const query = activeFilter === "All" ? "" : activeFilter;
     const cacheName = "vendor-cache-v1";
-    const cacheKey = `/user/services?query=${query}&page=${page}&limit=${limit}&maxDistance=${maxDistance}${useLocation ? `&coords=${JSON.stringify(coords)}` : `addressId=${addressId}`}`;
+    const cacheKey = `/user/services?query=${query}&search=${search}&page=${page}&limit=${limit}&maxDistance=${maxDistance}${useLocation ? `&coords=${JSON.stringify(coords)}` : `addressId=${addressId}`}`;
 
     let refreshInterval;
 
@@ -115,6 +119,7 @@ const VendorGrid = () => {
           useLocation ? { coords } : {},
           {
             params: {
+              search,
               query,
               page,
               limit,
@@ -160,7 +165,7 @@ const VendorGrid = () => {
     // 🔹 Clear cache on reload/close
     const clearCache = async () => {
       storePageState();
-      console.log("🧹 Clearing vendor cache (reload/close)");
+      // console.log("🧹 Clearing vendor cache (reload/close)");
       if (typeof window !== "undefined" && "caches" in window) {
         await caches.delete(cacheName);
       }
@@ -188,7 +193,7 @@ const VendorGrid = () => {
       window.removeEventListener("beforeunload", clearCache);
       window.removeEventListener("unload", clearCache);
     };
-  }, [coords, activeFilter, page, limit, maxDistance, addressId, useLocation]);
+  }, [coords, activeFilter, page, limit, maxDistance, addressId, useLocation, search]);
 
   const {
     pageBg,

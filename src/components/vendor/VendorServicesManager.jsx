@@ -4,8 +4,12 @@ import VendorServiceSkeleton from "./VendorServiceSkeleton";
 import { useThemeClasses } from "../theme/themeClasses";
 import { useEffect, useState } from "react";
 import api from "../axiosConfig";
+import { useOutletContext } from "react-router-dom";
 
 const VendorServicesManager = () => {
+
+  const { search } = useOutletContext();
+
   const [services, setServices] = useState(
     JSON.parse(sessionStorage.getItem("vendor-services")) || null
   );
@@ -30,6 +34,39 @@ const VendorServicesManager = () => {
     }
   }, []);
 
+  const filteredServices = services?.filter(item => {
+    const searchTerm = search.toLowerCase();
+
+    // check inside main service fields
+    const inServiceName = item.service?.service_name?.toLowerCase().includes(searchTerm);
+    const inDescription = item.service?.description?.toLowerCase().includes(searchTerm);
+    const inPricingType = item.service?.pricing_type?.toLowerCase().includes(searchTerm);
+    const inBasePrice = item.service?.base_price?.toString().includes(searchTerm);
+
+    // check top-level fields
+    const inPrice = item.price?.toString().includes(searchTerm);
+    const inStatus = item.status?.toLowerCase().includes(searchTerm);
+
+    // check inside addons
+    const inAddons = item.addons?.some(addon =>
+      addon.title?.toLowerCase().includes(searchTerm) ||
+      addon.description?.toLowerCase().includes(searchTerm) ||
+      addon.price?.toString().includes(searchTerm)
+    );
+
+    // combine all checks
+    return (
+      inServiceName ||
+      inDescription ||
+      inPricingType ||
+      inBasePrice ||
+      inPrice ||
+      inStatus ||
+      inAddons
+    );
+  });
+
+
 
 
   const { containerBg } = useThemeClasses();
@@ -46,16 +83,16 @@ const VendorServicesManager = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {loading
           ? Array.from({ length: 4 }).map((_, index) => (
-              <VendorServiceSkeleton key={index} index={index} />
-            ))
-          : services?.map((item, index) => (
-              <VendorServiceBlock
-                key={item.service._id}
-                serviceItem={item}
-                index={index}
-                onUpdate={fetchVendorServices} 
-              />
-            ))}
+            <VendorServiceSkeleton key={index} index={index} />
+          ))
+          : filteredServices?.map((item, index) => (
+            <VendorServiceBlock
+              key={item.service._id}
+              serviceItem={item}
+              index={index}
+              onUpdate={fetchVendorServices}
+            />
+          ))}
       </div>
     </motion.div>
   );

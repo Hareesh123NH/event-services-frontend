@@ -3,8 +3,12 @@ import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import { Check, Loader2, Save } from "lucide-react";
+import { useOutletContext } from "react-router-dom";
 
 const BookOrder = () => {
+
+
+  const { search } = useOutletContext();
 
   const [addresses, setAddresses] = useState([]);
   const [selectedAddressId, setSelectedAddressId] = useState(localStorage.getItem("addressId"));
@@ -40,6 +44,16 @@ const BookOrder = () => {
     fetchAddresses();
     setCartServices(JSON.parse(localStorage.getItem("cart")) || []);
   }, []);
+
+
+  const filteredAddresses = addresses.filter(addr => {
+    if (!search) return true; // show all if search is empty
+    const lowerSearch = search.toLowerCase();
+    return [addr.label, addr.address_line1, addr.city, addr.state, addr.country]
+      .filter(Boolean)
+      .some(field => field.toLowerCase().includes(lowerSearch));
+  });
+
 
   const isFormComplete = () =>
     formData.scheduled_from && formData.scheduled_to && formData.quantity;
@@ -215,7 +229,7 @@ const BookOrder = () => {
               </div>
             ))
             : // 🟢 Real address cards
-            addresses.map((addr) => (
+            filteredAddresses.map((addr) => (
               <div
                 key={addr._id}
                 className={`relative p-3 rounded-lg min-w-[220px] sm:min-w-[250px] flex-shrink-0 cursor-pointer border transition-all duration-200

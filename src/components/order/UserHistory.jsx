@@ -49,7 +49,7 @@ const UserHistory = () => {
   };
 
   // 🔎 Filter logic across *all* attributes
-  const filteredOrders = orders.filter(order => {
+  const filteredOrders = orders?.filter(order => {
     if (!search) return true;
     const term = search.toLowerCase();
 
@@ -107,8 +107,8 @@ const UserHistory = () => {
   return (
 
     <>
-      {loading || !orders ? <OrdersShimmer isDark={isDark} /> : (
-        orders.length === 0 ? (
+      {loading || !filteredOrders ? <OrdersShimmer isDark={isDark} /> : (
+        filteredOrders.length === 0 ? (
           <div className={`${secondaryText} text-center mt-10 text-sm sm:text-base`}>
             No orders found.
           </div>

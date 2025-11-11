@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import OrdersShimmer from "./OrdersShimmer";
+import { useOutletContext } from "react-router-dom";
 
 const UserHistory = () => {
 
@@ -10,6 +11,7 @@ const UserHistory = () => {
   const [orders, setOrders] = useState(JSON.parse(sessionStorage.getItem("user-history")) || null);
   const [loading, setLoading] = useState(false);
 
+  const { search } = useOutletContext();
 
   useEffect(() => {
 
@@ -39,6 +41,58 @@ const UserHistory = () => {
 
   }, [])
 
+
+
+  const includesSearch = (value, term) => {
+    if (!value) return false;
+    return value.toString().toLowerCase().includes(term);
+  };
+
+  // 🔎 Filter logic across *all* attributes
+  const filteredOrders = orders?.filter(order => {
+    if (!search) return true;
+    const term = search.toLowerCase();
+
+    const address = order.event_address || {};
+    const services = order.services || [];
+
+    // Collect vendor-related info
+    const vendorFields = services
+      .map(s => s.vendor_service?.vendor)
+      .filter(Boolean)
+      .flatMap(v => [v.name, v.email, v.phone_number]);
+
+    // Collect service-related info
+    const serviceFields = services.flatMap(s => [
+      s.price,
+      s.quantity,
+      s.provider_status,
+      s.scheduled_from,
+      s.scheduled_to,
+      s.vendor_service?.status,
+      s.vendor_service?.final_price,
+    ]);
+
+    // Check across all relevant order attributes
+    return [
+      order._id,
+      order.status,
+      order.payment_status,
+      order.total_amount,
+      order.actual_amount,
+      order.event_date,
+      order.order_date,
+      address.label,
+      address.address_line1,
+      address.address_line2,
+      address.city,
+      ...vendorFields,
+      ...serviceFields,
+    ]
+      .filter(Boolean)
+      .some(field => includesSearch(field, term));
+  });
+
   const {
     pageBg,
     cardBg,
@@ -53,14 +107,14 @@ const UserHistory = () => {
   return (
 
     <>
-      {loading || !orders ? <OrdersShimmer isDark={isDark} /> : (
-        orders.length === 0 ? (
+      {loading || !filteredOrders ? <OrdersShimmer isDark={isDark} /> : (
+        filteredOrders.length === 0 ? (
           <div className={`${secondaryText} text-center mt-10 text-sm sm:text-base`}>
             No orders found.
           </div>
         ) : (
           <motion.div layout className={`p-3 sm:p-4 space-y-4 sm:space-y-6 overflow-y-auto ${pageBg}`}>
-            {orders.map((order) => (
+            {filteredOrders.map((order) => (
               <motion.div
                 key={order._id}
                 layout

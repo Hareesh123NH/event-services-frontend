@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Plus, Save } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
+import { useOutletContext } from "react-router-dom";
 
 
 
@@ -27,6 +28,8 @@ const ServiceSkeleton = ({ cardDefault }) => {
 
 
 const AddNewVendorService = () => {
+
+  const { search } = useOutletContext();
 
   const [availableServices, setAvailableServices] = useState([]);
 
@@ -58,6 +61,18 @@ const AddNewVendorService = () => {
     fetchAvailableServicers();
   }, [])
 
+
+
+  const filteredAvailableServices = availableServices?.filter(service => {
+    const searchTerm = search.toLowerCase();
+
+    const inName = service.service_name?.toLowerCase().includes(searchTerm);
+    const inType = service.pricing_type?.toLowerCase().includes(searchTerm);
+    const inPrice = service.base_price?.toString().includes(searchTerm);
+    const inId = service.service_id?.toLowerCase().includes(searchTerm);
+
+    return inName || inType || inPrice || inId;
+  });
 
 
 
@@ -143,7 +158,7 @@ const AddNewVendorService = () => {
           <ServiceSkeleton cardDefault={cardDefault} />
         ) : (
           <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
-            {availableServices.map((service) => {
+            {filteredAvailableServices.map((service) => {
               const selected = selectedServiceId === service.service_id;
               return (
                 <div

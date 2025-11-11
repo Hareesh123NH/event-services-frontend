@@ -6,7 +6,7 @@ import api from "../axiosConfig";
 import { handleCart } from "./VendorGrid";
 import { CheckCircle, PlusCircle } from "lucide-react";
 import { filtersList } from "../data/duplicatedata";
-import logo from "/ES_logo.png"
+import logo from "../../assets/ES_logo.png"
 
 const VendorDetail = () => {
   const navigate = useNavigate();

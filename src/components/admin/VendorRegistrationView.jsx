@@ -3,8 +3,11 @@ import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, FileText, Briefcase, Check, X, Loader2 } from "lucide-react";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
+import { useOutletContext } from "react-router-dom";
 
 const VendorRegistrationView = () => {
+
+  const { search } = useOutletContext();
   const [vendors, setVendors] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingId, setLoadingId] = useState(null);
@@ -24,6 +27,33 @@ const VendorRegistrationView = () => {
   useEffect(() => {
     fetchVendorRegistrations();
   }, []);
+
+
+  const filteredVendors = vendors?.filter((vendor) => {
+    const searchTerm = search.toLowerCase();
+
+    // Check vendor basic fields
+    const matchesBasicFields =
+      vendor.vendor_name?.toLowerCase().includes(searchTerm) ||
+      vendor.email?.toLowerCase().includes(searchTerm) ||
+      vendor.phonenumber?.toLowerCase().includes(searchTerm) ||
+      vendor.desc?.toLowerCase().includes(searchTerm) ||
+      vendor.address?.toLowerCase().includes(searchTerm);
+
+    // Check nested service fields
+    const matchesService =
+      vendor.service?.service_name?.toLowerCase().includes(searchTerm) ||
+      vendor.service?.pricing_type?.toLowerCase().includes(searchTerm) ||
+      vendor.service?.base_price?.toString().includes(searchTerm);
+
+    // Check uploaded media file names
+    const matchesMedia = vendor.media?.some((m) =>
+      m.name?.toLowerCase().includes(searchTerm)
+    );
+
+    return matchesBasicFields || matchesService || matchesMedia;
+  });
+
 
   // Handle media file click
   const handleFileClick = async (fileId, fileName) => {
@@ -60,8 +90,8 @@ const VendorRegistrationView = () => {
 
   const onAccept = async (id) => {
 
-    if(!confirm("Are sure to Accept?")){
-      return ;
+    if (!confirm("Are sure to Accept?")) {
+      return;
     }
     console.log("Accepted vendor:", id);
 
@@ -84,8 +114,8 @@ const VendorRegistrationView = () => {
 
   const onReject = async (id) => {
 
-    if(!confirm("Are sure to Reject?")){
-      return ;
+    if (!confirm("Are sure to Reject?")) {
+      return;
     }
 
     console.log("Rejected vendor:", id);
@@ -143,7 +173,7 @@ const VendorRegistrationView = () => {
   }
 
 
-  if (!vendors || vendors.length === 0) {
+  if (!filteredVendors || filteredVendors.length === 0) {
     return (
       <div className="text-center text-gray-500 dark:text-gray-400 mt-10">
         No vendor registrations found.
@@ -159,7 +189,7 @@ const VendorRegistrationView = () => {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
-      {vendors.map((vendor, index) => (
+      {filteredVendors.map((vendor, index) => (
         <motion.div
           key={vendor._id}
           layout

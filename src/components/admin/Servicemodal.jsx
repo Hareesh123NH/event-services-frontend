@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 
 export const ServiceModal = ({ service, onClose, onSave }) => {
-  
+
 
   const [formData, setFormData] = useState({
     service_name: "",
@@ -11,6 +11,9 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
     base_price: "",
     pricing_type: "per_day",
   });
+
+  const [saving, setSaving] = useState(false);
+
 
   // Update formData when service changes
   useEffect(() => {
@@ -32,8 +35,8 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
   };
 
   // Theme-based classes
-  const { modalBg, inputBg, textPrimary,textSecondary,cancelBtnBg,saveBtnBg } = useThemeClasses();
-  
+  const { modalBg, inputBg, textPrimary, textSecondary, cancelBtnBg, saveBtnBg } = useThemeClasses();
+
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 p-4">
@@ -111,10 +114,18 @@ export const ServiceModal = ({ service, onClose, onSave }) => {
             Cancel
           </button>
           <button
-            className={`px-4 py-2 rounded ${saveBtnBg}`}
-            onClick={() => onSave(formData)}
+            className={`px-4 py-2 rounded ${saveBtnBg} ${saving ? "opacity-50 cursor-not-allowed" : ""}`}
+            disabled={saving}
+            onClick={async () => {
+              setSaving(true);
+              try {
+                await onSave(formData);
+              } finally {
+                setSaving(false);
+              }
+            }}
           >
-            Save
+            {saving ? "Saving..." : "Save"}
           </button>
         </div>
       </motion.div>

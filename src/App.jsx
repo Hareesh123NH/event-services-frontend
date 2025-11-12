@@ -23,6 +23,8 @@ import RoleProtectedRoute from "./components/security/RoleProtectedRoute";
 import VendorProfile from "./components/vendor/VendorProfile";
 import { ThemeProvider } from "./components/theme/ThemeContext";
 import VendorRegister from "./components/auth/VendorRegister";
+import ForgotPasswordPage from "./components/auth/ForgetPassword";
+import SetPasswordPage from "./components/auth/ResetPassword";
 
 function App() {
   return (
@@ -44,6 +46,23 @@ function App() {
               element={
                 <MainLayout>
                   <Login />
+                </MainLayout>
+              }
+            />
+
+            <Route
+              path="/forget-password"
+              element={
+                <MainLayout>
+                  <ForgotPasswordPage />
+                </MainLayout>
+              }
+            />
+            <Route
+              path="/reset-password"
+              element={
+                <MainLayout>
+                  <SetPasswordPage />
                 </MainLayout>
               }
             />

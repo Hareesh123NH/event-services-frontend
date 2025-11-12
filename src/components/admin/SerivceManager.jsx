@@ -7,6 +7,7 @@ import api from "../axiosConfig";
 import logo from "../../assets/ES_logo.png";
 import { PenSquareIcon } from "lucide-react";
 import { useOutletContext } from "react-router-dom";
+import { filtersList } from "../data/duplicatedata";
 
 
 const ServiceManager = () => {
@@ -16,6 +17,17 @@ const ServiceManager = () => {
   const [allServices, setAllServices] = useState([]);
   const [editingService, setEditingService] = useState(null);
   const [addingService, setAddingService] = useState(false);
+
+
+  const filterMap = new Map(
+    filtersList.map(f => [f.title.trim().toLowerCase(), f.image])
+  );
+
+  const getFilterImage = (service_name) => {
+    console.log(service_name);
+    return filterMap.get(service_name.trim().toLowerCase()) || logo;
+  };
+
 
   const fetchServices = async () => {
     try {
@@ -131,20 +143,12 @@ const ServiceManager = () => {
               >
                 {/* ✅ Service Image */}
                 <div className="w-full h-40 bg-gray-200 dark:bg-gray-700 overflow-hidden rounded-t-xl flex items-center justify-center">
-                  {service.image_url ? (
-                    <img
-                      src={service.image_url}
-                      alt={service.service_name}
-                      onError={(e) => (e.currentTarget.src = logo)} // fallback image
-                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
-                    />
-                  ) : (
-                    <img
-                      src={logo}
-                      alt="Default"
-                      className="w-full h-full opacity-60"
-                    />
-                  )}
+                  <img
+                    src={getFilterImage(service.service_name)}
+                    alt={service.service_name}
+                    onError={(e) => (e.currentTarget.src = logo)}
+                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
 
                 {/* ✅ Service Info */}

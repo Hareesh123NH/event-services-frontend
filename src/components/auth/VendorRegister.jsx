@@ -75,6 +75,21 @@ const VendorRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const nameRegex = /^[A-Za-z\s]{3,}$/;
+    if (!nameRegex.test(formData.name)) {
+      alert("Please enter a valid full name (letters and spaces only, at least 3 characters).");
+      return;
+    }
+  
+    // Phone number validation
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.phone_number)) {
+      alert("Please enter a valid 10-digit Indian phone number starting with 6-9.");
+      return;
+    }
+
+    
     setRegisterMessage("");
     setRegistering(true);
 

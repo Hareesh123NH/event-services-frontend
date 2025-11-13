@@ -5,10 +5,10 @@ import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import { getCoordsFromAddressHelper } from "../user/location";
 
-const profileImage = "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg"
+const profileImage =
+  "https://img.favpng.com/14/4/9/smiling-business-man-smiling-3d-businessman-character-in-suit-QPGuRB56_t.jpg";
 
 const VendorProfile = () => {
-
   const [editing, setEditing] = useState(false);
   const [formData, setFormData] = useState({
     full_name: "",
@@ -33,6 +33,23 @@ const VendorProfile = () => {
 
   // ✅ Update vendor profile
   const handleSave = async () => {
+    
+    const nameRegex = /^[A-Za-z][A-Za-z0-9\s]{2,}$/;
+    if (!nameRegex.test(formData.full_name)) {
+      alert(
+        "Please enter a valid full name (letters and spaces only, at least 3 characters)."
+      );
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.phone_number)) {
+      alert(
+        "Please enter a valid 10-digit Indian phone number starting with 6-9."
+      );
+      return;
+    }
 
     setSaving(true);
 
@@ -54,11 +71,9 @@ const VendorProfile = () => {
         await api.put("/auth/update-profile", updateData);
         fetchProfile();
         alert("Profile updated successfully!");
-      }
-      else {
+      } else {
         alert("please try after some time");
       }
-
     } catch (err) {
       console.error("Error updating vendor profile:", err);
       alert("Failed to update profile");
@@ -70,9 +85,8 @@ const VendorProfile = () => {
     fetchProfile();
   }, []);
 
-
-
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -81,7 +95,6 @@ const VendorProfile = () => {
       setFormData({ ...formData, profileImage: imageUrl });
     }
   };
-
 
   const handleCancel = () => {
     fetchProfile();
@@ -100,7 +113,9 @@ const VendorProfile = () => {
   } = useThemeClasses();
 
   return (
-    <div className={`flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 ${pageBg} ${textPrimary}`}>
+    <div
+      className={`flex-1 overflow-y-auto px-4 sm:px-6 py-4 sm:py-6 ${pageBg} ${textPrimary}`}
+    >
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
@@ -128,13 +143,22 @@ const VendorProfile = () => {
             {editing && (
               <label className="absolute bottom-0 right-0 bg-blue-600 text-white p-2 rounded-full cursor-pointer hover:bg-blue-700">
                 <Camera size={16} />
-                <input type="file" className="hidden" accept="image/*" onChange={handleImageChange} />
+                <input
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
               </label>
             )}
           </div>
           <div className="text-center sm:text-left">
-            <h1 className="text-xl sm:text-2xl font-semibold">{formData.full_name}</h1>
-            <p className={`${textSecondary} text-sm sm:text-base`}>{formData.email}</p>
+            <h1 className="text-xl sm:text-2xl font-semibold">
+              {formData.full_name}
+            </h1>
+            <p className={`${textSecondary} text-sm sm:text-base`}>
+              {formData.email}
+            </p>
           </div>
         </div>
 
@@ -142,20 +166,26 @@ const VendorProfile = () => {
         <div className="space-y-4 sm:space-y-5">
           {/* Name */}
           <div>
-            <label className={`block text-sm mb-1 ${textSecondary}`}>Name</label>
+            <label className={`block text-sm mb-1 ${textSecondary}`}>
+              Name
+            </label>
             <input
               type="text"
               name="full_name"
               value={formData.full_name}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 sm:p-2.5 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 sm:p-2.5 rounded-md border text-sm sm:text-base ${
+                editing ? borderEditing : inputBg
+              }`}
             />
           </div>
 
           {/* Email */}
           <div>
-            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
+            <label
+              className={`flex items-center gap-2 text-sm ${textSecondary}`}
+            >
               <Mail size={16} /> Email
             </label>
             <input
@@ -169,7 +199,9 @@ const VendorProfile = () => {
 
           {/* Phone */}
           <div>
-            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
+            <label
+              className={`flex items-center gap-2 text-sm ${textSecondary}`}
+            >
               <Phone size={16} /> Phone
             </label>
             <input
@@ -178,13 +210,17 @@ const VendorProfile = () => {
               value={formData.phone_number}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${
+                editing ? borderEditing : inputBg
+              }`}
             />
           </div>
 
           {/* Address */}
           <div>
-            <label className={`flex items-center gap-2 text-sm ${textSecondary}`}>
+            <label
+              className={`flex items-center gap-2 text-sm ${textSecondary}`}
+            >
               <MapPin size={16} /> Address
             </label>
             <textarea
@@ -193,20 +229,26 @@ const VendorProfile = () => {
               value={formData.address}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${
+                editing ? borderEditing : inputBg
+              }`}
             />
           </div>
 
           {/* Description */}
           <div>
-            <label className={`block text-sm mb-1 ${textSecondary}`}>Description</label>
+            <label className={`block text-sm mb-1 ${textSecondary}`}>
+              Description
+            </label>
             <textarea
               name="description"
               rows={3}
               value={formData.description}
               onChange={handleChange}
               disabled={!editing}
-              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${editing ? borderEditing : inputBg}`}
+              className={`w-full p-2 mt-1 rounded-md border text-sm sm:text-base ${
+                editing ? borderEditing : inputBg
+              }`}
             />
           </div>
         </div>
@@ -226,7 +268,13 @@ const VendorProfile = () => {
                 disabled={saving}
                 className="w-full sm:w-auto px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 transition text-sm sm:text-base"
               >
-                {saving ? <>Saving...</> : <><Save size={16} /> Save</>}
+                {saving ? (
+                  <>Saving...</>
+                ) : (
+                  <>
+                    <Save size={16} /> Save
+                  </>
+                )}
               </button>
             </>
           ) : (

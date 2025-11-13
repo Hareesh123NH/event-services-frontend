@@ -5,8 +5,6 @@ import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 import { useOutletContext } from "react-router-dom";
 
-
-
 const ServiceSkeleton = ({ cardDefault }) => {
   return (
     <div className="flex space-x-3 overflow-x-auto pb-3 -mx-4 px-4 md:mx-0 md:px-0 scrollbar-hide">
@@ -25,10 +23,7 @@ const ServiceSkeleton = ({ cardDefault }) => {
   );
 };
 
-
-
 const AddNewVendorService = () => {
-
   const { search } = useOutletContext();
 
   const [availableServices, setAvailableServices] = useState([]);
@@ -40,7 +35,6 @@ const AddNewVendorService = () => {
   const [notes, setNotes] = useState("");
   const [addons, setAddons] = useState([]);
   const [description, setDescription] = useState("");
-
 
   const [loading, setLoading] = useState(false);
 
@@ -56,14 +50,11 @@ const AddNewVendorService = () => {
     }
   };
 
-
   useEffect(() => {
     fetchAvailableServicers();
-  }, [])
+  }, []);
 
-
-
-  const filteredAvailableServices = availableServices?.filter(service => {
+  const filteredAvailableServices = availableServices?.filter((service) => {
     const searchTerm = search.toLowerCase();
 
     const inName = service.service_name?.toLowerCase().includes(searchTerm);
@@ -73,8 +64,6 @@ const AddNewVendorService = () => {
 
     return inName || inType || inPrice || inId;
   });
-
-
 
   const selectedService = availableServices.find(
     (s) => s.service_id === selectedServiceId
@@ -103,6 +92,13 @@ const AddNewVendorService = () => {
   const handleSave = async () => {
     if (!selectedServiceId) return alert("Select a service!");
 
+    if (price < 0) {
+      return alert("price must be greater than zero!!");
+    }
+
+    if (discount < 0 || discount > 100) {
+      return alert("Discount will be between 0 to 100 only valid!!");
+    }
     setLoading(true);
 
     const payload = {
@@ -114,30 +110,37 @@ const AddNewVendorService = () => {
       addons,
     };
 
-
     try {
       await api.post(`/service/vendor/${selectedServiceId}`, payload);
 
       fetchAvailableServicers();
-
+      sessionStorage.removeItem("vendor-services");
       alert("Service added successfully!");
     } catch (err) {
       console.error("❌ Error adding service:", err);
-      alert("Failed to add new  service. Please try again.");
+      alert(
+        err?.response?.data?.message ||
+          "Failed to add new  service. Please try again."
+      );
     }
 
     setLoading(false);
-
   };
 
-
-
-
-  const { bgClass, inputBg, cardDefault, cardSelected, pageBg, textClass, cardBgActive } =
-    useThemeClasses();
+  const {
+    bgClass,
+    inputBg,
+    cardDefault,
+    cardSelected,
+    pageBg,
+    textClass,
+    cardBgActive,
+  } = useThemeClasses();
 
   return (
-    <div className={`min-h-[90vh] overflow-y-auto p-4 md:p-6 ${bgClass} ${textClass}`}>
+    <div
+      className={`min-h-[90vh] overflow-y-auto p-4 md:p-6 ${bgClass} ${textClass}`}
+    >
       <motion.div
         layout
         initial={{ opacity: 0, y: 20 }}
@@ -152,7 +155,6 @@ const AddNewVendorService = () => {
         <h3 className="text-base md:text-xl font-semibold mb-2">
           Select Service
         </h3>
-
 
         {loading ? (
           <ServiceSkeleton cardDefault={cardDefault} />
@@ -174,7 +176,9 @@ const AddNewVendorService = () => {
                     setDescription(service.description);
                   }}
                 >
-                  <p className="font-semibold text-sm sm:text-base">{service.service_name}</p>
+                  <p className="font-semibold text-sm sm:text-base">
+                    {service.service_name}
+                  </p>
                   <p className="text-xs sm:text-sm">
                     Base Price: ₹{service.base_price}/{service.pricing_type}
                   </p>
@@ -183,7 +187,6 @@ const AddNewVendorService = () => {
             })}
           </div>
         )}
-
 
         {selectedService && (
           <>
@@ -210,9 +213,7 @@ const AddNewVendorService = () => {
                 <input
                   type="number"
                   value={discount}
-                  onChange={(e) =>
-                    setDiscount(parseFloat(e.target.value) || 0)
-                  }
+                  onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
                   className={`w-full mt-1 p-2 rounded-md border text-sm ${inputBg}`}
                 />
               </div>
@@ -318,7 +319,13 @@ const AddNewVendorService = () => {
                 onClick={handleSave}
                 className="flex items-center gap-1 px-4 py-2 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
               >
-                {loading ? "Saving..." : (<><Save className="w-4 h-4" /> Save</>)}
+                {loading ? (
+                  "Saving..."
+                ) : (
+                  <>
+                    <Save className="w-4 h-4" /> Save
+                  </>
+                )}
               </button>
             </div>
           </>

@@ -22,9 +22,26 @@ const AddNewAdmin = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const nameRegex = /^[A-Za-z\s]{3,}$/;
+    if (!nameRegex.test(formData.full_name)) {
+      alert(
+        "Please enter a valid full name (letters and spaces only, at least 3 characters)."
+      );
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(formData.phone_number)) {
+      alert(
+        "Please enter a valid 10-digit Indian phone number starting with 6-9."
+      );
+      return;
+    }
+
     setLoading(true);
     try {
-
       await api.post("/admin/create", formData);
       alert("Admin added successfully!");
 
@@ -36,7 +53,8 @@ const AddNewAdmin = () => {
     setLoading(false);
   };
 
-  const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg } = useThemeClasses();
+  const { pageBg, cardBg, textClass, labelClass, inputBg, buttonBg } =
+    useThemeClasses();
 
   return (
     <div
@@ -57,7 +75,9 @@ const AddNewAdmin = () => {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Name */}
           <div>
-            <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
+            <label
+              className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}
+            >
               Name
             </label>
             <input
@@ -73,7 +93,9 @@ const AddNewAdmin = () => {
 
           {/* Email */}
           <div>
-            <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
+            <label
+              className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}
+            >
               Email
             </label>
             <input
@@ -89,7 +111,9 @@ const AddNewAdmin = () => {
 
           {/* Password */}
           <div className="relative">
-            <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
+            <label
+              className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}
+            >
               Password
             </label>
 
@@ -119,7 +143,9 @@ const AddNewAdmin = () => {
 
           {/* Phone */}
           <div>
-            <label className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}>
+            <label
+              className={`block mb-1 text-sm sm:text-base font-medium ${labelClass}`}
+            >
               Phone Number
             </label>
             <input
@@ -132,7 +158,6 @@ const AddNewAdmin = () => {
               required
             />
           </div>
-
 
           {/* Submit Button */}
           <motion.button

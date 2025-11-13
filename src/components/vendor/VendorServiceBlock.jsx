@@ -5,7 +5,6 @@ import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
 
 const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
-
   const [data, setData] = useState({
     price: serviceItem.price || "",
     base_price: serviceItem.service.base_price || "",
@@ -27,7 +26,8 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
     }
   }, [data.price, data.discount]);
 
-  const handleChange = (field, value) => setData((prev) => ({ ...prev, [field]: value }));
+  const handleChange = (field, value) =>
+    setData((prev) => ({ ...prev, [field]: value }));
 
   const handleAddonChange = (index, field, value) => {
     const newAddons = [...data.addons];
@@ -49,7 +49,6 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
     }));
   };
 
-
   const handleSave = async () => {
     const payload = {
       price: data.price,
@@ -63,18 +62,23 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
     setSaving(true);
 
     try {
-      const res = await api.patch(`/service/vendor-service/${serviceItem.service._id}`, payload);
+      const res = await api.patch(
+        `/service/vendor-service/${serviceItem.service._id}`,
+        payload
+      );
       onUpdate && onUpdate();
       alert("Service updated successfully!");
     } catch (err) {
       console.error("❌ Error updating service:", err);
-      alert("Failed to update service. Please try again.");
+      onUpdate && onUpdate();
+      alert(
+        err?.response?.data?.message ||
+          "Failed to update service. Please try again."
+      );
     }
 
     setSaving(false);
   };
-
-
 
   const {
     bgCard,
@@ -102,7 +106,9 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
         {serviceItem.service.service_name}
       </h2>
 
-      <div className={`text-xs sm:text-sm mb-3 flex flex-col gap-1 ${textSecondary}`}>
+      <div
+        className={`text-xs sm:text-sm mb-3 flex flex-col gap-1 ${textSecondary}`}
+      >
         <span>
           <strong>Base Price:</strong> ₹{data.base_price || 0}
         </span>
@@ -114,22 +120,26 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
         </span>
       </div>
 
-      <div className={`flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm mb-4 ${textSecondary}`}>
+      <div
+        className={`flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm mb-4 ${textSecondary}`}
+      >
         <span className="flex items-center">
           <Tag className="w-4 h-4 mr-1 text-gray-500" /> {data.discount}% off
         </span>
         <span className="flex items-center">
-          <Star className="w-4 h-4 mr-1 text-yellow-500" /> {serviceItem.average_rating} / 5
+          <Star className="w-4 h-4 mr-1 text-yellow-500" />{" "}
+          {serviceItem.average_rating} / 5
         </span>
         <span className="flex items-center">
           <CalendarCheck className="w-4 h-4 mr-1 text-green-500" />{" "}
           {serviceItem.total_bookings} bookings
         </span>
         <span
-          className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${serviceItem.status === "active"
-            ? `bg-green-100 text-green-700`
-            : `bg-red-100 text-red-700`
-            }`}
+          className={`px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium ${
+            serviceItem.status === "active"
+              ? `bg-green-100 text-green-700`
+              : `bg-red-100 text-red-700`
+          }`}
         >
           {serviceItem.status}
         </span>
@@ -143,7 +153,9 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
           <input
             type="number"
             value={data.price}
-            onChange={(e) => handleChange("price", parseFloat(e.target.value) || 0)}
+            onChange={(e) =>
+              handleChange("price", parseFloat(e.target.value) || 0)
+            }
             className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           />
         </div>
@@ -153,8 +165,10 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
           <label className="text-sm font-semibold">Discount (%)</label>
           <input
             type="number"
-            value={data.discount}
-            onChange={(e) => handleChange("discount", parseFloat(e.target.value) || 0)}
+            value={data.discount || 0}
+            onChange={(e) =>
+              handleChange("discount", parseFloat(e.target.value) || 0)
+            }
             className={`w-full mt-1 p-2 rounded-md border ${borderColor} ${inputBg} ${inputText} text-sm sm:text-base`}
           />
         </div>
@@ -203,21 +217,27 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
 
               {/* Title */}
               <div className="mb-2">
-                <label className={`block text-xs font-medium mb-1 ${textSecondary}`}>
+                <label
+                  className={`block text-xs font-medium mb-1 ${textSecondary}`}
+                >
                   Title
                 </label>
                 <input
                   type="text"
                   placeholder="Enter title"
                   value={addon.title}
-                  onChange={(e) => handleAddonChange(index, "title", e.target.value)}
+                  onChange={(e) =>
+                    handleAddonChange(index, "title", e.target.value)
+                  }
                   className={`w-full p-2 rounded-md border ${borderColor} ${bgCard} ${inputText}`}
                 />
               </div>
 
               {/* Price */}
               <div className="mb-2">
-                <label className={`block text-xs font-medium mb-1 ${textSecondary}`}>
+                <label
+                  className={`block text-xs font-medium mb-1 ${textSecondary}`}
+                >
                   Price (₹)
                 </label>
                 <input
@@ -225,7 +245,11 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
                   placeholder="Enter price"
                   value={addon.price}
                   onChange={(e) =>
-                    handleAddonChange(index, "price", parseFloat(e.target.value) || 0)
+                    handleAddonChange(
+                      index,
+                      "price",
+                      parseFloat(e.target.value) || 0
+                    )
                   }
                   className={`w-full p-2 rounded-md border ${borderColor} ${bgCard} ${inputText}`}
                 />
@@ -233,13 +257,17 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
 
               {/* Description */}
               <div>
-                <label className={`block text-xs font-medium mb-1 ${textSecondary}`}>
+                <label
+                  className={`block text-xs font-medium mb-1 ${textSecondary}`}
+                >
                   Description
                 </label>
                 <textarea
                   placeholder="Enter description"
                   value={addon.description}
-                  onChange={(e) => handleAddonChange(index, "description", e.target.value)}
+                  onChange={(e) =>
+                    handleAddonChange(index, "description", e.target.value)
+                  }
                   rows={2}
                   className={`w-full p-2 rounded-md border ${borderColor} ${bgCard} ${inputText}`}
                 />
@@ -278,7 +306,13 @@ const VendorServiceBlock = ({ serviceItem, index, onUpdate }) => {
             disabled={saving}
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 bg-green-600 text-white text-sm sm:text-base rounded-lg hover:bg-green-700 transition"
           >
-            {saving ? "Saving..." : (<><Save className="w-4 h-4" /> Save</>)}
+            {saving ? (
+              "Saving..."
+            ) : (
+              <>
+                <Save className="w-4 h-4" /> Save
+              </>
+            )}
           </button>
         </div>
       </div>

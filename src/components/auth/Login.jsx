@@ -196,7 +196,7 @@ export default function LoginPage() {
                 {loading ? "Checking..." : "Sign In"}
               </button>
 
-              <div className="pt-2 sm:pt-3">
+              {/* <div className="pt-2 sm:pt-3">
                 <div className="flex items-center gap-2 justify-center text-xs sm:text-sm text-[#cfc0ff]">
                   <span>or continue with</span>
                 </div>
@@ -204,7 +204,7 @@ export default function LoginPage() {
                 <div className="mt-2 sm:mt-3 grid grid-cols-1 gap-1">
                   <button type="button" className="py-2 rounded-lg border border-white/8 bg-white/4 text-white text-xs sm:text-sm">Google</button>
                 </div>
-              </div>
+              </div> */}
 
               <p className="text-center text-xs sm:text-sm text-[#d9cfff] mt-3 sm:mt-4">
                 Don’t have an account?{" "}

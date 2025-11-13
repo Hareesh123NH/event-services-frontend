@@ -53,7 +53,7 @@ const VendorGrid = () => {
     pageNo = 1,
     activeFilter: savedFilter = "All",
     useLocation: savedLocation = true,
-    maxDistance: savedMaxDistance = 10,
+    maxDistance: savedMaxDistance = 300,
   } = savedState;
 
 

@@ -2,8 +2,20 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useThemeClasses } from "../theme/themeClasses";
 import api from "../axiosConfig";
-import { getAccuratePosition, getAddressFromCoords, getCoordsFromAddress } from "./location";
-import { CheckCircle, Loader2, LocateFixed, LocateFixedIcon, LucideHardDrive, Map, MapIcon, MapPin, Plus, Save, SaveAll, X } from "lucide-react";
+import {
+  getAccuratePosition,
+  getAddressFromCoords,
+  getCoordsFromAddress,
+} from "./location";
+import {
+  Loader2,
+  LocateFixed,
+  MapIcon,
+  MapPin,
+  Save,
+  SaveAll,
+  X,
+} from "lucide-react";
 
 const addressLabels = {
   label: "Label",
@@ -11,7 +23,7 @@ const addressLabels = {
   address_line2: "Address Line 2",
   city: "City",
   state: "State",
-  postal_code: "Postal Code",
+//   postal_code: "Postal Code",
   country: "Country",
   alternate_phone: "Alternate Phone",
 };
@@ -34,15 +46,16 @@ const CollapsibleSection = ({ title, children }) => {
 };
 
 const UserProfile = () => {
-
   const [profile, setProfile] = useState({
     full_name: ".....",
     email: ".....",
-    phone_number: "....."
+    phone_number: ".....",
   });
   const [addresses, setAddresses] = useState([]);
   const [showAddForm, setShowAddForm] = useState(false);
-  const [defaultAddressId, setDefaultAddressId] = useState(localStorage.getItem("addressId"));
+  const [defaultAddressId, setDefaultAddressId] = useState(
+    localStorage.getItem("addressId")
+  );
   const [newAddress, setNewAddress] = useState({
     label: "",
     address_line1: "",
@@ -87,13 +100,29 @@ const UserProfile = () => {
     }
   };
 
-
   useEffect(() => {
     fetchProfile();
     fetchAddresses();
   }, []);
 
   const saveProfile = async () => {
+    const nameRegex = /^[A-Za-z\s]{3,}$/;
+    if (!nameRegex.test(profile.full_name)) {
+      alert(
+        "Please enter a valid full name (letters and spaces only, at least 3 characters)."
+      );
+      return;
+    }
+
+    // Phone number validation
+    const phoneRegex = /^[6-9]\d{9}$/;
+    if (!phoneRegex.test(profile.phone_number)) {
+      alert(
+        "Please enter a valid 10-digit Indian phone number starting with 6-9."
+      );
+      return;
+    }
+
     try {
       await api.put("/auth/update-profile", profile);
     } catch (err) {
@@ -109,20 +138,26 @@ const UserProfile = () => {
   };
 
   const updateAddress = async (updatedAddress) => {
-    try {
+    const postalCodeRegex = /^[1-9][0-9]{5}$/;
 
+    if (!postalCodeRegex.test(updatedAddress.postal_code)) {
+      alert(
+        "Please enter a valid 6-digit Indian postal code (cannot start with 0)."
+      );
+      return;
+    }
+
+    try {
       const coords = await getCoordsFromAddress(updatedAddress);
 
       if (coords) {
         updatedAddress.location = { type: "Point", coordinates: coords };
 
         await api.put(`/user/address/${updatedAddress._id}`, updatedAddress);
-      }
-      else {
+      } else {
         alert("please after some time");
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error("Error updating address:", err);
       fetchAddresses();
     }
@@ -135,7 +170,6 @@ const UserProfile = () => {
     }
 
     try {
-
       const coords = await getCoordsFromAddress(newAddress);
 
       if (coords) {
@@ -144,12 +178,10 @@ const UserProfile = () => {
         console.log("after", newAddress);
 
         await api.post(`/user/address`, newAddress);
-      }
-      else {
+      } else {
         alert("please after some time");
       }
-    }
-    catch (err) {
+    } catch (err) {
       console.error("Error adding address:", err);
     }
 
@@ -168,8 +200,6 @@ const UserProfile = () => {
     setShowAddForm(false);
     alert("New address added!");
   };
-
-
 
   const handleAddLiveLocation = async () => {
     try {
@@ -199,24 +229,21 @@ const UserProfile = () => {
       if (err.code === 1) {
         alert("Location permission denied");
         console.warn("Location permission denied");
-      }
-      else {
+      } else {
         alert("Please try again!");
-        console.error("Error fetching location or address:", err)
-      };
+        console.error("Error fetching location or address:", err);
+      }
     } finally {
       fetchAddresses();
       setLoadingLocation(false);
     }
   };
 
-
   const handleSetDefault = (id) => {
     setDefaultAddressId(id);
     localStorage.setItem("addressId", id);
     // Optionally: send PUT request to backend
   };
-
 
   const {
     pageBg,
@@ -225,7 +252,8 @@ const UserProfile = () => {
     borderDefault,
     borderActive,
     sectionBg,
-    isDark } = useThemeClasses();
+    isDark,
+  } = useThemeClasses();
 
   return (
     <div
@@ -252,9 +280,7 @@ const UserProfile = () => {
             type="email"
             placeholder="Email"
             value={profile.email}
-            onChange={(e) =>
-              setProfile({ ...profile, email: e.target.value })
-            }
+            onChange={(e) => setProfile({ ...profile, email: e.target.value })}
             className={`p-2 sm:p-3 text-sm sm:text-base rounded border w-full ${inputBg}`}
           />
           <input
@@ -276,10 +302,11 @@ const UserProfile = () => {
           }}
           disabled={saving}
           className={`mt-4 w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border
-    ${saving
-              ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed opacity-80"
-              : "bg-blue-200 hover:bg-blue-300 text-blue-800 border-blue-200"
-            }`}
+    ${
+      saving
+        ? "bg-gray-200 text-gray-500 border-gray-300 cursor-not-allowed opacity-80"
+        : "bg-blue-200 hover:bg-blue-300 text-blue-800 border-blue-200"
+    }`}
         >
           {saving ? (
             <>
@@ -293,43 +320,67 @@ const UserProfile = () => {
             </>
           )}
         </motion.button>
-
-
       </CollapsibleSection>
 
       {/* Addresses Section */}
       <CollapsibleSection title="Addresses">
         {loadingAddresses ? (
-
-          <div className={`p-4 sm:p-5 mb-4 rounded border animate-pulse
-          ${isDark ? "bg-gray-800 border-gray-700" : "bg-gray-200 border-gray-300"}`}>
-
+          <div
+            className={`p-4 sm:p-5 mb-4 rounded border animate-pulse
+          ${
+            isDark
+              ? "bg-gray-800 border-gray-700"
+              : "bg-gray-200 border-gray-300"
+          }`}
+          >
             <div className="flex justify-between items-center mb-2">
-              <div className={`h-5 w-32 rounded ${isDark ? "bg-gray-700" : "bg-gray-300"}`}></div>
-              <div className={`h-4 w-16 rounded ${isDark ? "bg-gray-700" : "bg-gray-300"}`}></div>
+              <div
+                className={`h-5 w-32 rounded ${
+                  isDark ? "bg-gray-700" : "bg-gray-300"
+                }`}
+              ></div>
+              <div
+                className={`h-4 w-16 rounded ${
+                  isDark ? "bg-gray-700" : "bg-gray-300"
+                }`}
+              ></div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {[...Array(4)].map((_, j) => (
                 <div key={j} className="flex flex-col">
-                  <div className={`h-3 w-24 rounded mb-1 ${isDark ? "bg-gray-700" : "bg-gray-300"}`}></div>
-                  <div className={`h-8 w-full rounded ${isDark ? "bg-gray-700" : "bg-gray-300"}`}></div>
+                  <div
+                    className={`h-3 w-24 rounded mb-1 ${
+                      isDark ? "bg-gray-700" : "bg-gray-300"
+                    }`}
+                  ></div>
+                  <div
+                    className={`h-8 w-full rounded ${
+                      isDark ? "bg-gray-700" : "bg-gray-300"
+                    }`}
+                  ></div>
                 </div>
               ))}
             </div>
 
-            <div className={`mt-4 h-10 w-full rounded ${isDark ? "bg-gray-700" : "bg-gray-300"}`}></div>
+            <div
+              className={`mt-4 h-10 w-full rounded ${
+                isDark ? "bg-gray-700" : "bg-gray-300"
+              }`}
+            ></div>
           </div>
-
         ) : (
           addresses.map((addr) => (
             <div
               key={addr._id}
-              className={`p-4 sm:p-5 mb-4 rounded border text-sm sm:text-base transition-all ${defaultAddressId === addr._id ? borderActive : borderDefault
-                }`}
+              className={`p-4 sm:p-5 mb-4 rounded border text-sm sm:text-base transition-all ${
+                defaultAddressId === addr._id ? borderActive : borderDefault
+              }`}
             >
               <div className="flex justify-between items-center mb-2">
-                <h3 className="font-semibold text-base sm:text-lg">{addr.label}</h3>
+                <h3 className="font-semibold text-base sm:text-lg">
+                  {addr.label}
+                </h3>
                 <button
                   className="text-xs sm:text-sm text-blue-500"
                   onClick={() => handleSetDefault(addr._id)}
@@ -342,9 +393,15 @@ const UserProfile = () => {
                 {Object.keys(addr)
                   .filter(
                     (k) =>
-                      !["_id", "user", "location", "__v", "createdAt", "updatedAt"].includes(
-                        k
-                      )
+                      ![
+                        "_id",
+                        "user",
+                        "location",
+                        "postal_code",
+                        "__v",
+                        "createdAt",
+                        "updatedAt",
+                      ].includes(k)
                   )
                   .map((key) => (
                     <div key={key} className="flex flex-col">
@@ -401,10 +458,11 @@ const UserProfile = () => {
               whileTap={{ scale: 0.95 }}
               onClick={() => setShowAddForm(true)}
               className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border backdrop-blur-sm
-            ${isDark
-                  ? "bg-green-900/40 hover:bg-green-800/50 text-green-200 border-green-700/40"
-                  : "bg-green-100/70 hover:bg-green-200/80 text-green-800 border-green-300/40"
-                }`}
+            ${
+              isDark
+                ? "bg-green-900/40 hover:bg-green-800/50 text-green-200 border-green-700/40"
+                : "bg-green-100/70 hover:bg-green-200/80 text-green-800 border-green-300/40"
+            }`}
             >
               <MapPin className="w-4 h-4" />
               Add New Address
@@ -417,10 +475,11 @@ const UserProfile = () => {
               onClick={handleAddLiveLocation}
               disabled={loadingLocation}
               className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border backdrop-blur-sm
-    ${isDark
-                  ? "bg-red-900/40 hover:bg-red-800/50 text-red-200 border-red-700/40"
-                  : "bg-red-100/70 hover:bg-red-200/80 text-red-800 border-red-300/40"
-                }`}
+    ${
+      isDark
+        ? "bg-red-900/40 hover:bg-red-800/50 text-red-200 border-red-700/40"
+        : "bg-red-100/70 hover:bg-red-200/80 text-red-800 border-red-300/40"
+    }`}
             >
               {loadingLocation ? (
                 <>
@@ -434,11 +493,8 @@ const UserProfile = () => {
                 </>
               )}
             </motion.button>
-
           </div>
-
         )}
-
 
         {/* Add New Address Form */}
         {showAddForm && (
@@ -446,7 +502,9 @@ const UserProfile = () => {
             className={`mt-6 p-4 sm:p-6 rounded-lg border ${borderDefault} ${sectionBg} shadow-inner transition-all`}
           >
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-base sm:text-lg">New Address</h3>
+              <h3 className="font-semibold text-base sm:text-lg">
+                New Address
+              </h3>
               <button
                 className="text-red-500 text-sm sm:text-base"
                 onClick={() => setShowAddForm(false)}
@@ -480,19 +538,20 @@ const UserProfile = () => {
                 whileHover={{ scale: savingAddress ? 1 : 1.05 }}
                 whileTap={{ scale: savingAddress ? 1 : 0.95 }}
                 onClick={() => {
-                  setSavingAddress(true)
+                  setSavingAddress(true);
                   handleAddAddress().finally(() => setSavingAddress(false));
                 }}
                 disabled={savingAddress}
                 className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border backdrop-blur-sm
-    ${savingAddress
-                    ? isDark
-                      ? "bg-blue-900/50 text-blue-300 border-blue-700/50 cursor-not-allowed opacity-80"
-                      : "bg-blue-100/50 text-blue-500 border-blue-300/50 cursor-not-allowed opacity-80"
-                    : isDark
-                      ? "bg-blue-900/40 hover:bg-blue-800/50 text-blue-200 border-blue-700/40"
-                      : "bg-blue-100/70 hover:bg-blue-200/80 text-blue-800 border-blue-300/40"
-                  }`}
+    ${
+      savingAddress
+        ? isDark
+          ? "bg-blue-900/50 text-blue-300 border-blue-700/50 cursor-not-allowed opacity-80"
+          : "bg-blue-100/50 text-blue-500 border-blue-300/50 cursor-not-allowed opacity-80"
+        : isDark
+        ? "bg-blue-900/40 hover:bg-blue-800/50 text-blue-200 border-blue-700/40"
+        : "bg-blue-100/70 hover:bg-blue-200/80 text-blue-800 border-blue-300/40"
+    }`}
               >
                 {savingAddress ? (
                   <>
@@ -507,23 +566,22 @@ const UserProfile = () => {
                 )}
               </motion.button>
 
-
               {/* Cancel Button */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setShowAddForm(false)}
                 className={`w-full sm:w-auto flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm sm:text-base transition-all shadow-sm border backdrop-blur-sm
-      ${isDark
-                    ? "bg-gray-700/40 hover:bg-gray-600/50 text-gray-200 border-gray-600/40"
-                    : "bg-gray-100/70 hover:bg-gray-200/80 text-gray-800 border-gray-300/40"
-                  }`}
+      ${
+        isDark
+          ? "bg-gray-700/40 hover:bg-gray-600/50 text-gray-200 border-gray-600/40"
+          : "bg-gray-100/70 hover:bg-gray-200/80 text-gray-800 border-gray-300/40"
+      }`}
               >
                 <X className="w-4 h-4" />
                 Cancel
               </motion.button>
             </div>
-
           </div>
         )}
       </CollapsibleSection>

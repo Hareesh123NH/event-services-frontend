@@ -160,7 +160,7 @@ const VendorGrid = () => {
     refreshInterval = setInterval(() => {
       console.log("⏰ Auto-refreshing vendor data...");
       fetchServices(true);
-    }, 10 * 60 * 1000);
+    }, 5 * 60 * 1000);
 
     // 🔹 Clear cache on reload/close
     const clearCache = async () => {
